@@ -2,6 +2,7 @@ import { CheckCircle, Users, Truck, Shield, Award, Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
+<<<<<<< HEAD
 export default function AboutPage() {
   return (
     <div className="min-h-screen">
@@ -215,3 +216,17 @@ export default function AboutPage() {
     </div>
   )
 }
+=======
+export default function About() {
+  return (
+    <div>
+      <Navbar />
+      <Footer />
+    </div>
+  );
+}
+
+const Footer = () => {
+  return <footer>foter geming</footer>;
+};
+>>>>>>> 649ac21ff44ed0747c5e3f0b626ce159d29d1a85
