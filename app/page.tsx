@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <section className="bg-pink-50 py-16 px-5 flex flex-col md:flex-row items-center justify-between">
+    <section className="bg-pink-50  py-16 px-5 flex flex-col md:flex-row items-center justify-between mx-auto w-full">
       {/* Text Section */}
       <div className="max-w-xl">
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 leading-tight mb-4">

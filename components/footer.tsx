@@ -1,10 +1,18 @@
-import Link from "next/link"
-import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react"
+import Link from "next/link";
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
+  Mail,
+  Phone,
+  MapPin,
+} from "lucide-react";
 
 export default function Footer() {
   return (
     <footer className="bg-gray-50 border-t">
-      <div className="container mx-auto px-4 py-12">
+      <div className=" px-5 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
@@ -15,8 +23,8 @@ export default function Footer() {
               <span className="font-bold text-xl">ShopHub</span>
             </div>
             <p className="text-sm text-gray-600">
-              Your trusted online marketplace for quality products at great prices. Shop with confidence and enjoy fast,
-              reliable delivery.
+              Your trusted online marketplace for quality products at great
+              prices. Shop with confidence and enjoy fast, reliable delivery.
             </p>
             <div className="flex space-x-4">
               <button className="p-2 hover:bg-gray-200 rounded-md">
@@ -38,19 +46,34 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="font-semibold">Quick Links</h3>
             <div className="space-y-2">
-              <Link href="/about" className="block text-sm text-gray-600 hover:text-blue-600">
+              <Link
+                href="/about"
+                className="block text-sm text-gray-600 hover:text-blue-600"
+              >
                 About Us
               </Link>
-              <Link href="/products" className="block text-sm text-gray-600 hover:text-blue-600">
+              <Link
+                href="/products"
+                className="block text-sm text-gray-600 hover:text-blue-600"
+              >
                 All Products
               </Link>
-              <Link href="/deals" className="block text-sm text-gray-600 hover:text-blue-600">
+              <Link
+                href="/deals"
+                className="block text-sm text-gray-600 hover:text-blue-600"
+              >
                 Special Deals
               </Link>
-              <Link href="/blog" className="block text-sm text-gray-600 hover:text-blue-600">
+              <Link
+                href="/blog"
+                className="block text-sm text-gray-600 hover:text-blue-600"
+              >
                 Blog
               </Link>
-              <Link href="/careers" className="block text-sm text-gray-600 hover:text-blue-600">
+              <Link
+                href="/careers"
+                className="block text-sm text-gray-600 hover:text-blue-600"
+              >
                 Careers
               </Link>
             </div>
@@ -60,22 +83,40 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="font-semibold">Customer Service</h3>
             <div className="space-y-2">
-              <Link href="/contact" className="block text-sm text-gray-600 hover:text-blue-600">
+              <Link
+                href="/contact"
+                className="block text-sm text-gray-600 hover:text-blue-600"
+              >
                 Contact Us
               </Link>
-              <Link href="/faq" className="block text-sm text-gray-600 hover:text-blue-600">
+              <Link
+                href="/faq"
+                className="block text-sm text-gray-600 hover:text-blue-600"
+              >
                 FAQ
               </Link>
-              <Link href="/shipping" className="block text-sm text-gray-600 hover:text-blue-600">
+              <Link
+                href="/shipping"
+                className="block text-sm text-gray-600 hover:text-blue-600"
+              >
                 Shipping Info
               </Link>
-              <Link href="/returns" className="block text-sm text-gray-600 hover:text-blue-600">
+              <Link
+                href="/returns"
+                className="block text-sm text-gray-600 hover:text-blue-600"
+              >
                 Returns & Exchanges
               </Link>
-              <Link href="/track-order" className="block text-sm text-gray-600 hover:text-blue-600">
+              <Link
+                href="/track-order"
+                className="block text-sm text-gray-600 hover:text-blue-600"
+              >
                 Track Your Order
               </Link>
-              <Link href="/size-guide" className="block text-sm text-gray-600 hover:text-blue-600">
+              <Link
+                href="/size-guide"
+                className="block text-sm text-gray-600 hover:text-blue-600"
+              >
                 Size Guide
               </Link>
             </div>
@@ -84,7 +125,9 @@ export default function Footer() {
           {/* Newsletter & Contact */}
           <div className="space-y-4">
             <h3 className="font-semibold">Stay Connected</h3>
-            <p className="text-sm text-gray-600">Subscribe to get special offers, free giveaways, and updates.</p>
+            <p className="text-sm text-gray-600">
+              Subscribe to get special offers, free giveaways, and updates.
+            </p>
             <div className="flex space-x-2">
               <input
                 placeholder="Enter your email"
@@ -117,15 +160,26 @@ export default function Footer() {
         {/* Bottom Section */}
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
-            <p className="text-sm text-gray-600">© 2024 ShopHub. All rights reserved.</p>
+            <p className="text-sm text-gray-600">
+              © 2024 ShopHub. All rights reserved.
+            </p>
             <div className="flex space-x-4">
-              <Link href="/privacy" className="text-sm text-gray-600 hover:text-blue-600">
+              <Link
+                href="/privacy"
+                className="text-sm text-gray-600 hover:text-blue-600"
+              >
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="text-sm text-gray-600 hover:text-blue-600">
+              <Link
+                href="/terms"
+                className="text-sm text-gray-600 hover:text-blue-600"
+              >
                 Terms of Service
               </Link>
-              <Link href="/cookies" className="text-sm text-gray-600 hover:text-blue-600">
+              <Link
+                href="/cookies"
+                className="text-sm text-gray-600 hover:text-blue-600"
+              >
                 Cookie Policy
               </Link>
             </div>
@@ -152,5 +206,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }
