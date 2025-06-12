@@ -1,13 +1,14 @@
-import { Button } from "@/components/ui/button";
 import {
     Card,
+    CardAction,
     CardContent,
     CardDescription,
     CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import Image from "next/image";
+import Image from "next/image"
+import Link from 'next/link'
 
 type ProductType = {
     name: string,
@@ -19,92 +20,93 @@ type ProductType = {
 export default function Products() {
     const products: ProductType[] = [
         {
-            name: "Product 1",
-            desc: "asdadadada",
+            name: "Tas 1",
+            desc: "Simple dan elegan",
             price: 123,
-            images: "product.jpeg"
+            images: "tas_product.jpg"
         },
         {
-            name: "Product 2",
-            desc: "asdasdad",
+            name: "Tas 2",
+            desc: "Nyaman digunakan",
             price: 456,
-            images: "product.jpeg"
+            images: "tas_product.jpg"
         },
         {
-            name: "Product 3",
-            desc: "Produk ini cocok untuk kebutuhan sehari-hari",
+            name: "Tas 3",
+            desc: "Sehari-hari praktis",
             price: 789,
-            images: "product.jpeg"
+            images: "tas_product.jpg"
         },
         {
-            name: "Product 4",
-            desc: "Kualitas terbaik dan tahan lama",
+            name: "Tas 4",
+            desc: "Tahan lama",
             price: 321,
-            images: "product.jpeg"
+            images: "tas_product.jpg"
         },
         {
-            name: "Product 5",
-            desc: "Produk ekonomis dan multifungsi",
+            name: "Tas 5",
+            desc: "Ekonomis multifungsi",
             price: 654,
-            images: "product.jpeg"
+            images: "tas_product.jpg"
         },
         {
-            name: "Product 6",
-            desc: "Pilihan tepat untuk rumah tangga modern",
+            name: "Tas 6",
+            desc: "Modern dan praktis",
             price: 987,
-            images: "product.jpeg"
+            images: "tas_product.jpg"
         },
         {
-            name: "Product 7",
-            desc: "Ringan dan mudah digunakan",
+            name: "Tas 7",
+            desc: "Ringan dan simpel",
             price: 159,
-            images: "product.jpeg"
+            images: "tas_product.jpg"
         },
         {
-            name: "Product 8",
-            desc: "Dirancang untuk kenyamanan maksimal",
+            name: "Tas 8",
+            desc: "Nyaman maksimal",
             price: 753,
-            images: "product.jpeg"
+            images: "tas_product.jpg"
         },
         {
-            name: "Product 9",
-            desc: "Desain minimalis dan elegan",
+            name: "Tas 9",
+            desc: "Minimalis elegan",
             price: 852,
-            images: "product.jpeg"
+            images: "tas_product.jpg"
         },
         {
-            name: "Product 10",
-            desc: "Dibuat dari bahan ramah lingkungan",
+            name: "Tas 10",
+            desc: "Ramah lingkungan",
             price: 951,
-            images: "product.jpeg"
+            images: "tas_product.jpg"
         },
         {
-            name: "Product 11",
-            desc: "asdadadada",
+            name: "Tas 11",
+            desc: "Simple dan elegan",
             price: 123,
-            images: "product.jpeg"
+            images: "tas_product.jpg"
         },
         {
-            name: "Product 12",
-            desc: "asdasdad",
+            name: "Tas 12",
+            desc: "Nyaman digunakan",
             price: 456,
-            images: "product.jpeg"
+            images: "tas_product.jpg"
         },
     ];
 
     return (
         <div className="flex items-center justify-center flex-col gap-4 p-4">
-            <h2>Our Product</h2>
+            <h1 className="text-4xl mb-8 mt-6">Our Products</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {products.map((product, index) => (
-                    <Card key={product.name} className="w-60 gap-2">
+                    <Card key={product.name} className="w-60 gap-2 relative inline-block">
                         <CardHeader>
+                            <Image src={`/${product.images}`} width={200} height={200} alt={String(product.name)}
+                            className="transition-transform duration-300 hover:scale-105 rounded-lg" />
+                        </CardHeader>
+                        <CardContent className="flex flex-col gap-2">
                             <CardTitle>{product.name}</CardTitle>
                             <CardDescription>{product.desc}</CardDescription>
-                        </CardHeader>
-                        <CardContent className="flex flex-col items-center gap-2">
-                            <Image src={`/${product.images}`} width={200} height={200} alt={String(product.name)} />
-                            <Button>{product.price}</Button>
+                            <CardAction>Rp.{product.price}</CardAction>
                         </CardContent>
                     </Card>
                 ))}
