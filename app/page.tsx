@@ -2,14 +2,15 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <section className="bg-pink-50 py-16 px-8 flex flex-col md:flex-row items-center justify-between">
+    <section className="bg-pink-50 py-16 px-5 flex flex-col md:flex-row items-center justify-between">
       {/* Text Section */}
       <div className="max-w-xl">
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 leading-tight mb-4">
           Koleksi Tas Dya Official
         </h1>
         <p className="text-lg text-gray-600 mb-6">
-          Temukan gaya terbaikmu dengan koleksi tas elegan & modern. Cocok untuk aktivitas harian maupun acara spesial.
+          Temukan gaya terbaikmu dengan koleksi tas elegan & modern. Cocok untuk
+          aktivitas harian maupun acara spesial.
         </p>
         <div className="flex space-x-4">
           <button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition">
