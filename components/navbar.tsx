@@ -15,78 +15,50 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { Badge } from "@/components/ui/badge";
+import { SearchCommand } from "./search-comand";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const page: { name: string; href: string }[] = [
-    {
-      name: "Produk",
-      href: "/products",
-    },
-
-    {
-      name: "Diskon",
-      href: "/discount",
-    },
-    {
-      name: "Tentang Kami",
-      href: "/about",
-    },
-    {
-      name: "Kontak",
-      href: "/contact",
-    },
-  ];
+  const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background">
-      <div className="px-5">
-        <div className="flex h-16 items-center justify-between">
+    <header className="sticky  px-5 top-0 z-50 w-full bg-background">
+      <div>
+        <div className="flex h-16  items-center justify-between">
           {/* Desktop Navigation */}
           <nav className="flex space-x-6 items-center">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">
-                  S
-                </span>
-              </div>
-              <span className="font-bold text-xl">Dyah Colection</span>
+              <span className="font-bold text-xl uppercase">
+                Dyah Collection
+              </span>
             </Link>
+          </nav>
+
+          <div className="flex items-center space-x-2">
             <div className="hidden md:flex items-center gap-4">
               {page.map((item) => (
                 <Link
                   href={item.href}
                   key={item.name}
-                  className="text-sm font-medium hover:text-primary "
+                  className={cn(
+                    "text-sm font-medium hover:text-primary px-2",
+                    pathname === item.href && "font-bold"
+                  )}
                 >
                   {item.name}
                 </Link>
               ))}
-              <div className="relative pl-10">
-                <Input
-                  type="search"
-                  placeholder="Cari produk..."
-                  className="md:w-70  bg-muted border-none"
-                />
-                <Search className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              </div>
+              <SearchCommand />
             </div>
-          </nav>
-
-          <div className="flex items-center space-x-2">
             {/* Authentication */}
             <SignedOut>
-              <SignInButton mode="modal">
-                <Button variant="ghost">Sign In</Button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <Button>Sign Up</Button>
-              </SignUpButton>
+              <SignInButton mode="modal">Log in</SignInButton>
             </SignedOut>
             <SignedIn>
-              <UserButton afterSignOutUrl="/" />
+              <UserButton />
             </SignedIn>
             <Button variant="ghost" size="icon" className="relative">
               <ShoppingCart className="h-5 w-5" />
@@ -138,3 +110,26 @@ export default function Navbar() {
     </header>
   );
 }
+export const page: { name: string; href: string }[] = [
+  {
+    name: "Home",
+    href: "/",
+  },
+  {
+    name: "Produk",
+    href: "/products",
+  },
+
+  {
+    name: "Diskon",
+    href: "/discount",
+  },
+  {
+    name: "Tentang Kami",
+    href: "/about",
+  },
+  {
+    name: "Kontak",
+    href: "/contact",
+  },
+];

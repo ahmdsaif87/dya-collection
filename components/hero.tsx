@@ -1,24 +1,25 @@
 import Image from "next/image";
+import { Button } from "./ui/button";
 
 export default function Hero() {
   return (
-    <section className="min-h-screen bg-pink-50  py-16 px-5 flex flex-col md:flex-row items-center justify-between mx-auto w-full">
+    <section className="min-h-screen   py-16 px-5 flex flex-col md:flex-row items-center justify-between mx-auto w-full">
       {/* Text Section */}
       <div className="max-w-xl">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 leading-tight mb-4">
-          Koleksi Tas Dya Official
+        <h1 className="text-4xl md:text-7xl font-medium text-gray-800 leading-tight mb-4">
+          Koleksi Tas <br /> Dyah Official
         </h1>
-        <p className="text-lg text-gray-600 mb-6">
+        <p className="text-lg text-gray-600 mb-6 max-w-xl">
           Temukan gaya terbaikmu dengan koleksi tas elegan & modern. Cocok untuk
           aktivitas harian maupun acara spesial.
         </p>
         <div className="flex space-x-4">
-          <button className="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition">
+          <Button variant="default" size={"lg"}>
             Belanja Sekarang
-          </button>
-          <button className="border border-pink-500 text-pink-500 hover:bg-pink-100 font-semibold py-3 px-6 rounded-xl transition">
+          </Button>
+          <Button variant="outline" size={"lg"}>
             Lihat Koleksi
-          </button>
+          </Button>
         </div>
       </div>
 
