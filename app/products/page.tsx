@@ -19,7 +19,7 @@ export default function Products() {
           <Link href={`/products/${product.slug}`} key={index}>
             <Card
               key={product.name}
-              className="w-60 gap-2 relative inline-block"
+              className="w-60 gap-2 relative inline-block w-full"
             >
               <CardHeader>
                 <Image

@@ -88,11 +88,11 @@ export default function Page() {
 
           {/* Add to Cart Button */}
           <Button
-            className="p-10 rounded-full w-full mt-8"
+            className="p-10 rounded-full w-full mt-8 text-lg"
             size="lg"
             variant={"outline"}
           >
-            <Plus />
+            <Plus className="size-8 mr-2" />
             Add To Cart
           </Button>
         </div>

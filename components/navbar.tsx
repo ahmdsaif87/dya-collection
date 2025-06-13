@@ -55,7 +55,9 @@ export default function Navbar() {
             </div>
             {/* Authentication */}
             <SignedOut>
-              <SignInButton mode="modal">Log in</SignInButton>
+              <SignInButton mode="modal">
+                <Button variant="ghost">Log in</Button>
+              </SignInButton>
             </SignedOut>
             <SignedIn>
               <UserButton />
