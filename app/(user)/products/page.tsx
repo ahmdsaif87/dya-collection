@@ -9,11 +9,13 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { products } from "./products";
+import ProductCategory from "@/components/product-category";
 
 export default function Products() {
   return (
     <div className="flex items-center justify-center flex-col gap-4 p-4">
-      <h1 className="text-4xl mb-8 mt-6">Our Products</h1>
+      <h1 className="text-4xl mt-6">Our Products</h1>
+      <ProductCategory />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {products.map((product, index) => (
           <Link href={`/products/${product.slug}`} key={index}>

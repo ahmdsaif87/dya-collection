@@ -3,11 +3,11 @@ import { Button } from "./ui/button";
 
 export default function Hero() {
   return (
-    <section className="min-h-screen   py-16 px-5 flex flex-col md:flex-row items-center justify-between mx-auto w-full">
+    <section className="min-h-screen   py-16 px-5 flex flex-col md:flex-row items-center justify-center mx-auto w-full">
       {/* Text Section */}
       <div className="max-w-xl">
         <h1 className="text-4xl md:text-7xl font-medium text-gray-800 leading-tight mb-4">
-          Koleksi Tas <br /> Dyah Official
+          Koleksi <br /> Dya Official
         </h1>
         <p className="text-lg text-gray-600 mb-6 max-w-xl">
           Temukan gaya terbaikmu dengan koleksi tas elegan & modern. Cocok untuk

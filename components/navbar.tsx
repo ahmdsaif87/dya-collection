@@ -26,7 +26,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
               <span className="font-bold text-xl uppercase">
-                Dyah Collection
+                Dya Collection
               </span>
             </Link>
           </nav>
