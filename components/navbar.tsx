@@ -2,25 +2,24 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, Search, ShoppingCart, X } from "lucide-react";
+import { Menu, Search, X } from "lucide-react";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-import { Badge } from "@/components/ui/badge";
 import { SearchCommand } from "./search-comand";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { CartSheet } from "./cart-sheet";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
 
   return (
-    <header className="sticky  px-5 top-0 z-50 w-full bg-background">
+    <header className="sticky px-5 top-0 z-50 w-full bg-background">
       <div>
-        <div className="flex h-16  items-center justify-between">
+        <div className="flex h-16 items-center justify-between">
           {/* Desktop Navigation */}
           <nav className="flex space-x-6 items-center">
             {/* Logo */}
@@ -56,12 +55,7 @@ export default function Navbar() {
             <SignedIn>
               <UserButton />
             </SignedIn>
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              <Badge className="absolute -right-1 -top-1 h-5 w-5 rounded-full p-0">
-                0
-              </Badge>
-            </Button>
+            <CartSheet />
             {/* Mobile Menu Button */}
             <button
               className="md:hidden"
@@ -106,6 +100,7 @@ export default function Navbar() {
     </header>
   );
 }
+
 export const page: { name: string; href: string }[] = [
   {
     name: "Home",
@@ -115,7 +110,6 @@ export const page: { name: string; href: string }[] = [
     name: "Produk",
     href: "/products",
   },
-
   {
     name: "Diskon",
     href: "/discount",

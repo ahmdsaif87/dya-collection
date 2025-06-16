@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Home, ShoppingBag, DollarSign, PackageSearch } from "lucide-react";
+import { Home, ShoppingBag, PackageSearch } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 
@@ -11,7 +11,6 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
@@ -22,13 +21,18 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/",
+      url: "/admin/dashboard",
       icon: Home,
     },
     {
       title: "Products",
-      url: "/products",
+      url: "/admin/products",
       icon: ShoppingBag,
+    },
+    {
+      title: "Categories",
+      url: "/admin/categories",
+      icon: PackageSearch,
     },
   ],
 };

@@ -1,0 +1,153 @@
+"use client";
+
+import { useState } from "react";
+import { Plus } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/data-table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { columns, CategoryColumn } from "./columns";
+import { CategoryForm } from "./category-form";
+
+async function getCategories() {
+  const response = await fetch("/api/categories");
+  if (!response.ok) {
+    throw new Error("Failed to fetch categories");
+  }
+  const data = await response.json();
+  return data.map((category: any) => ({
+    id: category.id,
+    name: category.name,
+    productsCount: category._count.products,
+    createdAt: new Date(category.createdAt).toLocaleDateString(),
+  }));
+}
+
+export function CategoriesClient() {
+  const [open, setOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategoryColumn | null>(null);
+  const queryClient = useQueryClient();
+
+  const { data: categories = [], isLoading } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const response = await fetch(`/api/categories/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete category");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      toast.success("Category deleted successfully");
+    },
+  });
+
+  const onDelete = async (id: string) => {
+    try {
+      if (window.confirm("Are you sure you want to delete this category?")) {
+        await deleteMutation.mutateAsync(id);
+      }
+    } catch (error) {
+      console.error("[DELETE_CATEGORY]", error);
+      toast.error("Something went wrong");
+    }
+  };
+
+  const onSubmit = async (data: { name: string }) => {
+    try {
+      if (selectedCategory) {
+        const response = await fetch(`/api/categories/${selectedCategory.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          throw response;
+        }
+
+        await queryClient.invalidateQueries({ queryKey: ["categories"] });
+        toast.success("Category updated successfully");
+        setOpen(false);
+      } else {
+        const response = await fetch("/api/categories", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          throw response;
+        }
+
+        await queryClient.invalidateQueries({ queryKey: ["categories"] });
+        toast.success("Category created successfully");
+        setOpen(false);
+      }
+    } catch (error: any) {
+      if (error?.status === 409) {
+        throw error;
+      }
+      console.error("[CATEGORY_ERROR]", error);
+      toast.error("Something went wrong");
+    }
+  };
+
+  const openEditDialog = (category: CategoryColumn) => {
+    setSelectedCategory(category);
+    setOpen(true);
+  };
+
+  const onOpenChange = (open: boolean) => {
+    setOpen(open);
+    if (!open) {
+      setSelectedCategory(null);
+    }
+  };
+
+  return (
+    <div className="space-y-4 p-8 pt-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-3xl font-bold tracking-tight">Categories</h2>
+        <Dialog open={open} onOpenChange={onOpenChange}>
+          <DialogTrigger asChild>
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              Add New
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>
+                {selectedCategory ? "Edit Category" : "Create Category"}
+              </DialogTitle>
+            </DialogHeader>
+            <CategoryForm initialData={selectedCategory} onSubmit={onSubmit} />
+          </DialogContent>
+        </Dialog>
+      </div>
+      <DataTable
+        columns={columns}
+        data={categories}
+        onDelete={onDelete}
+        openEditDialog={openEditDialog}
+      />
+    </div>
+  );
+}
