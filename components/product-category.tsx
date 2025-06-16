@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 
@@ -44,11 +45,11 @@ export default function ProductCategory() {
                 className="px-4 py-2 rounded-full bg-black-200 border text-white-800 hover:bg-white-300 transition-colors text-sm"
               >
                 {category.name}
-                {category._count.products > 0 && (
+                {/* {category._count.products > 0 && (
                   <span className="ml-2 text-xs opacity-70">
                     ({category._count.products})
                   </span>
-                )}
+                )} */}
               </Link>
             </li>
           ))}

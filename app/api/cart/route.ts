@@ -14,7 +14,7 @@ export async function GET() {
     await prisma.user.upsert({
       where: { id: userId },
       update: {},
-      create: { id: userId },
+      create: { id: userId, email: userId },
     });
 
     const cartItems = await prisma.cartItem.findMany({
@@ -63,7 +63,7 @@ export async function POST(req: Request) {
     await prisma.user.upsert({
       where: { id: userId },
       update: {},
-      create: { id: userId },
+      create: { id: userId, email: userId },
     });
 
     // Check if item already in cart
@@ -138,7 +138,7 @@ export async function PATCH(req: Request) {
     await prisma.user.upsert({
       where: { id: userId },
       update: {},
-      create: { id: userId },
+      create: { id: userId, email: userId },
     });
 
     const cartItem = await prisma.cartItem.update({
@@ -184,7 +184,7 @@ export async function DELETE(req: Request) {
     await prisma.user.upsert({
       where: { id: userId },
       update: {},
-      create: { id: userId },
+      create: { id: userId, email: userId },
     });
 
     await prisma.cartItem.delete({

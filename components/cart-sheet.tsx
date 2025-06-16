@@ -71,8 +71,8 @@ export function CartSheet() {
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent className="flex w-full flex-col pr-0 sm:max-w-lg">
-        <SheetHeader className="space-y-2.5 pr-6">
+      <SheetContent className="p-10 flex w-full flex-col  sm:max-w-lg">
+        <SheetHeader className="space-y-2.5">
           <SheetTitle>Cart ({items.length})</SheetTitle>
         </SheetHeader>
         {isLoading ? (

@@ -1,33 +1,42 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { productId: string } }
+  context: { params: Promise<{ productId: string }> }
 ) {
   try {
-    // Ensure params is awaited
-    const { productId } = params;
+    const { productId } = await context.params;
+
+    if (!productId) {
+      return NextResponse.json(
+        { error: "Product ID is required" },
+        { status: 400 }
+      );
+    }
 
     const product = await prisma.product.findUnique({
       where: {
         id: productId,
       },
       include: {
-        category: true,
         variant: true,
+        category: true,
       },
     });
 
     if (!product) {
-      return Response.json({ error: "Product not found" }, { status: 404 });
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
-    return Response.json(product);
+    return NextResponse.json(product);
   } catch (error) {
     console.error("Error fetching product:", error);
-    return Response.json({ error: "Failed to fetch product" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch product" },
+      { status: 500 }
+    );
   }
 }
 

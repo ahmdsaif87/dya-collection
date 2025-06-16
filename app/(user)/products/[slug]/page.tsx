@@ -21,6 +21,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { useCartStore } from "@/lib/store";
+import { formatPrice } from "@/lib/utils";
 
 interface Variant {
   id: string;
@@ -100,6 +101,7 @@ async function getRelatedProducts() {
 export default function Page() {
   const { slug } = useParams();
   const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
+  const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
 
@@ -114,6 +116,24 @@ export default function Page() {
     queryKey: ["relatedProducts"],
     queryFn: getRelatedProducts,
   });
+
+  const handleVariantChange = (variantId: string) => {
+    const variant = product?.variant.find((v) => v.id === variantId);
+    setSelectedVariant(variant || null);
+    setQuantity(1);
+  };
+
+  const handleQuantityChange = (value: string) => {
+    const newQuantity = parseInt(value);
+    if (isNaN(newQuantity) || newQuantity < 1) {
+      setQuantity(1);
+    } else if (selectedVariant && newQuantity > selectedVariant.stock) {
+      setQuantity(selectedVariant.stock);
+      toast.error("Quantity cannot exceed available stock");
+    } else {
+      setQuantity(newQuantity);
+    }
+  };
 
   const handleAddToCart = async () => {
     try {
@@ -137,11 +157,11 @@ export default function Page() {
         productId: selectedVariant.id,
         quantity,
         product: {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          imageUrl: product.imageUrl,
-          variant: product.variant,
+          id: product?.id || "",
+          name: product?.name || "",
+          price: product?.price || 0,
+          imageUrl: product?.imageUrl || "",
+          variant: product?.variant || [],
         },
       });
       toast.success("Added to cart!");
@@ -219,7 +239,7 @@ export default function Page() {
             </Badge>
           </div>
           <Badge className="font-mono text-xl font-bold mt-4 rounded-full border-primary border-2 w-fit">
-            Rp. {product.price.toLocaleString("id-ID")}
+            Rp. {formatPrice(product.price)}
           </Badge>
 
           <Separator className="my-4" />
@@ -232,7 +252,7 @@ export default function Page() {
                   <Button
                     variant="outline"
                     key={variant.id}
-                    onClick={() => setSelectedVariant(variant)}
+                    onClick={() => handleVariantChange(variant.id)}
                     className={cn(
                       "rounded-full px-4 py-1",
                       selectedVariant?.id === variant.id &&
@@ -258,6 +278,43 @@ export default function Page() {
             <p className="text-md text-muted-foreground mt-4">
               {product.description}
             </p>
+          )}
+
+          {/* Quantity Selection */}
+          {selectedVariant && selectedVariant.stock > 0 && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Quantity</label>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() =>
+                    handleQuantityChange((quantity - 1).toString())
+                  }
+                  disabled={quantity <= 1}
+                >
+                  -
+                </Button>
+                <input
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => handleQuantityChange(e.target.value)}
+                  className="w-20 text-center border rounded-md p-2"
+                  min="1"
+                  max={selectedVariant.stock}
+                />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() =>
+                    handleQuantityChange((quantity + 1).toString())
+                  }
+                  disabled={quantity >= selectedVariant.stock}
+                >
+                  +
+                </Button>
+              </div>
+            </div>
           )}
 
           {/* Add to Cart Button */}
@@ -316,7 +373,7 @@ export default function Page() {
                         </CardDescription>
                         <div className="flex justify-between items-center">
                           <CardAction>
-                            Rp.{product.price.toLocaleString("id-ID")}
+                            Rp.{formatPrice(product.price)}
                           </CardAction>
                           {product.variant.length > 0 && (
                             <span className="text-xs text-muted-foreground">
