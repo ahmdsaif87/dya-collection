@@ -2,14 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, Search, ShoppingCart, User, X } from "lucide-react";
-import {
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { Menu, Search, ShoppingCart, X } from "lucide-react";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
