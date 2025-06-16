@@ -88,21 +88,23 @@ export function CartSheet() {
                     <div className="flex items-center space-x-4">
                       <div className="relative aspect-square h-16 w-16 min-w-fit overflow-hidden rounded">
                         <Image
-                          src={item.imageUrl}
-                          alt={item.productName}
+                          src={item.product.imageUrl}
+                          alt={item.product.name}
                           fill
                           className="absolute object-cover"
                         />
                       </div>
                       <div className="flex flex-col space-y-1 self-start">
                         <span className="line-clamp-1 text-sm font-medium">
-                          {item.productName}
+                          {item.product.name}
                         </span>
-                        <span className="line-clamp-1 text-xs text-muted-foreground">
-                          {item.variantName}
-                        </span>
+                        {item.product.variant.length > 0 && (
+                          <span className="line-clamp-1 text-xs text-muted-foreground">
+                            {item.product.variant.length} variants available
+                          </span>
+                        )}
                         <span className="line-clamp-1 text-sm font-medium">
-                          {formatPrice(item.price)}
+                          {formatPrice(item.product.price)}
                         </span>
                       </div>
                     </div>

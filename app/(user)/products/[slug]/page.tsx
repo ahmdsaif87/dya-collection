@@ -116,31 +116,40 @@ export default function Page() {
   });
 
   const handleAddToCart = async () => {
-    if (!product || !selectedVariant) {
-      toast.error("Please select a variant");
-      return;
-    }
-
-    if (selectedVariant.stock === 0) {
-      toast.error("Selected variant is out of stock");
-      return;
-    }
-
     try {
+      if (!selectedVariant) {
+        toast.error("Please select a variant");
+        return;
+      }
+
+      if (quantity <= 0) {
+        toast.error("Please select a valid quantity");
+        return;
+      }
+
+      if (quantity > selectedVariant.stock) {
+        toast.error("Quantity exceeds available stock");
+        return;
+      }
+
       setIsAddingToCart(true);
       await addItem({
-        id: `${product.id}-${selectedVariant.id}`,
-        productId: product.id,
-        variantId: selectedVariant.id,
-        productName: product.name,
-        variantName: selectedVariant.name,
-        price: product.price,
-        quantity: 1,
-        imageUrl: product.imageUrl,
+        productId: selectedVariant.id,
+        quantity,
+        product: {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          imageUrl: product.imageUrl,
+          variant: product.variant,
+        },
       });
-      toast.success("Added to cart");
+      toast.success("Added to cart!");
     } catch (error) {
-      toast.error("Failed to add to cart");
+      console.error("Error adding to cart:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to add item to cart"
+      );
     } finally {
       setIsAddingToCart(false);
     }

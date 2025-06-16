@@ -23,7 +23,13 @@ export interface CartItem {
 interface CartStore {
   items: CartItem[];
   isLoading: boolean;
-  addItem: (item: Omit<CartItem, "id">) => Promise<void>;
+  isAuthenticated: boolean;
+  setIsAuthenticated: (value: boolean) => void;
+  addItem: (item: {
+    productId: string;
+    quantity: number;
+    product: Product;
+  }) => Promise<void>;
   removeItem: (itemId: string) => Promise<void>;
   updateQuantity: (itemId: string, quantity: number) => Promise<void>;
   clearCart: () => void;
@@ -36,9 +42,14 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       items: [],
       isLoading: false,
+      isAuthenticated: false,
+      setIsAuthenticated: (value) => set({ isAuthenticated: value }),
 
       fetchCart: async () => {
         try {
+          const { isAuthenticated } = get();
+          if (!isAuthenticated) return;
+
           set({ isLoading: true });
           const response = await fetch("/api/cart");
           if (!response.ok) throw new Error("Failed to fetch cart");
@@ -54,7 +65,33 @@ export const useCartStore = create<CartStore>()(
 
       addItem: async (item) => {
         try {
+          const { isAuthenticated, items } = get();
           set({ isLoading: true });
+
+          // If not authenticated, handle locally
+          if (!isAuthenticated) {
+            const existingItem = items.find(
+              (i) => i.productId === item.productId
+            );
+            if (existingItem) {
+              set({
+                items: items.map((i) =>
+                  i.productId === item.productId
+                    ? { ...i, quantity: i.quantity + item.quantity }
+                    : i
+                ),
+              });
+            } else {
+              const newItem = {
+                id: `local-${Date.now()}`,
+                ...item,
+              };
+              set({ items: [...items, newItem] });
+            }
+            return;
+          }
+
+          // Handle server-side cart
           const response = await fetch("/api/cart", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -64,10 +101,12 @@ export const useCartStore = create<CartStore>()(
             }),
           });
 
-          if (!response.ok) throw new Error("Failed to add item to cart");
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Failed to add item to cart");
+          }
 
           const updatedItem = await response.json();
-          const items = get().items;
           const existingItemIndex = items.findIndex(
             (i) => i.id === updatedItem.id
           );
@@ -91,12 +130,26 @@ export const useCartStore = create<CartStore>()(
 
       removeItem: async (itemId) => {
         try {
+          const { isAuthenticated } = get();
           set({ isLoading: true });
+
+          // If not authenticated, handle locally
+          if (!isAuthenticated) {
+            set((state) => ({
+              items: state.items.filter((i) => i.id !== itemId),
+            }));
+            return;
+          }
+
+          // Handle server-side cart
           const response = await fetch(`/api/cart?id=${itemId}`, {
             method: "DELETE",
           });
 
-          if (!response.ok) throw new Error("Failed to remove item from cart");
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Failed to remove item from cart");
+          }
 
           set((state) => ({
             items: state.items.filter((i) => i.id !== itemId),
@@ -111,14 +164,30 @@ export const useCartStore = create<CartStore>()(
 
       updateQuantity: async (itemId, quantity) => {
         try {
+          const { isAuthenticated, items } = get();
           set({ isLoading: true });
+
+          // If not authenticated, handle locally
+          if (!isAuthenticated) {
+            set({
+              items: items.map((item) =>
+                item.id === itemId ? { ...item, quantity } : item
+              ),
+            });
+            return;
+          }
+
+          // Handle server-side cart
           const response = await fetch("/api/cart", {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ id: itemId, quantity }),
           });
 
-          if (!response.ok) throw new Error("Failed to update cart item");
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Failed to update cart item");
+          }
 
           const updatedItem = await response.json();
           set((state) => ({
