@@ -232,7 +232,7 @@ export default function Page() {
             </Badge>
           </div>
           <Badge className="font-mono text-xl font-bold mt-4 rounded-full border-primary border-2 w-fit">
-            Rp. {formatPrice(product.price)}
+            {formatPrice(product.price)}
           </Badge>
 
           <Separator className="my-4" />

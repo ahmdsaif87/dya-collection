@@ -40,7 +40,7 @@ export default function ProductCategory() {
           {categories?.map((category) => (
             <li key={category.id}>
               <Link
-                href={`/kategori/${encodeURIComponent(
+                href={`/search/${encodeURIComponent(
                   category.name.toLowerCase().replace(/\s+/g, "-")
                 )}`}
                 className="px-4 py-2 rounded-full bg-black-200 border text-white-800 hover:bg-white-300 transition-colors text-sm"
