@@ -1,18 +1,26 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { toast } from "sonner";
 
-interface ProductVariant {
+export interface ProductVariant {
   id: string;
   name: string;
   stock: number;
 }
 
-interface Product {
+export interface Product {
   id: string;
   name: string;
+  description?: string;
   price: number;
   imageUrl: string;
+  categoryId?: string;
+  category?: {
+    id: string;
+    name: string;
+  };
   variant: ProductVariant[];
+  slug?: string;
 }
 
 export interface CartItem {
@@ -20,58 +28,34 @@ export interface CartItem {
   productId: string;
   productVariantId: string;
   quantity: number;
-  product: Product;
-  variant: ProductVariant;
+  product: Omit<Product, "variant">;
+  productVariant: ProductVariant;
 }
+
+type AddToCartInput = Omit<CartItem, "id">;
 
 interface CartStore {
   items: CartItem[];
-  isAuthenticated: boolean;
-  setIsAuthenticated: (value: boolean) => void;
-  addItem: (item: {
-    productId: string;
-    productVariantId: string;
-    quantity: number;
-    product: Product;
-    variant: ProductVariant;
-  }) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  isLoading: boolean;
+  addItem: (item: AddToCartInput) => Promise<void>;
+  removeItem: (id: string) => Promise<void>;
+  updateQuantity: (id: string, quantity: number) => Promise<void>;
   clearCart: () => void;
   getTotal: () => number;
-  syncWithBackend: () => Promise<void>;
+  setItems: (items: CartItem[]) => void;
 }
 
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
-      isAuthenticated: false,
-      setIsAuthenticated: (value) => {
-        set({ isAuthenticated: value });
-        if (value) {
-          // Silently sync with backend when authenticated
-          get().syncWithBackend();
-        }
+      isLoading: false,
+
+      setItems: (items) => {
+        set({ items });
       },
 
-      syncWithBackend: async () => {
-        try {
-          const response = await fetch("/api/cart");
-          if (!response.ok) return;
-
-          const backendItems = await response.json();
-          // Only update state if there are items in backend
-          if (backendItems.length > 0) {
-            set({ items: backendItems });
-          }
-        } catch (error) {
-          console.error("Error syncing with backend:", error);
-        }
-      },
-
-      addItem: (item) => {
-        const tempId = `temp-${Date.now()}`;
+      addItem: async (item) => {
         const existingItem = get().items.find(
           (i) =>
             i.productId === item.productId &&
@@ -79,38 +63,25 @@ export const useCartStore = create<CartStore>()(
         );
 
         if (existingItem) {
-          // Update quantity if item exists
-          set((state) => ({
-            items: state.items.map((i) =>
-              i.productId === item.productId &&
-              i.productVariantId === item.productVariantId
-                ? { ...i, quantity: i.quantity + item.quantity }
-                : i
-            ),
-          }));
+          return get().updateQuantity(
+            existingItem.id,
+            existingItem.quantity + item.quantity
+          );
+        }
 
-          // Sync to database
-          fetch("/api/cart", {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              id: existingItem.id,
-              quantity: existingItem.quantity + item.quantity,
-            }),
-          });
-        } else {
-          // Add new item to state
-          const newItem = {
-            ...item,
-            id: tempId,
-          };
+        // Add new item optimistically with a temporary ID
+        const tempId = `temp-${Date.now()}`;
+        const tempItem = {
+          ...item,
+          id: tempId,
+        };
 
-          set((state) => ({
-            items: [...state.items, newItem],
-          }));
+        set((state) => ({
+          items: [...state.items, tempItem],
+        }));
 
-          // Sync to database
-          fetch("/api/cart", {
+        try {
+          const response = await fetch("/api/cart", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -119,36 +90,93 @@ export const useCartStore = create<CartStore>()(
               quantity: item.quantity,
             }),
           });
+
+          if (!response.ok) {
+            throw new Error("Failed to add item to cart");
+          }
+
+          const savedItem = await response.json();
+
+          // Replace temp item with saved item
+          set((state) => ({
+            items: state.items.map((i) => (i.id === tempId ? savedItem : i)),
+          }));
+        } catch (error) {
+          // Remove temp item on error
+          set((state) => ({
+            items: state.items.filter((i) => i.id !== tempId),
+          }));
+          toast.error(
+            error instanceof Error ? error.message : "Failed to add item"
+          );
         }
       },
 
-      removeItem: (id) => {
-        set((state) => ({
-          items: state.items.filter((item) => item.id !== id),
-        }));
-
-        fetch(`/api/cart?id=${id}`, {
-          method: "DELETE",
-        });
-      },
-
-      updateQuantity: (id, quantity) => {
+      updateQuantity: async (id, quantity) => {
         if (quantity <= 0) {
-          get().removeItem(id);
+          return get().removeItem(id);
+        }
+
+        const originalItems = get().items;
+        const item = originalItems.find((i) => i.id === id);
+
+        if (!item) {
+          toast.error("Item not found");
           return;
         }
 
+        // Update optimistically
         set((state) => ({
           items: state.items.map((item) =>
             item.id === id ? { ...item, quantity } : item
           ),
         }));
 
-        fetch("/api/cart", {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id, quantity }),
-        });
+        try {
+          // Only make API call for non-temporary items
+          if (!id.startsWith("temp-")) {
+            const response = await fetch("/api/cart", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id, quantity }),
+            });
+
+            if (!response.ok) {
+              throw new Error("Failed to update quantity");
+            }
+          }
+        } catch (error) {
+          // Revert on error
+          set({ items: originalItems });
+          toast.error(
+            error instanceof Error ? error.message : "Failed to update quantity"
+          );
+        }
+      },
+
+      removeItem: async (id) => {
+        const originalItems = get().items;
+
+        // Remove optimistically
+        set((state) => ({
+          items: state.items.filter((item) => item.id !== id),
+        }));
+
+        try {
+          const response = await fetch(`/api/cart?id=${id}`, {
+            method: "DELETE",
+          });
+
+          if (!response.ok && !id.startsWith("temp-")) {
+            throw new Error("Failed to remove item");
+          }
+        } catch (error) {
+          // Revert on error
+          set({ items: originalItems });
+          toast.error(
+            error instanceof Error ? error.message : "Failed to remove item"
+          );
+        }
       },
 
       clearCart: () => {

@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
 
 import { QueryProvider } from "./QueryClientProvider";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
           <QueryProvider>
             {children}
             <Toaster position="top-center" />
+            <ReactQueryDevtools initialIsOpen={false} />
           </QueryProvider>
         </body>
       </html>

@@ -6,9 +6,9 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
+      <section className=" py-20">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">About ShopHub</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">Tentang Kami</h1>
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
             Your trusted online marketplace connecting millions of customers with quality products since 2020
           </p>
@@ -42,19 +42,19 @@ export default function AboutPage() {
             <div className="bg-gray-100 rounded-lg p-8">
               <div className="grid grid-cols-2 gap-6 text-center">
                 <div>
-                  <div className="text-3xl font-bold text-blue-600 mb-2">5M+</div>
+                  <div className="text-3xl font-bold text-primary mb-2">5M+</div>
                   <div className="text-sm text-gray-600">Happy Customers</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-blue-600 mb-2">50K+</div>
+                  <div className="text-3xl font-bold text-primary mb-2">50K+</div>
                   <div className="text-sm text-gray-600">Products</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-blue-600 mb-2">1K+</div>
+                  <div className="text-3xl font-bold text-primary mb-2">1K+</div>
                   <div className="text-sm text-gray-600">Trusted Sellers</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-blue-600 mb-2">99.9%</div>
+                  <div className="text-3xl font-bold text-primary mb-2">99.9%</div>
                   <div className="text-sm text-gray-600">Uptime</div>
                 </div>
               </div>
@@ -64,7 +64,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Values */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-card">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Our Values</h2>
@@ -74,8 +74,8 @@ export default function AboutPage() {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center p-6">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="h-8 w-8 text-blue-600" />
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="h-8 w-8 text-primary-foreground" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Quality First</h3>
               <p className="text-gray-600">
@@ -84,8 +84,8 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="text-center p-6">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Heart className="h-8 w-8 text-blue-600" />
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <Heart className="h-8 w-8 text-primary-foreground" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Customer Love</h3>
               <p className="text-gray-600">
@@ -94,8 +94,8 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="text-center p-6">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-8 w-8 text-blue-600" />
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="h-8 w-8 text-primary-foreground" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Trust & Security</h3>
               <p className="text-gray-600">
@@ -117,8 +117,8 @@ export default function AboutPage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Truck className="h-8 w-8 text-green-600" />
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <Truck className="h-8 w-8 text-primary-foreground" />
               </div>
               <h3 className="font-semibold mb-2">Fast Shipping</h3>
               <p className="text-sm text-gray-600">
@@ -126,22 +126,22 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-8 w-8 text-purple-600" />
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="h-8 w-8 text-primary-foreground" />
               </div>
               <h3 className="font-semibold mb-2">Secure Payment</h3>
               <p className="text-sm text-gray-600">Your payment information is protected with bank-level security</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="h-8 w-8 text-orange-600" />
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <Award className="h-8 w-8 text-primary-foreground" />
               </div>
               <h3 className="font-semibold mb-2">Quality Guarantee</h3>
               <p className="text-sm text-gray-600">30-day money-back guarantee on all purchases</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="h-8 w-8 text-blue-600" />
+              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="h-8 w-8 text-primary-foreground" />
               </div>
               <h3 className="font-semibold mb-2">24/7 Support</h3>
               <p className="text-sm text-gray-600">Round-the-clock customer service to help you anytime</p>
@@ -151,42 +151,42 @@ export default function AboutPage() {
       </section>
 
       {/* Team Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-card">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Meet Our Team</h2>
+            <h2 className="text-3xl font-bold mb-4">Tim Kami</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               The passionate people behind ShopHub who work tirelessly to bring you the best shopping experience
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <Users className="h-16 w-16 text-gray-500" />
+              <div className="w-32 h-32 bg-primary  border rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Users className="h-16 w-16 text-primary-foreground" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Sarah Johnson</h3>
-              <p className="text-blue-600 mb-2">CEO & Founder</p>
+              <p className="text-primary mb-2">CEO & Founder</p>
               <p className="text-sm text-gray-600">
                 Visionary leader with 15+ years in e-commerce, passionate about creating exceptional customer
                 experiences.
               </p>
             </div>
             <div className="text-center">
-              <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <Users className="h-16 w-16 text-gray-500" />
+              <div className="w-32 h-32 bg-primary text-primary-foreground border rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Users className="h-16 w-16 text-primary-foreground" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Michael Chen</h3>
-              <p className="text-blue-600 mb-2">CTO</p>
+              <p className="text-primary mb-2">CTO</p>
               <p className="text-sm text-gray-600">
                 Tech innovator ensuring our platform stays cutting-edge and secure for millions of users worldwide.
               </p>
             </div>
             <div className="text-center">
-              <div className="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <Users className="h-16 w-16 text-gray-500" />
+                <div className="w-32 h-32 bg-primary text-primary-foreground border rounded-full mx-auto mb-4 flex items-center justify-center">
+                <Users className="h-16 w-16 text-primary-foreground" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Emily Rodriguez</h3>
-              <p className="text-blue-600 mb-2">Head of Customer Success</p>
+              <p className="text-primary mb-2">Head of Customer Success</p>
               <p className="text-sm text-gray-600">
                 Dedicated to ensuring every customer has an amazing experience from browse to delivery and beyond.
               </p>
@@ -196,7 +196,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-blue-600 text-white">
+      <section className="py-16 mx-5 rounded-t-4xl bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Start Shopping?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
@@ -206,7 +206,7 @@ export default function AboutPage() {
             <Button size="lg" variant="secondary" asChild>
               <Link href="/products">Browse Products</Link>
             </Button>
-            <Button size="lg" variant="outline" className="text-blue-600 border-white hover:bg-white" asChild>
+            <Button size="lg" variant="outline" className="text-primary border-white hover:bg-white" asChild>
               <Link href="/contact">Contact Us</Link>
             </Button>
           </div>

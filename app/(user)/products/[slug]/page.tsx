@@ -2,66 +2,71 @@
 
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { useCartStore } from "@/lib/store";
+import { useCartStore, type Product, type ProductVariant } from "@/lib/store";
 import { formatPrice } from "@/lib/utils";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-interface ProductVariant {
-  id: string;
-  name: string;
-  stock: number;
-}
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  imageUrl: string;
-  categoryId: string;
-  category: {
-    id: string;
-    name: string;
-  };
-  variant: ProductVariant[];
-}
 
 function ProductSkeleton() {
   return (
-    <div className="flex w-full max-w-7xl gap-x-8 border p-7 bg-card">
-      <div className="w-1/2">
-        <Skeleton className="aspect-square w-full" />
-      </div>
-      <div className="w-1/2 flex flex-col">
-        <Skeleton className="h-16 w-3/4 mb-2" />
-        <Skeleton className="h-16 w-1/2" />
-        <Skeleton className="h-8 w-32 mt-4" />
-        <Separator className="my-4" />
-        <Skeleton className="h-4 w-24 mb-2" />
-        <div className="flex gap-2">
-          <Skeleton className="h-10 w-20" />
-          <Skeleton className="h-10 w-20" />
-          <Skeleton className="h-10 w-20" />
+    <div className="flex min-h-screen flex-col items-center justify-between px-5 py-10">
+      <div className="flex md:flex-row flex-col w-full max-w-4xl gap-x-8">
+        {/* Product Image Skeleton */}
+        <div className="w-full md:w-1/2">
+          <div className="aspect-square">
+            <Skeleton className="h-full w-full" />
+          </div>
         </div>
-        <Skeleton className="h-24 w-full mt-4" />
-        <Skeleton className="h-16 w-full mt-8" />
+
+        {/* Product Info Skeleton */}
+        <div className="w-full md:w-1/2 flex flex-col">
+          <div className="flex flex-col items-start gap-2">
+            <Skeleton className="h-16 w-3/4" />
+            <Skeleton className="h-16 w-3/4" />
+          </div>
+          <Skeleton className="h-8 w-32 mt-4" />
+
+          <Separator className="my-4" />
+
+          {/* Variants Selection Skeleton */}
+          <div>
+            <Skeleton className="h-4 w-20 mb-2" />
+            <div className="mt-2 flex flex-wrap gap-2">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="h-9 w-24 rounded-full" />
+              ))}
+            </div>
+          </div>
+
+          {/* Description Skeleton */}
+          <div className="mt-4 space-y-2">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-4/6" />
+          </div>
+
+          {/* Add to Cart Button Skeleton */}
+          <Skeleton className="h-12 w-48 rounded-full mt-8" />
+        </div>
+      </div>
+
+      {/* Related Products Section Skeleton */}
+      <div className="w-full max-w-7xl mt-10">
+        <Skeleton className="h-8 w-64 mb-4" />
+        <div className="flex gap-4 overflow-x-auto pb-10">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <RelatedProductSkeleton key={index} />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -83,11 +88,12 @@ function RelatedProductSkeleton() {
 }
 
 async function getProduct(slug: string) {
-  const response = await fetch(`/api/products/${slug}`);
+  const response = await fetch(`/api/products/${encodeURIComponent(slug)}`);
   if (!response.ok) {
     throw new Error("Failed to fetch product");
   }
-  return response.json();
+  const data = await response.json();
+  return data;
 }
 
 async function getRelatedProducts() {
@@ -95,11 +101,20 @@ async function getRelatedProducts() {
   if (!response.ok) {
     throw new Error("Failed to fetch related products");
   }
-  return response.json();
+  const data = await response.json();
+  // Add slug to each product
+  return data.map((product: Product) => ({
+    ...product,
+    slug: product.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, ""),
+  }));
 }
 
 export default function Page() {
-  const { slug } = useParams();
+  const params = useParams();
+  const slug = params?.slug as string;
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
     null
   );
@@ -137,6 +152,11 @@ export default function Page() {
   };
 
   const handleAddToCart = () => {
+    if (!product) {
+      toast.error("Product not found");
+      return;
+    }
+
     if (!selectedVariant) {
       toast.error("Please select a variant");
       return;
@@ -153,38 +173,28 @@ export default function Page() {
     }
 
     addItem({
-      productId: product?.id || "",
+      productId: product.id,
       productVariantId: selectedVariant.id,
       quantity,
       product: {
-        id: product?.id || "",
-        name: product?.name || "",
-        price: product?.price || 0,
-        imageUrl: product?.imageUrl || "",
-        variant: product?.variant || [],
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        description: product.description,
+        categoryId: product.categoryId,
+        category: product.category,
       },
-      variant: selectedVariant,
+      productVariant: selectedVariant,
     });
 
-    toast.success("Added to cart!");
+    toast.success(
+      `${product.name} ${selectedVariant.name} di tambahkan ke keranjang!`
+    );
   };
 
   if (productLoading) {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-between p-4">
-        <ProductSkeleton />
-        <div className="w-full max-w-7xl mt-10">
-          <h2 className="text-2xl font-medium justify-start">
-            Produk yang mungkin anda sukai
-          </h2>
-          <div className="flex gap-4 mt-4 overflow-x-auto pb-10">
-            {Array.from({ length: 4 }).map((_, index) => (
-              <RelatedProductSkeleton key={index} />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
+    return <ProductSkeleton />;
   }
 
   if (!product) {
@@ -204,33 +214,29 @@ export default function Page() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-between p-4">
-      <div className="flex w-full max-w-7xl gap-x-8 border p-7 bg-card">
+    <div className="flex min-h-screen flex-col items-center justify-between px-5 py-10">
+      <div className="flex md:flex-row flex-col w-full max-w-4xl gap-x-8 ">
         {/* Product Image */}
-        <div className="w-1/2">
-          <div className="aspect-square overflow-hidden">
-            <Image
-              src={product.imageUrl}
-              alt={product.name}
-              width={500}
-              height={500}
-              className="h-full w-full object-cover object-center"
-            />
-          </div>
+        <div className="w-full md:w-1/2">
+          <Suspense fallback={<Skeleton className="w-full h-full" />}>
+            <div className="aspect-square overflow-hidden">
+              <Image
+                src={product.imageUrl}
+                alt={product.name}
+                width={500}
+                height={500}
+                className="h-full w-full object-cover object-center"
+              />
+            </div>
+          </Suspense>
         </div>
 
         {/* Product Info */}
-        <div className="w-1/2 flex flex-col">
+        <div className="w-full md:w-1/2 flex flex-col">
           <div className="flex items-start justify-between">
-            <h1 className="text-7xl font-medium">
-              <span className="block">{product.name.split(" ")[0]}</span>
-              <span className="block">
-                {product.name.split(" ").slice(1).join(" ")}
-              </span>
+            <h1 className="text-4xl md:text-7xl font-medium">
+              <span className="block">{product.name}</span>
             </h1>
-            <Badge variant="secondary" className="text-sm">
-              {product.category.name}
-            </Badge>
           </div>
           <Badge className="font-mono text-xl font-bold mt-4 rounded-full border-primary border-2 w-fit">
             {formatPrice(product.price)}
@@ -248,21 +254,19 @@ export default function Page() {
                     key={variant.id}
                     onClick={() => handleVariantChange(variant.id)}
                     className={cn(
-                      "rounded-full px-4 py-1",
+                      "rounded-full px-4 py-1 relative border-2",
                       selectedVariant?.id === variant.id &&
-                        "border-3 border-primary"
+                        "border-2 border-primary",
+                      variant.stock === 0 && "bg-muted "
                     )}
                     disabled={variant.stock === 0}
                   >
                     <span>{variant.name}</span>
-                    <Badge
-                      variant={variant.stock > 0 ? "secondary" : "destructive"}
-                      className="ml-2"
-                    >
-                      {variant.stock > 0
-                        ? `${variant.stock} left`
-                        : "Out of stock"}
-                    </Badge>
+                    {variant.stock === 0 && (
+                      <span className="pointer-events-none absolute inset-0 w-full h-full flex items-center justify-center">
+                        <div className="w-[90%] h-[2px] bg-muted-foreground/50 rotate-45 rounded-full" />
+                      </span>
+                    )}
                   </Button>
                 ))}
               </div>
@@ -274,53 +278,16 @@ export default function Page() {
             </p>
           )}
 
-          {/* Quantity Selection */}
-          {selectedVariant && selectedVariant.stock > 0 && (
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Quantity</label>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() =>
-                    handleQuantityChange((quantity - 1).toString())
-                  }
-                  disabled={quantity <= 1}
-                >
-                  -
-                </Button>
-                <input
-                  type="number"
-                  value={quantity}
-                  onChange={(e) => handleQuantityChange(e.target.value)}
-                  className="w-20 text-center border rounded-md p-2"
-                  min="1"
-                  max={selectedVariant.stock}
-                />
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() =>
-                    handleQuantityChange((quantity + 1).toString())
-                  }
-                  disabled={quantity >= selectedVariant.stock}
-                >
-                  +
-                </Button>
-              </div>
-            </div>
-          )}
-
           {/* Add to Cart Button */}
           <Button
-            className="p-10 rounded-full w-full mt-8 text-lg"
+            className="p-5 rounded-full w-fit mt-8 border-2 border-primary"
             size="lg"
-            variant="outline"
+            variant="default"
             onClick={handleAddToCart}
             disabled={!selectedVariant || selectedVariant.stock === 0}
           >
-            <ShoppingCart className="size-8 mr-2" />
-            Add To Cart
+            <Plus className="size-4 mr-2" />
+            Tambahkan ke keranjang
           </Button>
         </div>
       </div>
@@ -335,26 +302,34 @@ export default function Page() {
               ))
             : relatedProducts
                 .filter((p) => p.id !== product.id)
-                .slice(0, 6)
                 .map((product) => (
-                  <Link href={`/products/${product.id}`} key={product.id}>
-                    <Card className="w-60 h-[300px rounded-xl relative overflow-hidden shadow-md">
-                      <CardHeader className="flex items-center justify-center p-4">
-                        <Image
-                          src={product.imageUrl}
-                          width={200}
-                          height={200}
-                          alt={product.name}
-                          className="transition-transform duration-300 hover:scale-105 object-contain"
-                        />
+                  <Link
+                    key={product.id}
+                    href={`/products/${product.slug}`}
+                    className="w-60 gap-2 relative"
+                  >
+                    <Card>
+                      <CardHeader>
+                        <div className="aspect-square overflow-hidden">
+                          <Image
+                            src={product.imageUrl}
+                            alt={product.name}
+                            width={200}
+                            height={200}
+                            className="h-full w-full object-cover object-center"
+                          />
+                        </div>
                       </CardHeader>
-                      <CardContent className="absolute bottom-0 left-0 right-0 p-3 flex items-center justify-between rounded-b-xl">
-                        <span className="text-sm font-medium">
+                      <CardContent className="flex flex-col gap-2">
+                        <h3 className="font-medium line-clamp-1">
                           {product.name}
-                        </span>
-                        <span className="bg-primary text-white text-sm font-semibold px-3 py-1 rounded-full">
+                        </h3>
+                        <p className="text-sm text-muted-foreground line-clamp-2">
+                          {product.description}
+                        </p>
+                        <Badge className="w-fit" variant="outline">
                           {formatPrice(product.price)}
-                        </span>
+                        </Badge>
                       </CardContent>
                     </Card>
                   </Link>
