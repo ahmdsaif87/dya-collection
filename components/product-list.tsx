@@ -38,7 +38,7 @@ function ProductCard({ product }: { product: Product }) {
         <CardContent className="absolute bottom-0 left-0 right-0 p-3 flex items-center ">
           <div className="flex border rounded-full  items-center  gap-2 p-2 bg-glass bg-white/10 backdrop-blur-md">
             <span className="text-sm font-semibold">{product.name}</span>
-            <span className="bg-primary text-white text-sm font-semibold px-3 py-1 rounded-full">
+            <span className="bg-primary text-primary-foreground text-sm font-semibold px-3 py-1 rounded-full">
               {formatPrice(product.price)}
             </span>
           </div>

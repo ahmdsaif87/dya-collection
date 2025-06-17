@@ -1,25 +1,26 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
+import { Skeleton } from "./ui/skeleton";
+import { usePathname } from "next/navigation";
 
 interface Category {
   id: string;
   name: string;
-  _count: {
-    products: number;
-  };
 }
+
+const getCategories = async () => {
+  const response = await fetch("/api/categories");
+  if (!response.ok) {
+    throw new Error("Failed to fetch categories");
+  }
+  return response.json();
+};
 
 export default function ProductCategory() {
   const { data: categories, isLoading } = useQuery<Category[]>({
     queryKey: ["categories"],
-    queryFn: async () => {
-      const response = await fetch("/api/categories");
-      if (!response.ok) {
-        throw new Error("Failed to fetch categories");
-      }
-      return response.json();
-    },
+    queryFn: getCategories,
   });
 
   if (isLoading) {
@@ -45,15 +46,63 @@ export default function ProductCategory() {
                 className="px-4 py-2 rounded-full bg-black-200 border text-white-800 hover:bg-white-300 transition-colors text-sm"
               >
                 {category.name}
-                {/* {category._count.products > 0 && (
-                  <span className="ml-2 text-xs opacity-70">
-                    ({category._count.products})
-                  </span>
-                )} */}
               </Link>
             </li>
           ))}
         </ul>
+      </div>
+    </div>
+  );
+}
+
+export function ProductCategoryLink() {
+  const pathname = usePathname();
+  const { data: categories, isLoading } = useQuery<Category[]>({
+    queryKey: ["categories"],
+    queryFn: getCategories,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="w-64 p-6">
+        <h2 className="text-xl font-semibold mb-4">Collections</h2>
+        <div className="space-y-2">
+          {[...Array(6)].map((_, i) => (
+            <Skeleton key={i} className="h-6 w-full" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-50 p-6  min-h-screen  ">
+      <h2 className="text-sm text-muted-foreground  mb-4">Collections</h2>
+      <div className="flex flex-col space-y-3">
+        <Link
+          href="/products"
+          className={`text-sm ${pathname === "/products" ? "underline" : ""}`}
+        >
+          All
+        </Link>
+        {categories?.map((category) => (
+          <Link
+            key={category.id}
+            href={`/kategori/${encodeURIComponent(
+              category.name.toLowerCase().replace(/\s+/g, "-")
+            )}`}
+            className={`text-sm ${
+              pathname ===
+              `/kategori/${encodeURIComponent(
+                category.name.toLowerCase().replace(/\s+/g, "-")
+              )}`
+                ? "underline"
+                : ""
+            }`}
+          >
+            {category.name}
+          </Link>
+        ))}
       </div>
     </div>
   );

@@ -1,10 +1,13 @@
+import { ProductCategoryLink } from "@/components/product-category";
 import { ProductList } from "@/components/product-list";
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
   return (
-    <main className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Our Products</h1>
-      <ProductList />
+    <main className="flex min-h-screen">
+      <ProductCategoryLink />
+      <div className="flex-1 p-6">
+        <ProductList />
+      </div>
     </main>
   );
 }
