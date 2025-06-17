@@ -18,10 +18,7 @@ export default async function SearchCategoryPage({
   if (!decodedCategory) {
     notFound();
   }
-
-  // Convert URL-friendly category name to display format
-  const displayCategory = decodedCategory.split("-").join(" ");
-
+  
   return (
     <main className="flex min-h-screen">
       <ProductCategoryLink />

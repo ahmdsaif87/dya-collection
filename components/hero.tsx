@@ -3,9 +3,9 @@ import { Button } from "./ui/button";
 
 export default function Hero() {
   return (
-    <section className="min-h-screen   py-16 px-5 flex flex-col md:flex-row items-center justify-center mx-auto w-full">
+    <section className=" py-16 px-5  flex flex-col md:flex-row items-center justify-between w-full min-h-screen">
       {/* Text Section */}
-      <div className="max-w-xl">
+      <div>
         <h1 className="text-4xl md:text-7xl font-medium text-gray-800 leading-tight mb-4">
           Koleksi <br /> Dya Official
         </h1>

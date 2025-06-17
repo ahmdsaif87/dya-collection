@@ -2,8 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, Search, X } from "lucide-react";
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { Menu, Search, User, X } from "lucide-react";
+import {
+  SignInButton,
+  SignOutButton,
+  SignedIn,
+  SignedOut,
+  useUser,
+} from "@clerk/nextjs";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,11 +17,39 @@ import { SearchCommand } from "./search-comand";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { CartSheet } from "./cart-sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import Image from "next/image";
+
+export const page: { name: string; href: string }[] = [
+  {
+    name: "Home",
+    href: "/",
+  },
+  {
+    name: "Produk",
+    href: "/search",
+  },
+  {
+    name: "Tentang Kami",
+    href: "/about",
+  },
+  {
+    name: "Kontak",
+    href: "/contact",
+  },
+];
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+  const { user } = useUser();
   return (
     <header className="sticky px-5 top-0 z-50 w-full bg-background">
       <div>
@@ -53,7 +87,7 @@ export default function Navbar() {
               </SignInButton>
             </SignedOut>
             <SignedIn>
-              <UserButton />
+              <UserButton user={user} />
             </SignedIn>
             <CartSheet />
             {/* Mobile Menu Button */}
@@ -101,25 +135,41 @@ export default function Navbar() {
   );
 }
 
-export const page: { name: string; href: string }[] = [
-  {
-    name: "Home",
-    href: "/",
-  },
-  {
-    name: "Produk",
-    href: "/search",
-  },
-  {
-    name: "Diskon",
-    href: "/discount",
-  },
-  {
-    name: "Tentang Kami",
-    href: "/about",
-  },
-  {
-    name: "Kontak",
-    href: "/contact",
-  },
-];
+const UserButton = ({ user }: { user: any }) => (
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Image
+        src={user.imageUrl}
+        alt={user.fullName}
+        width={32}
+        height={32}
+        className="rounded-full cursor-pointer hover:opacity-80 transition-opacity"
+      />
+    </DropdownMenuTrigger>
+    <DropdownMenuContent>
+      <DropdownMenuLabel>
+        <div className="flex flex-col space-y-1 leading-none">
+          <p className="font-medium">{user.fullName}</p>
+          <p className="text-xs text-muted-foreground">
+            {user.emailAddresses[0].emailAddress}
+          </p>
+        </div>
+      </DropdownMenuLabel>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem asChild>
+        <Link href={"/purchase"} className="cursor-pointer w-full">
+          Pesanan Saya
+        </Link>
+      </DropdownMenuItem>
+      <DropdownMenuItem asChild>
+        <Link href="/user-profile" className="cursor-pointer w-full">
+          Akun Saya
+        </Link>
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem>
+        <SignOutButton>Keluar</SignOutButton>
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+);

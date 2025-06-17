@@ -4,18 +4,36 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/data-table";
 import { columns } from "./columns";
+import { ProductResponse } from "../types";
 
-async function getProducts() {
+interface FormattedProduct {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+  category: string;
+  categoryId: string;
+  variants: Array<{
+    id: string;
+    name: string;
+    stock: number;
+  }>;
+  createdAt: string;
+}
+
+async function getProducts(): Promise<FormattedProduct[]> {
   const response = await fetch("/api/products");
   if (!response.ok) {
     throw new Error("Failed to fetch products");
   }
   const data = await response.json();
-  return data.map((product: any) => ({
+  return data.map((product: ProductResponse) => ({
     id: String(product.id),
     name: String(product.name),
     description: String(product.description || ""),
@@ -24,7 +42,7 @@ async function getProducts() {
     category: String(product.category?.name || ""),
     categoryId: String(product.category?.id || ""),
     variants:
-      product.variant?.map((v: any) => ({
+      product.variant?.map((v) => ({
         id: String(v.id),
         name: String(v.name),
         stock: Number(v.stock),
@@ -36,8 +54,10 @@ async function getProducts() {
 export function ProductsClient() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  const { data: products = [], isLoading } = useQuery({
+  const { data: products = [] } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
   });
@@ -63,16 +83,26 @@ export function ProductsClient() {
 
   const onDelete = async (id: string) => {
     try {
-      if (window.confirm("Are you sure you want to delete this product?")) {
-        await deleteMutation.mutateAsync(id);
+      setLoading(true);
+      const response = await fetch(`/api/products/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete product");
       }
+
+      router.refresh();
+      toast.success("Product deleted successfully");
     } catch (error) {
-      console.error("[DELETE_PRODUCT]", error);
       toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+      setOpen(false);
     }
   };
 
-  const openEditDialog = (product: any) => {
+  const openEditDialog = (product: FormattedProduct) => {
     router.push(`/admin/products/${product.id}`);
   };
 

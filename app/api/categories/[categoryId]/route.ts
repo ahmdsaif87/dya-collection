@@ -1,41 +1,57 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 
 export async function GET(
-  req: Request,
-  { params }: { params: { categoryId: string } }
+  request: NextRequest,
+  context: { params: Promise<{ categoryId: string }> }
 ) {
   try {
-    if (!params.categoryId) {
-      return new NextResponse("Category ID is required", { status: 400 });
+    const { categoryId } = await context.params;
+
+    if (!categoryId) {
+      return NextResponse.json(
+        { error: "Category ID is required" },
+        { status: 400 }
+      );
     }
 
     const category = await prisma.category.findUnique({
       where: {
-        id: params.categoryId,
+        id: categoryId,
       },
       include: {
-        products: true,
+        products: {
+          include: {
+            variant: true,
+          },
+        },
       },
     });
 
     if (!category) {
-      return new NextResponse("Category not found", { status: 404 });
+      return NextResponse.json(
+        { error: "Category not found" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json(category);
   } catch (error) {
-    console.error("[CATEGORY_GET]", error);
-    return new NextResponse("Internal error", { status: 500 });
+    console.error("Error fetching category:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch category" },
+      { status: 500 }
+    );
   }
 }
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { categoryId: string } }
+  context: { params: Promise<{ categoryId: string }> }
 ) {
   try {
+    const { categoryId } = await context.params;
     const body = await req.json();
     const { name } = body;
 
@@ -51,7 +67,7 @@ export async function PATCH(
           mode: "insensitive",
         },
         NOT: {
-          id: params.categoryId,
+          id: categoryId,
         },
       },
     });
@@ -64,7 +80,7 @@ export async function PATCH(
 
     const category = await prisma.category.update({
       where: {
-        id: params.categoryId,
+        id: categoryId,
       },
       data: {
         name,
@@ -87,12 +103,53 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { categoryId: string } }
+  context: { params: Promise<{ categoryId: string }> }
 ) {
   try {
+    const { categoryId } = await context.params;
+
+    // First, get all products in this category
+    const products = await prisma.product.findMany({
+      where: {
+        categoryId,
+      },
+      include: {
+        variant: true,
+      },
+    });
+
+    // Delete in correct order to handle foreign key constraints
+    for (const product of products) {
+      // First delete cart items referencing product variants
+      if (product.variant.length > 0) {
+        await prisma.cartItem.deleteMany({
+          where: {
+            productVariantId: {
+              in: product.variant.map((v) => v.id),
+            },
+          },
+        });
+      }
+
+      // Then delete product variants
+      await prisma.productVariant.deleteMany({
+        where: {
+          productId: product.id,
+        },
+      });
+    }
+
+    // Now delete all products in this category
+    await prisma.product.deleteMany({
+      where: {
+        categoryId,
+      },
+    });
+
+    // Finally delete the category
     const category = await prisma.category.delete({
       where: {
-        id: params.categoryId,
+        id: categoryId,
       },
     });
 

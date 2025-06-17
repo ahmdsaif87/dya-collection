@@ -7,31 +7,35 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
 
+// Helper function to generate slug from product name
+function generateSlug(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
 interface Product {
   id: string;
   name: string;
-  description: string;
+  description: string | null;
   price: number;
   imageUrl: string;
-  variant: { id: string; name: string }[];
+  variant: { id: string; name: string; stock: number }[];
+  slug?: string;
 }
-
-const getProducts = async () => {
-  const response = await fetch("/api/products");
-  if (!response.ok) {
-    throw new Error("Failed to fetch products");
-  }
-  return response.json();
-};
 
 interface ProductListProps {
   categoryFilter?: string;
 }
 
 function ProductCard({ product }: { product: Product }) {
+  // Generate slug if not provided by the API
+  const slug = product.slug || generateSlug(product.name);
+
   return (
-    <Link href={`/products/${product.id}`} key={product.id}>
-      <Card className="w-full  h-full rounded-xl relative overflow-hidden shadow-md">
+    <Link href={`/products/${slug}`} key={slug}>
+      <Card className="w-full h-full rounded-xl relative overflow-hidden shadow-md">
         <CardHeader className="flex items-center justify-center p-4">
           <Image
             src={product.imageUrl}
@@ -42,7 +46,7 @@ function ProductCard({ product }: { product: Product }) {
           />
         </CardHeader>
         <CardContent className="absolute bottom-0 left-0 right-0 p-3 flex items-center ">
-          <div className="flex border rounded-full  items-center  gap-2 p-2 bg-glass bg-white/10 backdrop-blur-md">
+          <div className="flex border rounded-full items-center gap-2 p-2 bg-glass bg-white/10 backdrop-blur-md">
             <span className="text-sm font-semibold">{product.name}</span>
             <span className="bg-primary text-primary-foreground text-sm font-semibold px-3 py-1 rounded-full">
               {formatPrice(product.price)}
@@ -74,7 +78,12 @@ export function ProductList({ categoryFilter }: ProductListProps) {
       if (!response.ok) {
         throw new Error("Failed to fetch products");
       }
-      return response.json();
+      const data = await response.json();
+      // Ensure each product has a slug
+      return data.map((product: Product) => ({
+        ...product,
+        slug: product.slug || generateSlug(product.name),
+      }));
     },
   });
 
