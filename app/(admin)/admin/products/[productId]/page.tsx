@@ -30,6 +30,7 @@ interface Category {
 
 export default function EditProductPage() {
   const params = useParams();
+  const productId = params?.productId as string;
   const [product, setProduct] = React.useState<Product | null>(null);
   const [categories, setCategories] = React.useState<Category[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -42,7 +43,7 @@ export default function EditProductPage() {
         setError(null);
 
         const [productRes, categoriesRes] = await Promise.all([
-          fetch(`/api/products/${params.productId}`),
+          fetch(`/api/products/${productId}`),
           fetch("/api/categories"),
         ]);
 
@@ -71,10 +72,10 @@ export default function EditProductPage() {
       }
     };
 
-    if (params.productId) {
+    if (productId) {
       fetchData();
     }
-  }, [params.productId]);
+  }, [productId]);
 
   if (loading) {
     return (

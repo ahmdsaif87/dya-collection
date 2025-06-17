@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { ApiError } from "../types";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -43,8 +44,9 @@ export function CategoryForm({ initialData, onSubmit }: CategoryFormProps) {
     try {
       await onSubmit(data);
       form.reset();
-    } catch (error: any) {
-      if (error?.status === 409) {
+    } catch (error) {
+      const apiError = error as ApiError;
+      if (apiError.status === 409) {
         form.setError("name", {
           type: "manual",
           message: "A category with this name already exists",

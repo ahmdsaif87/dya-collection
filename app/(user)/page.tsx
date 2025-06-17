@@ -7,17 +7,8 @@ export default function HomePage() {
   return (
     <main>
       <Hero />
-      <div className="container mx-auto px-4 py-16 space-y-16">
+      <div className="container mx-auto px-5 py-16 space-y-16">
         <section>
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-medium">Shop by Category</h2>
-            <Link
-              href="/categories"
-              className="text-sm text-muted-foreground hover:text-foreground"
-            >
-              View all categories →
-            </Link>
-          </div>
           <ProductCategory />
         </section>
 

@@ -51,7 +51,14 @@ interface Product {
 }
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .regex(
+      /^[a-zA-Z0-9\s\-']+$/,
+      "Name can only contain letters, numbers, spaces, hyphens, and apostrophes"
+    )
+    .transform((str) => str.trim()),
   description: z.string().optional(),
   price: z.string().min(1, "Price is required"),
   imageUrl: z.string().min(1, "Image URL is required"),
@@ -174,11 +181,10 @@ export function ProductForm({
       );
 
       if (!response.ok) {
-        throw new Error("Failed to save product");
+        throw new Error("Failed to submit form");
       }
 
       router.push("/admin/products");
-      router.refresh();
       toast.success(
         initialData
           ? "Product updated successfully"
