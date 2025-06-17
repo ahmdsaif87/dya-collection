@@ -1,18 +1,48 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const products = await prisma.product.findMany({
-      include: {
-        category: true,
-        variant: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get("category");
+
+    let products;
+
+    if (category) {
+      // Convert URL-friendly category name to display format
+      const searchCategory = category
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+
+      products = await prisma.product.findMany({
+        where: {
+          category: {
+            name: {
+              mode: "insensitive",
+              equals: searchCategory,
+            },
+          },
+        },
+        include: {
+          category: true,
+          variant: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    } else {
+      products = await prisma.product.findMany({
+        include: {
+          category: true,
+          variant: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }
 
     return NextResponse.json(products);
   } catch (error) {
@@ -87,12 +117,8 @@ export async function POST(req: Request) {
     return NextResponse.json(product);
   } catch (error) {
     console.error("[PRODUCTS_POST]", error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2002") {
-        return new NextResponse("A product with this name already exists", {
-          status: 409,
-        });
-      }
+    if (error instanceof Error) {
+      return new NextResponse(error.message, { status: 500 });
     }
     return new NextResponse("Internal error", { status: 500 });
   }

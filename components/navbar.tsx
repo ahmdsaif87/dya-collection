@@ -108,7 +108,7 @@ export const page: { name: string; href: string }[] = [
   },
   {
     name: "Produk",
-    href: "/products",
+    href: "/search",
   },
   {
     name: "Diskon",

@@ -16,10 +16,16 @@ interface Product {
   variant: { id: string; name: string }[];
 }
 
-async function getProducts() {
+const getProducts = async () => {
   const response = await fetch("/api/products");
-  if (!response.ok) throw new Error("Failed to fetch products");
+  if (!response.ok) {
+    throw new Error("Failed to fetch products");
+  }
   return response.json();
+};
+
+interface ProductListProps {
+  categoryFilter?: string;
 }
 
 function ProductCard({ product }: { product: Product }) {
@@ -64,10 +70,20 @@ function ProductSkeleton() {
   );
 }
 
-export function ProductList() {
+export function ProductList({ categoryFilter }: ProductListProps) {
   const { data: products = [], isLoading } = useQuery<Product[]>({
-    queryKey: ["products"],
-    queryFn: getProducts,
+    queryKey: ["products", categoryFilter],
+    queryFn: async () => {
+      const response = await fetch(
+        categoryFilter
+          ? `/api/products?category=${encodeURIComponent(categoryFilter)}`
+          : "/api/products"
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch products");
+      }
+      return response.json();
+    },
   });
 
   return (

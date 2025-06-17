@@ -64,8 +64,8 @@ export function ProductCategoryLink() {
 
   if (isLoading) {
     return (
-      <div className="w-64 p-6">
-        <h2 className="text-xl font-semibold mb-4">Collections</h2>
+      <div className="w-50 p-6">
+        <h2 className="text-sm text-muted-foreground mb-4">Collections</h2>
         <div className="space-y-2">
           {[...Array(6)].map((_, i) => (
             <Skeleton key={i} className="h-6 w-full" />
@@ -76,24 +76,24 @@ export function ProductCategoryLink() {
   }
 
   return (
-    <div className="w-50 p-6  min-h-screen  ">
-      <h2 className="text-sm text-muted-foreground  mb-4">Collections</h2>
+    <div className="w-50 p-6 min-h-screen">
+      <h2 className="text-sm text-muted-foreground mb-4">Collections</h2>
       <div className="flex flex-col space-y-3">
         <Link
-          href="/products"
-          className={`text-sm ${pathname === "/products" ? "underline" : ""}`}
+          href="/search"
+          className={`text-sm ${pathname === "/search" ? "underline" : ""}`}
         >
           All
         </Link>
         {categories?.map((category) => (
           <Link
             key={category.id}
-            href={`/kategori/${encodeURIComponent(
+            href={`/search/${encodeURIComponent(
               category.name.toLowerCase().replace(/\s+/g, "-")
             )}`}
             className={`text-sm ${
               pathname ===
-              `/kategori/${encodeURIComponent(
+              `/search/${encodeURIComponent(
                 category.name.toLowerCase().replace(/\s+/g, "-")
               )}`
                 ? "underline"
