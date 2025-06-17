@@ -14,6 +14,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { columns, CategoryColumn } from "./columns";
 import { CategoryForm } from "./category-form";
 
@@ -33,6 +43,7 @@ async function getCategories() {
 
 export function CategoriesClient() {
   const [open, setOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] =
     useState<CategoryColumn | null>(null);
   const queryClient = useQueryClient();
@@ -59,13 +70,19 @@ export function CategoriesClient() {
   });
 
   const onDelete = async (id: string) => {
+    setDeleteId(id);
+  };
+
+  const handleDelete = async () => {
+    if (!deleteId) return;
+
     try {
-      if (window.confirm("Are you sure you want to delete this category?")) {
-        await deleteMutation.mutateAsync(id);
-      }
+      await deleteMutation.mutateAsync(deleteId);
     } catch (error) {
       console.error("[DELETE_CATEGORY]", error);
       toast.error("Something went wrong");
+    } finally {
+      setDeleteId(null);
     }
   };
 
@@ -148,6 +165,24 @@ export function CategoriesClient() {
         onDelete={onDelete}
         openEditDialog={openEditDialog}
       />
+      <AlertDialog
+        open={!!deleteId}
+        onOpenChange={(open) => !open && setDeleteId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              category and all its associated products.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
