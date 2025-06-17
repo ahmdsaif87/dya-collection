@@ -1,13 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,25 +24,24 @@ async function getProducts() {
 
 function ProductCard({ product }: { product: Product }) {
   return (
-    <Link href={`/products/${product.id}`}>
-      <Card className="gap-2 relative inline-block w-full">
-        <CardHeader className="relative flex justify-center items-center">
+    <Link href={`/products/${product.id}`} key={product.id}>
+      <Card className="w-full  h-full rounded-xl relative overflow-hidden shadow-md">
+        <CardHeader className="flex items-center justify-center p-4">
           <Image
             src={product.imageUrl}
-            alt={product.name}
             width={200}
             height={200}
-            className="transition-transform duration-300 hover:scale-105 rounded-lg"
+            alt={product.name}
+            className="transition-transform duration-300 hover:scale-105 object-contain"
           />
         </CardHeader>
-        <CardContent className="flex flex-col gap-2">
-          <CardTitle>{product.name}</CardTitle>
-          <CardDescription className="line-clamp-2">
-            {product.description}
-            <p className="text-sm text-muted-foreground">
+        <CardContent className="absolute bottom-0 left-0 right-0 p-3 flex items-center ">
+          <div className="flex border rounded-full  items-center  gap-2 p-2 bg-glass bg-white/10 backdrop-blur-md">
+            <span className="text-sm font-semibold">{product.name}</span>
+            <span className="bg-primary text-white text-sm font-semibold px-3 py-1 rounded-full">
               {formatPrice(product.price)}
-            </p>
-          </CardDescription>
+            </span>
+          </div>
         </CardContent>
       </Card>
     </Link>
@@ -57,14 +50,15 @@ function ProductCard({ product }: { product: Product }) {
 
 function ProductSkeleton() {
   return (
-    <Card className="w-full gap-2">
-      <CardHeader className="p-0">
-        <Skeleton className="aspect-square rounded-t-lg" />
+    <Card className="w-full  h-full rounded-xl relative overflow-hidden shadow-md">
+      <CardHeader className="flex items-center justify-center p-4">
+        <Skeleton className="w-60 h-60" />
       </CardHeader>
-      <CardContent className="space-y-2 p-4">
-        <Skeleton className="h-6 w-3/4" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-1/2" />
+      <CardContent className="absolute bottom-0 left-0 right-0 p-3 flex items-center ">
+        <div className="flex border rounded-full  items-center  gap-2 p-2 bg-glass bg-white/10 backdrop-blur-md">
+          <Skeleton className="w-20 h-4" />
+          <Skeleton className="w-20 h-4" />
+        </div>
       </CardContent>
     </Card>
   );

@@ -246,7 +246,7 @@ export default function Page() {
           {/* Variants Selection */}
           {product.variant && product.variant.length > 0 && (
             <div>
-              <h3 className="text-sm font-medium">VARIAN</h3>
+              <h3 className="text-sm font-medium">VARIANT</h3>
               <div className="mt-2 flex flex-wrap gap-2">
                 {product.variant.map((variant) => (
                   <Button
@@ -356,31 +356,23 @@ export default function Page() {
                 .slice(0, 6)
                 .map((product) => (
                   <Link href={`/products/${product.id}`} key={product.id}>
-                    <Card className="w-60 gap-2 relative inline-block">
-                      <CardHeader>
+                    <Card className="w-60 h-[300px rounded-xl relative overflow-hidden shadow-md">
+                      <CardHeader className="flex items-center justify-center p-4">
                         <Image
                           src={product.imageUrl}
                           width={200}
                           height={200}
                           alt={product.name}
-                          className="transition-transform duration-300 hover:scale-105 rounded-lg"
+                          className="transition-transform duration-300 hover:scale-105 object-contain"
                         />
                       </CardHeader>
-                      <CardContent className="flex flex-col gap-2">
-                        <CardTitle>{product.name}</CardTitle>
-                        <CardDescription className="line-clamp-2">
-                          {product.description}
-                        </CardDescription>
-                        <div className="flex justify-between items-center">
-                          <CardAction>
-                            Rp.{formatPrice(product.price)}
-                          </CardAction>
-                          {product.variant.length > 0 && (
-                            <span className="text-xs text-muted-foreground">
-                              {product.variant.length} variants
-                            </span>
-                          )}
-                        </div>
+                      <CardContent className="absolute bottom-0 left-0 right-0 p-3 flex items-center justify-between rounded-b-xl">
+                        <span className="text-sm font-medium">
+                          {product.name}
+                        </span>
+                        <span className="bg-primary text-white text-sm font-semibold px-3 py-1 rounded-full">
+                          {formatPrice(product.price)}
+                        </span>
                       </CardContent>
                     </Card>
                   </Link>
