@@ -15,7 +15,7 @@ import { CartSheet } from "./cart-sheet";
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <header className="sticky px-5 top-0 z-50 w-full bg-background">
       <div>

@@ -56,17 +56,9 @@ function ProductCard({ product }: { product: Product }) {
 
 function ProductSkeleton() {
   return (
-    <Card className="w-full  h-full rounded-xl relative overflow-hidden shadow-md">
-      <CardHeader className="flex items-center justify-center p-4">
-        <Skeleton className="w-60 h-60" />
-      </CardHeader>
-      <CardContent className="absolute bottom-0 left-0 right-0 p-3 flex items-center ">
-        <div className="flex border rounded-full  items-center  gap-2 p-2 bg-glass bg-white/10 backdrop-blur-md">
-          <Skeleton className="w-20 h-4" />
-          <Skeleton className="w-20 h-4" />
-        </div>
-      </CardContent>
-    </Card>
+    <div className="w-full h-full rounded-xl relative overflow-hidden ">
+      <Skeleton className="w-60 h-60" />
+    </div>
   );
 }
 

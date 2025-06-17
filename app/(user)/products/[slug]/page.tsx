@@ -15,8 +15,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { useCartStore } from "@/lib/store";
 import { formatPrice } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-interface Variant {
+interface ProductVariant {
   id: string;
   name: string;
   stock: number;
@@ -33,7 +40,7 @@ interface Product {
     id: string;
     name: string;
   };
-  variant: Variant[];
+  variant: ProductVariant[];
 }
 
 function ProductSkeleton() {
@@ -93,9 +100,10 @@ async function getRelatedProducts() {
 
 export default function Page() {
   const { slug } = useParams();
-  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
+    null
+  );
   const [quantity, setQuantity] = useState(1);
-  const [isAddingToCart, setIsAddingToCart] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
 
   const { data: product, isLoading: productLoading } = useQuery<Product>({
@@ -128,44 +136,37 @@ export default function Page() {
     }
   };
 
-  const handleAddToCart = async () => {
-    try {
-      if (!selectedVariant) {
-        toast.error("Please select a variant");
-        return;
-      }
-
-      if (quantity <= 0) {
-        toast.error("Please select a valid quantity");
-        return;
-      }
-
-      if (quantity > selectedVariant.stock) {
-        toast.error("Quantity exceeds available stock");
-        return;
-      }
-
-      setIsAddingToCart(true);
-      await addItem({
-        productId: selectedVariant.id,
-        quantity,
-        product: {
-          id: product?.id || "",
-          name: product?.name || "",
-          price: product?.price || 0,
-          imageUrl: product?.imageUrl || "",
-          variant: product?.variant || [],
-        },
-      });
-      toast.success("Added to cart!");
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-      toast.error(
-        error instanceof Error ? error.message : "Failed to add item to cart"
-      );
-    } finally {
-      setIsAddingToCart(false);
+  const handleAddToCart = () => {
+    if (!selectedVariant) {
+      toast.error("Please select a variant");
+      return;
     }
+
+    if (quantity <= 0) {
+      toast.error("Please select a valid quantity");
+      return;
+    }
+
+    if (quantity > selectedVariant.stock) {
+      toast.error("Quantity exceeds available stock");
+      return;
+    }
+
+    addItem({
+      productId: product?.id || "",
+      productVariantId: selectedVariant.id,
+      quantity,
+      product: {
+        id: product?.id || "",
+        name: product?.name || "",
+        price: product?.price || 0,
+        imageUrl: product?.imageUrl || "",
+        variant: product?.variant || [],
+      },
+      variant: selectedVariant,
+    });
+
+    toast.success("Added to cart!");
   };
 
   if (productLoading) {
@@ -316,22 +317,10 @@ export default function Page() {
             size="lg"
             variant="outline"
             onClick={handleAddToCart}
-            disabled={
-              isAddingToCart || !selectedVariant || selectedVariant.stock === 0
-            }
+            disabled={!selectedVariant || selectedVariant.stock === 0}
           >
-            {isAddingToCart ? (
-              "Adding to Cart..."
-            ) : !selectedVariant ? (
-              "Select a Variant"
-            ) : selectedVariant.stock === 0 ? (
-              "Out of Stock"
-            ) : (
-              <>
-                <ShoppingCart className="size-8 mr-2" />
-                Add To Cart
-              </>
-            )}
+            <ShoppingCart className="size-8 mr-2" />
+            Add To Cart
           </Button>
         </div>
       </div>
