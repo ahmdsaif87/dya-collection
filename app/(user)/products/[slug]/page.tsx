@@ -8,14 +8,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
