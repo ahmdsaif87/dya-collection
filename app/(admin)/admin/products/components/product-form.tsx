@@ -55,9 +55,10 @@ const formSchema = z.object({
     .string()
     .min(1, "Name is required")
     .regex(
-      /^[a-zA-Z0-9\s\-']+$/,
-      "Name can only contain letters, numbers, spaces, hyphens, and apostrophes"
+      /^[a-zA-Z0-9\s']+$/,
+      "Name can only contain letters, numbers, spaces, and apostrophes. Hyphens are not allowed."
     )
+
     .transform((str) => str.trim()),
   description: z.string().optional(),
   price: z.string().min(1, "Price is required"),
