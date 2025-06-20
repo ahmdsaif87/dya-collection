@@ -36,7 +36,7 @@ export default async function CheckoutPage() {
   }
 
   return (
-    <div className="container max-w-2xl py-8">
+    <div className="container max-w-2xl py-8 px-5 mx-auto">
       <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-bold">Checkout</h1>

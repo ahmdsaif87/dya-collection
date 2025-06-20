@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Home, ShoppingBag, PackageSearch } from "lucide-react";
+import { Home, ShoppingBag, PackageSearch, List } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 
@@ -32,7 +32,7 @@ const data = {
     {
       title: "Categories",
       url: "/admin/categories",
-      icon: PackageSearch,
+      icon: List,
     },
     {
       title: "Orders",

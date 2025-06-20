@@ -8,7 +8,7 @@ export async function DELETE(
 ) {
   try {
     const { userId } = await auth();
-
+    const { orderId } = await params;
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -16,7 +16,7 @@ export async function DELETE(
     // Delete order and related items
     const deletedOrder = await prisma.order.delete({
       where: {
-        id: params.orderId,
+        id: orderId,
       },
     });
 

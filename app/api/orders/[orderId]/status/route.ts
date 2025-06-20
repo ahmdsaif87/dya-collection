@@ -8,7 +8,7 @@ export async function PATCH(
 ) {
   try {
     const { userId } = await auth();
-
+    const { orderId } = await params;
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -23,7 +23,7 @@ export async function PATCH(
     // Update order status
     const updatedOrder = await prisma.order.update({
       where: {
-        id: params.orderId,
+        id: orderId,
       },
       data: {
         status,

@@ -60,12 +60,17 @@ export function CategoriesClient() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete category");
+        const data = await response.json();
+        throw new Error(data.error || "Failed to delete category");
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast.success("Category deleted successfully");
+    },
+    onError: (error: Error) => {
+      console.error("[DELETE_CATEGORY]", error);
+      toast.error(error.message);
     },
   });
 
@@ -79,8 +84,7 @@ export function CategoriesClient() {
     try {
       await deleteMutation.mutateAsync(deleteId);
     } catch (error) {
-      console.error("[DELETE_CATEGORY]", error);
-      toast.error("Something went wrong");
+      // Error is already handled in mutation's onError
     } finally {
       setDeleteId(null);
     }
@@ -139,7 +143,7 @@ export function CategoriesClient() {
   };
 
   return (
-    <div className="space-y-4 p-8 pt-6">
+    <div className="space-y-4 pt-6">
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold tracking-tight">Categories</h2>
         <Dialog open={open} onOpenChange={onOpenChange}>

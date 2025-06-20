@@ -19,6 +19,19 @@ export async function POST(req: Request) {
 
     // Create order and order items in a transaction
     const order = await prisma.$transaction(async (tx) => {
+      // Check stock availability for all items
+      for (const item of items) {
+        const variant = await tx.productVariant.findUnique({
+          where: { id: item.productVariantId },
+        });
+
+        if (!variant || variant.stock < item.quantity) {
+          throw new Error(
+            `Insufficient stock for ${item.product.name} - ${item.productVariant.name}`
+          );
+        }
+      }
+
       // Create the order
       const order = await tx.order.create({
         data: {
@@ -38,6 +51,18 @@ export async function POST(req: Request) {
         },
       });
 
+      // Update stock for each product variant
+      for (const item of items) {
+        await tx.productVariant.update({
+          where: { id: item.productVariantId },
+          data: {
+            stock: {
+              decrement: item.quantity,
+            },
+          },
+        });
+      }
+
       // Delete cart items
       await tx.cartItem.deleteMany({
         where: {
@@ -51,6 +76,9 @@ export async function POST(req: Request) {
     return NextResponse.json(order);
   } catch (error) {
     console.error("[CHECKOUT_POST]", error);
-    return new NextResponse("Internal error", { status: 500 });
+    return new NextResponse(
+      error instanceof Error ? error.message : "Internal error",
+      { status: 500 }
+    );
   }
 }

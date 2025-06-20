@@ -212,14 +212,18 @@ export default function Page() {
       </div>
     );
   }
+  const isOutOfStock =
+    !product.variant ||
+    product.variant.length === 0 ||
+    product.variant.every((v) => v.stock <= 0);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-between px-5 py-10">
-      <div className="flex md:flex-row flex-col w-full max-w-4xl gap-x-8 ">
+    <div className="flex min-h-screen flex-col items-center justify-between  py-10">
+      <div className="flex md:flex-row flex-col w-full max-w-4xl gap-x-8 px-5">
         {/* Product Image */}
         <div className="w-full md:w-1/2">
           <Suspense fallback={<Skeleton className="w-full h-full" />}>
-            <div className="aspect-square overflow-hidden">
+            <div className="aspect-square overflow-hidden relative">
               <Image
                 src={product.imageUrl}
                 alt={product.name}
@@ -227,6 +231,13 @@ export default function Page() {
                 height={500}
                 className="h-full w-full object-cover object-center"
               />
+              {isOutOfStock && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="bg-foreground text-white px-6 py-3 rounded-full font-semibold text-lg">
+                    Habis
+                  </div>
+                </div>
+              )}
             </div>
           </Suspense>
         </div>
@@ -272,6 +283,7 @@ export default function Page() {
               </div>
             </div>
           )}
+
           {product.description && (
             <p className="text-md text-muted-foreground mt-4">
               {product.description}
@@ -279,20 +291,32 @@ export default function Page() {
           )}
 
           {/* Add to Cart Button */}
-          <Button
-            className="p-5 rounded-full w-fit mt-8 border-2 border-primary"
-            size="lg"
-            variant="default"
-            onClick={handleAddToCart}
-            disabled={!selectedVariant || selectedVariant.stock === 0}
-          >
-            <Plus className="size-4 mr-2" />
-            Tambahkan ke keranjang
-          </Button>
+          {!isOutOfStock && (
+            <Button
+              className="p-5 rounded-full w-fit mt-8 border-2 border-primary"
+              size="lg"
+              variant="default"
+              onClick={handleAddToCart}
+              disabled={!selectedVariant || selectedVariant.stock === 0}
+            >
+              <Plus className="size-4 mr-2" />
+              Tambahkan ke keranjang
+            </Button>
+          )}
+          {isOutOfStock && (
+            <div className="flex h-full pt-4 ">
+              <p className="text-muted-foreground text-xl ">
+                Produk ini Habis, silahkan pilih produk{" "}
+                <Link href="/" className="text-primary underline">
+                  lainnya
+                </Link>
+              </p>
+            </div>
+          )}
         </div>
       </div>
-      <div className="w-full max-w-7xl mt-10">
-        <h2 className="text-2xl font-medium justify-start">
+      <div className="w-full px-5 mt-10">
+        <h2 className="text-2xl font-light justify-start">
           Produk yang mungkin anda sukai
         </h2>
         <div className="flex gap-4 mt-4 overflow-x-auto pb-10">

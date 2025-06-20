@@ -33,9 +33,18 @@ function ProductCard({ product }: { product: Product }) {
   // Generate slug if not provided by the API
   const slug = product.slug || generateSlug(product.name);
 
+  const isOutOfStock =
+    !product.variant ||
+    product.variant.length === 0 ||
+    product.variant.every((v) => v.stock <= 0);
+
   return (
     <Link href={`/products/${slug}`} key={slug}>
-      <Card className="w-full h-full rounded-xl relative overflow-hidden shadow-md">
+      <Card
+        className={`w-full h-full rounded-xl relative overflow-hidden shadow-md ${
+          isOutOfStock ? "opacity-50" : ""
+        }`}
+      >
         <CardHeader className="flex items-center justify-center p-4">
           <Image
             src={product.imageUrl}
@@ -53,6 +62,13 @@ function ProductCard({ product }: { product: Product }) {
             </span>
           </div>
         </CardContent>
+        {isOutOfStock && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="bg-black/80 text-white px-6 py-3 rounded-full font-semibold text-lg backdrop-blur-sm">
+              Habis
+            </div>
+          </div>
+        )}
       </Card>
     </Link>
   );

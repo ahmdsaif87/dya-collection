@@ -118,10 +118,10 @@ export function CheckoutForm({ addresses, cartItems }: CheckoutFormProps) {
         {isLoading ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Placing Order...
+            Membuat Pesanan...
           </>
         ) : (
-          `Place Order - ${formatPrice(total)}`
+          `Buat Pesanan dan Bayar`
         )}
       </Button>
     </div>

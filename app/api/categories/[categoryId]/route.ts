@@ -108,6 +108,25 @@ export async function DELETE(
   try {
     const { categoryId } = await context.params;
 
+    if (!categoryId) {
+      return NextResponse.json(
+        { error: "Category ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // Check if category exists
+    const categoryExists = await prisma.category.findUnique({
+      where: { id: categoryId },
+    });
+
+    if (!categoryExists) {
+      return NextResponse.json(
+        { error: "Category not found" },
+        { status: 404 }
+      );
+    }
+
     // First, get all products in this category
     const products = await prisma.product.findMany({
       where: {
@@ -130,6 +149,13 @@ export async function DELETE(
           },
         });
       }
+
+      // Delete order items referencing the product
+      await prisma.orderItem.deleteMany({
+        where: {
+          productId: product.id,
+        },
+      });
 
       // Then delete product variants
       await prisma.productVariant.deleteMany({
@@ -156,6 +182,21 @@ export async function DELETE(
     return NextResponse.json(category);
   } catch (error) {
     console.error("[CATEGORY_DELETE]", error);
-    return new NextResponse("Internal error", { status: 500 });
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2025") {
+        return NextResponse.json(
+          { error: "Category not found" },
+          { status: 404 }
+        );
+      }
+      return NextResponse.json(
+        { error: `Database error: ${error.message}` },
+        { status: 500 }
+      );
+    }
+    return NextResponse.json(
+      { error: "Failed to delete category" },
+      { status: 500 }
+    );
   }
 }

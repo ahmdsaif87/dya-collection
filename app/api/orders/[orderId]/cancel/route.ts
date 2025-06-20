@@ -4,9 +4,10 @@ import { NextResponse } from "next/server";
 
 export async function POST(
   req: Request,
-  { params }: { params: { orderId: string } }
+  context: { params: Promise<{ orderId: string }> }
 ) {
   try {
+    const { orderId } = await context.params;
     const { userId } = await auth();
 
     if (!userId) {
@@ -16,7 +17,7 @@ export async function POST(
     // Get the order and verify ownership
     const order = await prisma.order.findUnique({
       where: {
-        id: params.orderId,
+        id: orderId,
         userId,
       },
     });
@@ -38,7 +39,7 @@ export async function POST(
     // Update order status to CANCELLED
     const updatedOrder = await prisma.order.update({
       where: {
-        id: params.orderId,
+        id: orderId,
       },
       data: {
         status: "CANCELLED",

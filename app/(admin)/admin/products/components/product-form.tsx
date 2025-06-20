@@ -201,39 +201,61 @@ export function ProductForm({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 max-w-3xl mx-auto"
-      >
-        <Card className="p-6 space-y-6">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium">Product Information</h3>
-            <div className="flex gap-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.push("/admin/products")}
-                disabled={loading}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={loading}>
-                {loading ? "Saving..." : initialData ? "Update" : "Create"}
-              </Button>
-            </div>
-          </div>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-medium">Product Information</h3>
+        </div>
 
-          <div className="grid gap-6">
+        <div className="grid gap-6">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Product name"
+                    disabled={loading}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    placeholder="Product description"
+                    disabled={loading}
+                    className="min-h-[100px]"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField
               control={form.control}
-              name="name"
+              name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Price</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="Product name"
+                      type="number"
+                      placeholder="Enter price"
                       disabled={loading}
                     />
                   </FormControl>
@@ -241,211 +263,180 @@ export function ProductForm({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
-              name="description"
+              name="imageUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Image URL</FormLabel>
                   <FormControl>
-                    <Textarea
+                    <Input
                       {...field}
-                      placeholder="Product description"
+                      placeholder="Image URL"
                       disabled={loading}
-                      className="min-h-[100px]"
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+          </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
+          <FormField
+            control={form.control}
+            name="categoryId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Category</FormLabel>
+                <div className="flex gap-2">
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={loading}
+                  >
                     <FormControl>
-                      <Input
-                        {...field}
-                        type="number"
-                        placeholder="Enter price"
-                        disabled={loading}
-                      />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="imageUrl"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Image URL</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Image URL"
-                        disabled={loading}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                    <SelectContent>
+                      {localCategories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                      <Popover
+                        open={isNewCategoryOpen}
+                        onOpenChange={setIsNewCategoryOpen}
+                      >
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start font-normal"
+                            disabled={loading}
+                          >
+                            <Plus className="mr-2 h-4 w-4" />
+                            Add new category
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="p-4 w-80">
+                          <div className="space-y-4">
+                            <h4 className="font-medium">Create New Category</h4>
+                            <div className="flex gap-2">
+                              <Input
+                                placeholder="Category name"
+                                value={newCategory}
+                                onChange={(e) => setNewCategory(e.target.value)}
+                                disabled={isCreatingCategory}
+                              />
+                              <Button
+                                type="button"
+                                onClick={handleCreateCategory}
+                                disabled={
+                                  isCreatingCategory || !newCategory.trim()
+                                }
+                              >
+                                {isCreatingCategory ? "..." : "Add"}
+                              </Button>
+                            </div>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Separator />
+
+          <div className="space-y-4">
+            <div>
+              <FormLabel>Variants</FormLabel>
+              <p className="text-sm text-muted-foreground mb-4">
+                Add size, color, or any other variant options for this product
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Input
+                  placeholder="Variant name"
+                  value={newVariant}
+                  onChange={(e) => setNewVariant(e.target.value)}
+                  disabled={loading}
+                  className="flex-1"
+                />
+                <Input
+                  type="number"
+                  placeholder="Stock"
+                  value={newVariantStock}
+                  onChange={(e) =>
+                    setNewVariantStock(parseInt(e.target.value) || 0)
+                  }
+                  disabled={loading}
+                  className="w-24"
+                />
+                <Button
+                  type="button"
+                  onClick={addVariant}
+                  disabled={loading || !newVariant.trim()}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
 
-            <FormField
-              control={form.control}
-              name="categoryId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <div className="flex gap-2">
-                    <Select
-                      value={field.value}
-                      onValueChange={field.onChange}
-                      disabled={loading}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {localCategories.map((category) => (
-                          <SelectItem key={category.id} value={category.id}>
-                            {category.name}
-                          </SelectItem>
-                        ))}
-                        <Popover
-                          open={isNewCategoryOpen}
-                          onOpenChange={setIsNewCategoryOpen}
-                        >
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              className="w-full justify-start font-normal"
-                              disabled={loading}
-                            >
-                              <Plus className="mr-2 h-4 w-4" />
-                              Add new category
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="p-4 w-80">
-                            <div className="space-y-4">
-                              <h4 className="font-medium">
-                                Create New Category
-                              </h4>
-                              <div className="flex gap-2">
-                                <Input
-                                  placeholder="Category name"
-                                  value={newCategory}
-                                  onChange={(e) =>
-                                    setNewCategory(e.target.value)
-                                  }
-                                  disabled={isCreatingCategory}
-                                />
-                                <Button
-                                  type="button"
-                                  onClick={handleCreateCategory}
-                                  disabled={
-                                    isCreatingCategory || !newCategory.trim()
-                                  }
-                                >
-                                  {isCreatingCategory ? "..." : "Add"}
-                                </Button>
-                              </div>
-                            </div>
-                          </PopoverContent>
-                        </Popover>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <Separator />
-
-            <div className="space-y-4">
-              <div>
-                <FormLabel>Variants</FormLabel>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Add size, color, or any other variant options for this product
-                </p>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <Input
-                    placeholder="Variant name"
-                    value={newVariant}
-                    onChange={(e) => setNewVariant(e.target.value)}
-                    disabled={loading}
-                    className="flex-1"
-                  />
+            <div className="space-y-2">
+              {variants.map((variant) => (
+                <div
+                  key={variant.id}
+                  className="flex items-center gap-2 bg-secondary/20 p-2 rounded-md"
+                >
+                  <span className="flex-1">{variant.name}</span>
                   <Input
                     type="number"
-                    placeholder="Stock"
-                    value={newVariantStock}
+                    value={variant.stock}
                     onChange={(e) =>
-                      setNewVariantStock(parseInt(e.target.value) || 0)
+                      updateVariantStock(
+                        variant.id,
+                        parseInt(e.target.value) || 0
+                      )
                     }
                     disabled={loading}
                     className="w-24"
                   />
                   <Button
                     type="button"
-                    onClick={addVariant}
-                    disabled={loading || !newVariant.trim()}
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => removeVariant(variant.id)}
+                    disabled={loading}
                   >
-                    <Plus className="h-4 w-4" />
+                    <X className="h-4 w-4" />
                   </Button>
                 </div>
-              </div>
-
-              <div className="space-y-2">
-                {variants.map((variant) => (
-                  <div
-                    key={variant.id}
-                    className="flex items-center gap-2 bg-secondary/20 p-2 rounded-md"
-                  >
-                    <span className="flex-1">{variant.name}</span>
-                    <Input
-                      type="number"
-                      value={variant.stock}
-                      onChange={(e) =>
-                        updateVariantStock(
-                          variant.id,
-                          parseInt(e.target.value) || 0
-                        )
-                      }
-                      disabled={loading}
-                      className="w-24"
-                    />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="icon"
-                      onClick={() => removeVariant(variant.id)}
-                      disabled={loading}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-                {variants.length === 0 && (
-                  <p className="text-sm text-muted-foreground text-center py-4">
-                    No variants added yet. Add at least one variant.
-                  </p>
-                )}
-              </div>
+              ))}
+              {variants.length === 0 && (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  No variants added yet. Add at least one variant.
+                </p>
+              )}
             </div>
           </div>
-        </Card>
+        </div>
+        <div className="flex gap-4 justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.push("/admin/products")}
+            disabled={loading}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" disabled={loading}>
+            {loading ? "Saving..." : initialData ? "Update" : "Create"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

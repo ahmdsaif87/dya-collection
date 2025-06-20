@@ -1,8 +1,15 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
-import { OrderDetail } from "./order-detail";
+import { OrderDetail } from "@/app/(user)/orders/[orderId]/order-detail";
 import { notFound } from "next/navigation";
+import Link from "next/link";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 interface OrderPageProps {
   params: {
@@ -12,6 +19,7 @@ interface OrderPageProps {
 
 export default async function OrderPage({ params }: OrderPageProps) {
   const { userId } = await auth();
+  const { orderId } = await params;
 
   if (!userId) {
     redirect("/sign-in");
@@ -19,7 +27,7 @@ export default async function OrderPage({ params }: OrderPageProps) {
 
   const order = await prisma.order.findUnique({
     where: {
-      id: params.orderId,
+      id: orderId,
       userId,
     },
     include: {
@@ -37,14 +45,19 @@ export default async function OrderPage({ params }: OrderPageProps) {
   }
 
   return (
-    <div className="container max-w-4xl py-8">
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold">Detail Pesanan</h1>
-          <p className="text-muted-foreground">
-            Order #{params.orderId.slice(-8)}
-          </p>
-        </div>
+    <div className="container max-w-4xl py-8 px-5 mx-auto mt-10">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <Link href="/orders">Pesanan</Link>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <p className="text-sm text-muted-foreground">Rincian Pesanan</p>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <div className="space-y-8 mt-5">
         <OrderDetail order={order} />
       </div>
     </div>

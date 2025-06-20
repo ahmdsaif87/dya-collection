@@ -8,6 +8,7 @@ export async function POST(
 ) {
   try {
     const { userId } = await auth();
+    const { orderId } = await params;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -16,7 +17,7 @@ export async function POST(
     // Get the order and verify ownership
     const order = await prisma.order.findUnique({
       where: {
-        id: params.orderId,
+        id: orderId,
         userId,
       },
     });
@@ -32,7 +33,7 @@ export async function POST(
     // Update order status to PAID
     const updatedOrder = await prisma.order.update({
       where: {
-        id: params.orderId,
+        id: orderId,
       },
       data: {
         status: "PAID",

@@ -6,7 +6,7 @@ export default function HomePage() {
   return (
     <main>
       <Hero />
-      <div className="container mx-auto px-5 py-16 space-y-16">
+      <div className=" px-5 py-16 space-y-16">
         <section>
           <div className="flex flex-col gap-2 mb-8 text-center">
             <h2 className="text-2xl font-light">Kategori Produk</h2>

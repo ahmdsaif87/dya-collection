@@ -8,6 +8,15 @@ import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { OrderActions } from "./order-actions";
+import {
+  CheckCircle,
+  Clock,
+  MapPin,
+  Package,
+  PackageCheck,
+  Truck,
+  XCircle,
+} from "lucide-react";
 
 interface ExtendedOrderItem extends OrderItem {
   product: Product;
@@ -22,25 +31,38 @@ interface OrderDetailProps {
   order: ExtendedOrder;
 }
 
+const statusIcons = {
+  PENDING: <Clock className="h-4 w-4 mr-2 text-yellow-500" />,
+  PAID: <CheckCircle className="h-4 w-4 mr-2 text-green-600" />,
+  SHIPPED: <Truck className="h-4 w-4 mr-2 text-blue-600" />,
+  COMPLETED: <PackageCheck className="h-4 w-4 mr-2 text-emerald-600" />,
+  CANCELLED: <XCircle className="h-4 w-4 mr-2 text-red-500" />,
+};
+
 const orderStatusMap = {
   PENDING: {
     label: "Menunggu Pembayaran",
+    description: "Mohon segera melakukan pembayaran.",
     variant: "secondary" as const,
   },
   PAID: {
     label: "Sudah Dibayar",
+    description: "Pesanan anda sedang dikemas.",
     variant: "default" as const,
   },
   SHIPPED: {
     label: "Dalam Pengiriman",
+    description: "Pesanan sedang dalam pengiriman.",
     variant: "default" as const,
   },
   COMPLETED: {
     label: "Selesai",
+    description: "Pesanan telah diterima, terima kasih.",
     variant: "default" as const,
   },
   CANCELLED: {
     label: "Dibatalkan",
+    description: "Pesanan telah dibatalkan.",
     variant: "destructive" as const,
   },
 };
@@ -48,23 +70,42 @@ const orderStatusMap = {
 export function OrderDetail({ order }: OrderDetailProps) {
   return (
     <div className="space-y-8">
-      <div className="flex items-center gap-4">
-        <Badge
-          variant={orderStatusMap[order.status].variant}
-          className="h-8 px-4"
-        >
-          {orderStatusMap[order.status].label}
-        </Badge>
-        <p className="text-sm text-muted-foreground">
-          Dibuat pada{" "}
-          {format(order.createdAt, "d MMMM yyyy, HH:mm", { locale: id })}
-        </p>
+      <div>
+        <div className="mb-4">
+          <p className="text-sm text-muted-foreground">
+            ID Pesanan:{" "}
+            <span className="font-medium">#{order.id.slice(-8)}</span>
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <Badge
+            variant={orderStatusMap[order.status].variant}
+            className="h-8 px-4 text-sm w-fit flex items-center"
+          >
+            {statusIcons[order.status]}
+            {orderStatusMap[order.status].label}
+          </Badge>
+
+          <p className="text-muted-foreground text-sm">
+            {orderStatusMap[order.status].description}
+          </p>
+
+          <p className="text-sm text-muted-foreground">
+            Dibuat pada{" "}
+            <span className="font-medium">
+              {format(order.createdAt, "d MMMM yyyy, HH:mm", { locale: id })}
+            </span>
+          </p>
+        </div>
       </div>
 
       <div className="grid gap-8 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Produk</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Package className="h-4 w-4 mr-2" /> Produk
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {order.items.map((item) => (
@@ -99,7 +140,9 @@ export function OrderDetail({ order }: OrderDetailProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Alamat Pengiriman</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 mr-2" /> Alamat Pengiriman
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             <p className="font-medium">{order.address.name}</p>

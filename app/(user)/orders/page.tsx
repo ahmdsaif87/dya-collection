@@ -1,6 +1,5 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import prisma from "@/lib/prisma";
 import { OrderList } from "@/app/(user)/orders/order-list";
 
 export default async function OrdersPage() {
@@ -10,33 +9,16 @@ export default async function OrdersPage() {
     redirect("/sign-in");
   }
 
-  const orders = await prisma.order.findMany({
-    where: {
-      userId,
-    },
-    include: {
-      items: {
-        include: {
-          product: true,
-        },
-      },
-      address: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
   return (
-    <div className="container max-w-4xl py-8">
+    <div className="container max-w-4xl py-8 px-5 mx-auto">
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold">Pesanan Saya</h1>
+          <h1 className="text-xl font-light"> Pesanan Saya  </h1>
           <p className="text-muted-foreground">
             Lihat status dan riwayat pesanan Anda
           </p>
         </div>
-        <OrderList orders={orders} />
+        <OrderList />
       </div>
     </div>
   );
