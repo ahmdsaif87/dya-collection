@@ -117,7 +117,7 @@ function ProductCard({ product }: { product: Product }) {
 function ProductSkeleton() {
   return (
     <div className="w-full h-full rounded-xl relative overflow-hidden">
-      <Skeleton className="w-60 h-60" />
+      <Skeleton className="w-100 h-70" />
     </div>
   );
 }

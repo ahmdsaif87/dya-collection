@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, Search, User, X } from "lucide-react";
+import { Menu, Search,  X } from "lucide-react";
 import {
   SignInButton,
   SignOutButton,
