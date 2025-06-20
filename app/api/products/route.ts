@@ -1,53 +1,145 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const category = searchParams.get("category");
+    const searchParams = request.nextUrl.searchParams;
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "12");
+    const categorySlug = searchParams.get("category")?.toLowerCase();
+    const sort = searchParams.get("sort") || "relevance";
+    const exclude = searchParams.get("exclude");
+    const search = searchParams.get("search")?.trim();
 
-    let products;
+    const skip = (page - 1) * limit;
 
-    if (category) {
-      // Convert URL-friendly category name to display format
-      const searchCategory = category
-        .split("-")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
+    // Build the where clause based on category filter, exclude, and search
+    const where: any = {};
 
-      products = await prisma.product.findMany({
+      if (categorySlug) {
+      // Find category by slug
+      const category = await prisma.category.findFirst({
         where: {
+          name: {
+            mode: "insensitive",
+            in: [
+              categorySlug.replace(/-/g, " "), // Convert slug to name
+              categorySlug.replace(/-/g, ""), // Without spaces
+              categorySlug, // As is
+            ],
+          },
+        },
+      });
+
+      if (category) {
+        where.categoryId = category.id;
+      }
+    }
+
+    if (exclude) {
+      where.NOT = {
+        id: exclude,
+      };
+    }
+
+    if (search) {
+      where.OR = [
+        {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          description: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
           category: {
             name: {
+              contains: search,
               mode: "insensitive",
-              equals: searchCategory,
             },
           },
         },
-        include: {
-          category: true,
-          variant: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-    } else {
-      products = await prisma.product.findMany({
-        include: {
-          category: true,
-          variant: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
+      ];
     }
 
-    return NextResponse.json(products);
+    // Build the orderBy based on sort parameter and search relevance
+    let orderBy: any = [{ createdAt: "desc" }];
+
+    if (search && sort === "relevance") {
+      // For relevance sorting with search, prioritize name matches over description matches
+      orderBy = [
+        {
+          name: {
+            similarity: search,
+          },
+        },
+        {
+          description: {
+            similarity: search,
+          },
+        },
+      ];
+    } else {
+      switch (sort) {
+        case "latest":
+          orderBy = [{ createdAt: "desc" }];
+          break;
+        case "price_desc":
+          orderBy = [{ price: "desc" }];
+          break;
+        case "price_asc":
+          orderBy = [{ price: "asc" }];
+          break;
+        case "trending":
+          // For trending, we could add a viewCount or salesCount field later
+          orderBy = [{ createdAt: "desc" }];
+          break;
+        default:
+          orderBy = [{ createdAt: "desc" }];
+          break;
+      }
+    }
+
+    // Get total count for pagination
+    const total = await prisma.product.count({ where });
+
+    // Fetch products with pagination and sorting
+    const products = await prisma.product.findMany({
+      where,
+      skip,
+      take: limit,
+      include: {
+        variant: true,
+        category: true,
+      },
+      orderBy,
+    });
+
+    // Add slug to each product
+    const productsWithSlug = products.map((product) => ({
+      ...product,
+      slug: product.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, ""),
+    }));
+
+    return NextResponse.json({
+      products: productsWithSlug,
+      hasMore: skip + products.length < total,
+      total,
+    });
   } catch (error) {
     console.error("[PRODUCTS_GET]", error);
-    return new NextResponse("Internal error", { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch products" },
+      { status: 500 }
+    );
   }
 }
 

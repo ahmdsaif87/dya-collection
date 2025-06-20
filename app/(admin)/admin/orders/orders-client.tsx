@@ -10,16 +10,6 @@ import { useMutation } from "@tanstack/react-query";
 interface OrdersClientProps {
   data: OrderColumn[];
 }
-
-async function getOrders(): Promise<OrderColumn[]> {
-  const response = await fetch("/api/orders");
-  if (!response.ok) {
-    throw new Error("Failed to fetch orders");
-  }
-  const data = await response.json();
-  return data;
-}
-
 export default function OrdersClient({ data: initialData }: OrdersClientProps) {
   const [orders, setOrders] = useState(initialData);
 

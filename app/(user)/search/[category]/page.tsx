@@ -1,6 +1,4 @@
-import { ProductCategoryLink } from "@/components/product-category";
-import { ProductList } from "@/components/product-list";
-import { notFound } from "next/navigation";
+import { ProductListWithSort } from "@/components/product-list-with-sort";
 
 interface SearchCategoryPageProps {
   params: Promise<{
@@ -12,19 +10,15 @@ export default async function SearchCategoryPage({
   params,
 }: SearchCategoryPageProps) {
   const { category } = await params;
-  const decodedCategory = decodeURIComponent(category);
 
-  // If category is not valid, show 404
-  if (!decodedCategory) {
-    notFound();
-  }
-  
   return (
-    <main className="flex min-h-screen">
-      <ProductCategoryLink />
-      <div className="flex-1 p-6">
-        <ProductList categoryFilter={decodedCategory} />
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex gap-8">
+        {/* Main content */}
+        <div className="flex-1">
+          <ProductListWithSort className="grid-cols-1 sm:grid-cols-2 md:grid-cols-3" />
+        </div>
       </div>
-    </main>
+    </div>
   );
 }

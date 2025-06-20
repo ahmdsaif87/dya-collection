@@ -51,7 +51,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const { user } = useUser();
   return (
-    <header className="sticky px-5 top-0 z-50 w-full bg-background">
+    <header className="sticky px-5 top-0 z-50  w-full bg-background">
       <div>
         <div className="flex h-16 items-center justify-between">
           {/* Desktop Navigation */}

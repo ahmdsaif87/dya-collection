@@ -1,13 +1,13 @@
-import { ProductCategoryLink } from "@/components/product-category";
-import { ProductList } from "@/components/product-list";
+import { ProductListWithSort } from "@/components/product-list-with-sort";
 
-export default async function SearchPage() {
+export default function SearchPage() {
   return (
-    <main className="flex min-h-screen">
-      <ProductCategoryLink />
-      <div className="flex-1 p-6">
-        <ProductList />
+    <div className="container mx-auto px-4 py-8 flex flex-col md:flex-block gap-8">
+      <div className="flex gap-8">
+        <div className="flex-1">
+          <ProductListWithSort className="grid-cols-1 sm:grid-cols-2 md:grid-cols-3" />
+        </div>
       </div>
-    </main>
+    </div>
   );
 }

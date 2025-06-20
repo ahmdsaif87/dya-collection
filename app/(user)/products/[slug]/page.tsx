@@ -15,6 +15,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { useCartStore, type Product, type ProductVariant } from "@/lib/store";
 import { formatPrice } from "@/lib/utils";
+import { motion } from "framer-motion";
+import { ProductList } from "@/components/product-list";
 
 function ProductSkeleton() {
   return (
@@ -314,52 +316,38 @@ export default function Page() {
             </div>
           )}
         </div>
-      </div>
-      <div className="w-full px-5 mt-10">
-        <h2 className="text-2xl font-light justify-start">
-          Produk yang mungkin anda sukai
-        </h2>
-        <div className="flex gap-4 mt-4 overflow-x-auto pb-10">
-          {relatedLoading
-            ? Array.from({ length: 4 }).map((_, index) => (
-                <RelatedProductSkeleton key={index} />
-              ))
-            : relatedProducts
-                .filter((p) => p.id !== product.id)
-                .map((product) => (
-                  <Link
-                    key={product.id}
-                    href={`/products/${product.slug}`}
-                    className="w-60 gap-2 relative"
-                  >
-                    <Card>
-                      <CardHeader>
-                        <div className="aspect-square overflow-hidden">
-                          <Image
-                            src={product.imageUrl}
-                            alt={product.name}
-                            width={200}
-                            height={200}
-                            className="h-full w-full object-cover object-center"
-                          />
-                        </div>
-                      </CardHeader>
-                      <CardContent className="flex flex-col gap-2">
-                        <h3 className="font-medium line-clamp-1">
-                          {product.name}
-                        </h3>
-                        <p className="text-sm text-muted-foreground line-clamp-2">
-                          {product.description}
-                        </p>
-                        <Badge className="w-fit" variant="outline">
-                          {formatPrice(product.price)}
-                        </Badge>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))}
+      </div>{" "}
+      {/* Related Products */}
+      <section className="w-full mt-24 mb-12">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col gap-2 mb-8"
+          >
+            <h2 className="text-2xl font-medium text-center">
+              Produk yang mungkin Anda sukai
+            </h2>
+            <p className="text-sm text-muted-foreground text-center">
+              Rekomendasi produk serupa untuk Anda
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <ProductList
+              categoryFilter={product.categoryId}
+              className="grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
+              excludeProduct={product.id}
+            />
+          </motion.div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
