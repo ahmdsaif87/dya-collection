@@ -163,9 +163,12 @@ export function CartSheet() {
               <Button
                 className="w-full h-11"
                 size="lg"
-                onClick={() => alert("Coming Soon")}
+                onClick={() => {
+                  setIsOpen(false);
+                  window.location.href = "/checkout";
+                }}
               >
-                Proceed to Checkout
+                Lanjutkan ke Pembayaran
               </Button>
             </div>
           )}

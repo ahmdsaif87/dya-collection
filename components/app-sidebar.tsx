@@ -34,6 +34,11 @@ const data = {
       url: "/admin/categories",
       icon: PackageSearch,
     },
+    {
+      title: "Orders",
+      url: "/admin/orders",
+      icon: PackageSearch,
+    },
   ],
 };
 

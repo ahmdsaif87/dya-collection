@@ -157,7 +157,7 @@ const UserButton = ({ user }: { user: any }) => (
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuItem asChild>
-        <Link href={"/purchase"} className="cursor-pointer w-full">
+        <Link href={"/orders"} className="cursor-pointer w-full">
           Pesanan Saya
         </Link>
       </DropdownMenuItem>
