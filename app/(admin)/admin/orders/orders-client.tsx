@@ -5,7 +5,7 @@ import { columns, OrderColumn } from "./columns";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { OrderStatus } from "@prisma/client";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 interface OrdersClientProps {
   data: OrderColumn[];
@@ -21,7 +21,6 @@ async function getOrders(): Promise<OrderColumn[]> {
 }
 
 export default function OrdersClient({ data: initialData }: OrdersClientProps) {
-  const queryClient = useQueryClient();
   const [orders, setOrders] = useState(initialData);
 
   const updateStatusMutation = useMutation({
