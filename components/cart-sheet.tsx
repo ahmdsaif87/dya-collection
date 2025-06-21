@@ -59,9 +59,9 @@ export function CartSheet() {
           <SheetTitle>keranjang</SheetTitle>
         </SheetHeader>
 
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1 h-70">
           {items.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-70 gap-4">
+            <div className="flex flex-col items-center justify-center h-50 gap-4">
               <ShoppingCart className="w-20 h-20" />
               <p className="text-muted-foreground mb-4 text-2xl font-bold">
                 keranjang kamu kosong

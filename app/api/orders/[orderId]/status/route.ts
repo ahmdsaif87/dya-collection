@@ -3,8 +3,8 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
-  req: Request,
-  { params }: { params: { orderId: string } }
+  request: Request,
+  { params }: { params: Promise<{ orderId: string }> }
 ) {
   try {
     const { userId } = await auth();
@@ -13,7 +13,7 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const body = await req.json();
+    const body = await request.json();
     const { status } = body;
 
     if (!status) {

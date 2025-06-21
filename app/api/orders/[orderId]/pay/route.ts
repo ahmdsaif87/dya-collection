@@ -3,8 +3,8 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(
-  req: Request,
-  { params }: { params: { orderId: string } }
+  request: Request,
+  { params }: { params: Promise<{ orderId: string }> }
 ) {
   try {
     const { userId } = await auth();

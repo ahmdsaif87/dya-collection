@@ -2,14 +2,13 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function GET(
-  _req: Request,
-  { params }: { params: { categoryId: string } }
+  request: Request,
+  { params }: { params: Promise<{ categoryId: string }> }
 ) {
-  if (!params?.categoryId) {
+  const { categoryId } = await params;
+  if (!categoryId) {
     return new NextResponse("Category ID is required", { status: 400 });
   }
-
-  const categoryId = params.categoryId;
 
   try {
     const products = await prisma.product.findMany({
@@ -31,4 +30,3 @@ export async function GET(
     return new NextResponse("Internal error", { status: 500 });
   }
 }
- 

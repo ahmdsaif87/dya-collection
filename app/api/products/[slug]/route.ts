@@ -99,12 +99,12 @@ export async function GET(
 }
 
 export async function PATCH(
-  req: Request,
+  request: Request,
   context: { params: Promise<{ slug: string }> }
 ) {
   try {
     const { slug } = await context.params;
-    const body = await req.json();
+    const body = await request.json();
     const { name, description, price, imageUrl, categoryId, variant } = body;
 
     if (!name) {
@@ -230,7 +230,7 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  req: Request,
+  request: Request,
   context: { params: Promise<{ slug: string }> }
 ) {
   try {

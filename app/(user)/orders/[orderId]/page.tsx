@@ -1,3 +1,4 @@
+// /(user)/orders/[orderId]/page.tsx
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
@@ -11,13 +12,11 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-interface OrderPageProps {
-  params: {
-    orderId: string;
-  };
+interface PageProps {
+  params: Promise<{ orderId: string }>;
 }
 
-export default async function OrderPage({ params }: OrderPageProps) {
+export default async function OrderPage({ params }: PageProps) {
   const { userId } = await auth();
   const { orderId } = await params;
 

@@ -3,28 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
-import {
-  SignInButton,
-  SignOutButton,
-  SignedIn,
-  SignedOut,
-  useUser,
-} from "@clerk/nextjs";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 import { Button } from "@/components/ui/button";
 import { SearchCommand } from "./search-comand";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { CartSheet } from "./cart-sheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import Image from "next/image";
 
 export const page: { name: string; href: string }[] = [
   {
@@ -43,19 +28,15 @@ export const page: { name: string; href: string }[] = [
     name: "Kontak",
     href: "/contact",
   },
+  {
+    name: "Pesanan Saya",
+    href: "/orders",
+  },
 ];
-
-interface User {
-  id: string;
-  fullName?: string | null;
-  imageUrl?: string;
-  email?: string;
-}
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { user } = useUser();
   return (
     <header className="sticky px-5 top-0 z-50  w-full bg-background">
       <div>
@@ -93,7 +74,7 @@ export default function Navbar() {
               </SignInButton>
             </SignedOut>
             <SignedIn>
-              <UserButton user={user} />
+              <UserButton />
             </SignedIn>
             <CartSheet />
             {/* Mobile Menu Button */}
@@ -128,40 +109,5 @@ export default function Navbar() {
         )}
       </div>
     </header>
-  );
-}
-
-function UserButton({ user }: { user: User | undefined | null }) {
-  if (!user) return null;
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Image
-            src={user?.imageUrl || "/placeholder.png"}
-            alt={user?.fullName || "User"}
-            fill
-            className="rounded-full object-cover"
-          />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">
-              {user?.fullName || "User"}
-            </p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {user?.email}
-            </p>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <SignOutButton>Sign out</SignOutButton>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
   );
 }

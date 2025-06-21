@@ -7,9 +7,7 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 
 interface PaymentPageProps {
-  params: {
-    orderId: string;
-  };
+  params: Promise<{ orderId: string }>;
 }
 
 export default async function PaymentPage({ params }: PaymentPageProps) {
@@ -47,8 +45,11 @@ export default async function PaymentPage({ params }: PaymentPageProps) {
     <div className="container max-w-2xl py-8 px-5 mx-auto mt-10">
       <div className="space-y-8">
         <div>
-          <Link href="/orders" className="flex items-center
-           gap-2">
+          <Link
+            href="/orders"
+            className="flex items-center
+           gap-2"
+          >
             <ChevronLeft className="w-4 h-4" />
             Kembali ke Pesanan
           </Link>

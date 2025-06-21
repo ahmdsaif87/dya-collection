@@ -1,4 +1,4 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkClient, clerkMiddleware } from "@clerk/nextjs/server";
 
 export default clerkMiddleware();
 
@@ -9,4 +9,14 @@ export const config = {
     // Always run for API routes
     "/(api|trpc)(.*)",
   ],
+};
+
+export const onUserCreated = async (user: any) => {
+  await (
+    await clerkClient()
+  ).users.updateUserMetadata(user.id, {
+    publicMetadata: {
+      role: "admin",
+    },
+  });
 };
