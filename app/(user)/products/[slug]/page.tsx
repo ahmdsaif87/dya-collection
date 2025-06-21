@@ -146,7 +146,7 @@ export default function Page() {
         <div className="text-center">
           <h2 className="text-2xl font-medium">Produk tidak ditemukan</h2>
           <p className="text-muted-foreground mt-2">
-            Ptoduk yang kamu cari tidak ada.
+            Produk yang kamu cari tidak ada.
           </p>
           <Button asChild className="mt-4">
             <Link href="/products">Lihat Produk Lainnya</Link>

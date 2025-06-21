@@ -1,14 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
 import { Star } from "lucide-react";
 import { Marquee } from "@/components/magicui/marquee";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-
-
 
 const testimonials = [
   {
@@ -77,8 +73,7 @@ function ReviewCard({ review }: { review: (typeof testimonials)[0] }) {
         className={cn(
           "relative h-full w-[300px] cursor-pointer overflow-hidden mx-2 transition-all duration-300",
           "hover:shadow-lg hover:-translate-y-1",
-          "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
-          "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]"
+          " bg-card hover:bg-card/50"
         )}
       >
         <div className="p-6 relative">
@@ -98,19 +93,15 @@ function ReviewCard({ review }: { review: (typeof testimonials)[0] }) {
               )}
             </div>
 
-            <div className="flex items-center gap-2 absolute top-10 right-5">
-              <Link
-                href={review.link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+            <div className="flex items-center gap-2 absolute top-5 right-5">
+              <a href={review.link} target="_blank" rel="noopener noreferrer">
                 <Image
                   src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg"
                   alt="Google"
                   width={20}
                   height={20}
                 />
-              </Link>
+              </a>
             </div>
 
             <div>

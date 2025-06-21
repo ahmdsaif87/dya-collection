@@ -4,15 +4,11 @@ import ClientNavbar, { ClientNavbarMobile, MobileNav } from "./client-navbar";
 import { Button } from "../ui/button";
 import { UserButton } from "@clerk/nextjs";
 
-interface NavbarProps {
-  className?: string;
-}
-
-export default async function Navbar({ className }: NavbarProps) {
+export default async function Navbar() {
   const isAdmin = await checkRole("admin");
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background px-5 ">
+    <header className="sticky top-0 z-50 w-full bg-background px-5 border-b">
       <div className=" flex h-16 items-center">
         {/* Brand Logo */}
         <Link
