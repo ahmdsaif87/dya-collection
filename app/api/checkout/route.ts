@@ -2,6 +2,14 @@ import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+interface CartItem {
+  productId: string;
+  quantity: number;
+  product: {
+    price: number;
+  };
+}
+
 export async function POST(req: Request) {
   try {
     const { userId } = await auth();
@@ -39,7 +47,7 @@ export async function POST(req: Request) {
           addressId,
           total,
           items: {
-            create: items.map((item: any) => ({
+            create: items.map((item: CartItem) => ({
               productId: item.productId,
               quantity: item.quantity,
               price: item.product.price,

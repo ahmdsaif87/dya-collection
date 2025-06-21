@@ -98,22 +98,6 @@ async function getProduct(slug: string) {
   return data;
 }
 
-async function getRelatedProducts() {
-  const response = await fetch("/api/products?limit=10");
-  if (!response.ok) {
-    throw new Error("Failed to fetch related products");
-  }
-  const data = await response.json();
-  // Add slug to each product
-  return data.map((product: Product) => ({
-    ...product,
-    slug: product.name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, ""),
-  }));
-}
-
 export default function Page() {
   const params = useParams();
   const slug = params?.slug as string;
@@ -128,31 +112,11 @@ export default function Page() {
     queryFn: () => getProduct(String(slug)),
   });
 
-  const { data: relatedProducts = [], isLoading: relatedLoading } = useQuery<
-    Product[]
-  >({
-    queryKey: ["relatedProducts"],
-    queryFn: getRelatedProducts,
-  });
-
   const handleVariantChange = (variantId: string) => {
     const variant = product?.variant.find((v) => v.id === variantId);
     setSelectedVariant(variant || null);
     setQuantity(1);
   };
-
-  const handleQuantityChange = (value: string) => {
-    const newQuantity = parseInt(value);
-    if (isNaN(newQuantity) || newQuantity < 1) {
-      setQuantity(1);
-    } else if (selectedVariant && newQuantity > selectedVariant.stock) {
-      setQuantity(selectedVariant.stock);
-      toast.error("Quantity cannot exceed available stock");
-    } else {
-      setQuantity(newQuantity);
-    }
-  };
-
   const handleAddToCart = () => {
     if (!product) {
       toast.error("Product not found");
@@ -203,12 +167,12 @@ export default function Page() {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-medium">Product not found</h2>
+          <h2 className="text-2xl font-medium">Produk tidak ditemukan</h2>
           <p className="text-muted-foreground mt-2">
-            The product you're looking for doesn't exist or has been removed.
+            Ptoduk yang kamu cari tidak ada.
           </p>
           <Button asChild className="mt-4">
-            <Link href="/products">Back to Products</Link>
+            <Link href="/products">Lihat Produk Lainnya</Link>
           </Button>
         </div>
       </div>

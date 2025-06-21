@@ -49,7 +49,7 @@ export default async function OrderPage({ params }: OrderPageProps) {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <Link href="/orders">Pesanan</Link>
+            <Link href="/orders">Pesanan Saya</Link>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>

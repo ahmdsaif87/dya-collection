@@ -84,6 +84,8 @@ export default function OrdersClient({ data: initialData }: OrdersClientProps) {
   };
 
   return (
+
+    
     <DataTable
       columns={columns}
       data={orders}

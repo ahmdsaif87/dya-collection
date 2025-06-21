@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, Search,  X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import {
   SignInButton,
   SignOutButton,
@@ -12,7 +12,6 @@ import {
 } from "@clerk/nextjs";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { SearchCommand } from "./search-comand";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -46,6 +45,13 @@ export const page: { name: string; href: string }[] = [
   },
 ];
 
+interface User {
+  id: string;
+  fullName?: string | null;
+  imageUrl?: string;
+  email?: string;
+}
+
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -78,8 +84,8 @@ export default function Navbar() {
                   {item.name}
                 </Link>
               ))}
-              <SearchCommand />
             </div>
+            <SearchCommand />
             {/* Authentication */}
             <SignedOut>
               <SignInButton mode="modal">
@@ -108,16 +114,6 @@ export default function Navbar() {
         {isMenuOpen && (
           <div className="md:hidden">
             <div className="space-y-4 px-2 pb-3 pt-2">
-              {/* Mobile Search */}
-              <div className="relative">
-                <Input
-                  type="search"
-                  placeholder="Cari produk..."
-                  className="w-full pl-10 bg-muted border-none"
-                />
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              </div>
-
               {page.map((item) => (
                 <Link
                   href={item.href}
@@ -135,41 +131,37 @@ export default function Navbar() {
   );
 }
 
-const UserButton = ({ user }: { user: any }) => (
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Image
-        src={user.imageUrl}
-        alt={user.fullName}
-        width={32}
-        height={32}
-        className="rounded-full cursor-pointer hover:opacity-80 transition-opacity"
-      />
-    </DropdownMenuTrigger>
-    <DropdownMenuContent>
-      <DropdownMenuLabel>
-        <div className="flex flex-col space-y-1 leading-none">
-          <p className="font-medium">{user.fullName}</p>
-          <p className="text-xs text-muted-foreground">
-            {user.emailAddresses[0].emailAddress}
-          </p>
-        </div>
-      </DropdownMenuLabel>
-      <DropdownMenuSeparator />
-      <DropdownMenuItem asChild>
-        <Link href={"/orders"} className="cursor-pointer w-full">
-          Pesanan Saya
-        </Link>
-      </DropdownMenuItem>
-      <DropdownMenuItem asChild>
-        <Link href="/user-profile" className="cursor-pointer w-full">
-          Akun Saya
-        </Link>
-      </DropdownMenuItem>
-      <DropdownMenuSeparator />
-      <DropdownMenuItem>
-        <SignOutButton>Keluar</SignOutButton>
-      </DropdownMenuItem>
-    </DropdownMenuContent>
-  </DropdownMenu>
-);
+function UserButton({ user }: { user: User | undefined | null }) {
+  if (!user) return null;
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+          <Image
+            src={user?.imageUrl || "/placeholder.png"}
+            alt={user?.fullName || "User"}
+            fill
+            className="rounded-full object-cover"
+          />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium leading-none">
+              {user?.fullName || "User"}
+            </p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {user?.email}
+            </p>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <SignOutButton>Sign out</SignOutButton>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}

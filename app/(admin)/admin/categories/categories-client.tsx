@@ -27,13 +27,22 @@ import {
 import { columns, CategoryColumn } from "./columns";
 import { CategoryForm } from "./category-form";
 
+interface CategoryResponse {
+  id: string;
+  name: string;
+  _count: {
+    products: number;
+  };
+  createdAt: string;
+}
+
 async function getCategories() {
   const response = await fetch("/api/categories");
   if (!response.ok) {
     throw new Error("Failed to fetch categories");
   }
   const data = await response.json();
-  return data.map((category: any) => ({
+  return data.map((category: CategoryResponse) => ({
     id: category.id,
     name: category.name,
     productsCount: category._count.products,
@@ -48,7 +57,7 @@ export function CategoriesClient() {
     useState<CategoryColumn | null>(null);
   const queryClient = useQueryClient();
 
-  const { data: categories = [], isLoading } = useQuery({
+  const { data: categories = [] } = useQuery({
     queryKey: ["categories"],
     queryFn: getCategories,
   });
@@ -84,7 +93,7 @@ export function CategoriesClient() {
     try {
       await deleteMutation.mutateAsync(deleteId);
     } catch (error) {
-      // Error is already handled in mutation's onError
+      console.error("[DELETE_CATEGORY]", error);
     } finally {
       setDeleteId(null);
     }
@@ -121,12 +130,11 @@ export function CategoriesClient() {
         toast.success("Category created successfully");
         setOpen(false);
       }
-    } catch (error: any) {
-      if (error?.status === 409) {
+    } catch (error) {
+      if (error instanceof Response && error.status === 409) {
         throw error;
       }
       console.error("[CATEGORY_ERROR]", error);
-      toast.error("Something went wrong");
     }
   };
 

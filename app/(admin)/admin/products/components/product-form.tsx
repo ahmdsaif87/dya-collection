@@ -32,8 +32,6 @@ import {
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 
-import { Card } from "@/components/ui/card";
-
 interface ProductVariant {
   id: string;
   name: string;

@@ -1,12 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
+
+interface ProductVariant {
+  name: string;
+  stock: number;
+}
 
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
+    const searchParams = new URL(request.url).searchParams;
     const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "12");
-    const categorySlug = searchParams.get("category")?.toLowerCase();
+    const limit = parseInt(searchParams.get("limit") || "10");
+    const categorySlug = searchParams.get("category");
     const sort = searchParams.get("sort") || "relevance";
     const exclude = searchParams.get("exclude");
     const search = searchParams.get("search")?.trim();
@@ -14,9 +20,9 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     // Build the where clause based on category filter, exclude, and search
-    const where: any = {};
+    const where: Prisma.ProductWhereInput = {};
 
-      if (categorySlug) {
+    if (categorySlug) {
       // Find category by slug
       const category = await prisma.category.findFirst({
         where: {
@@ -68,22 +74,41 @@ export async function GET(request: NextRequest) {
     }
 
     // Build the orderBy based on sort parameter and search relevance
-    let orderBy: any = [{ createdAt: "desc" }];
+    let orderBy: Prisma.ProductOrderByWithRelationInput[] = [
+      { createdAt: "desc" },
+    ];
 
     if (search && sort === "relevance") {
-      // For relevance sorting with search, prioritize name matches over description matches
-      orderBy = [
+      // For relevance sorting with search, prioritize exact matches
+      where.OR = [
         {
           name: {
-            similarity: search,
+            equals: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          name: {
+            contains: search,
+            mode: "insensitive",
           },
         },
         {
           description: {
-            similarity: search,
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          category: {
+            name: {
+              contains: search,
+              mode: "insensitive",
+            },
           },
         },
       ];
+      orderBy = [{ createdAt: "desc" }];
     } else {
       switch (sort) {
         case "latest":
@@ -194,7 +219,7 @@ export async function POST(req: Request) {
         imageUrl,
         categoryId,
         variant: {
-          create: variant.map((v: { name: string; stock: number }) => ({
+          create: variant.map((v: ProductVariant) => ({
             name: v.name,
             stock: v.stock,
           })),

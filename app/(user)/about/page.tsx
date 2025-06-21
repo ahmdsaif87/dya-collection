@@ -38,14 +38,14 @@ export default function AboutPage() {
                 </p>
                 <p className="text-gray-600 mb-4">
                   We believe that shopping online should be simple, secure, and
-                  enjoyable. That's why we've built our platform with
+                  enjoyable. That&apos;s why we&apos;ve built our platform with
                   cutting-edge technology and a customer-centric approach that
                   ensures every interaction is smooth and satisfying.
                 </p>
                 <p className="text-gray-600">
-                  Today, we're proud to partner with thousands of sellers and
-                  brands to bring you the best products at competitive prices,
-                  backed by exceptional customer service.
+                  Today, we&apos;re proud to partner with thousands of sellers
+                  and brands to bring you the best products at competitive
+                  prices, backed by exceptional customer service.
                 </p>
               </div>
               <div className="bg-gray-100 rounded-lg p-8">
@@ -107,7 +107,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Customer Love</h3>
                 <p className="text-gray-600">
-                  Our customers are at the heart of everything we do. We're
+                  Our customers are at the heart of everything we do. We&apos;re
                   committed to providing exceptional service and support.
                 </p>
               </div>
@@ -131,8 +131,8 @@ export default function AboutPage() {
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">Why Choose ShopHub?</h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                We're more than just an online store - we're your trusted
-                shopping partner
+                We&apos;re more than just an online store - we&apos;re your
+                trusted shopping partner
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">

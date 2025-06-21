@@ -1,10 +1,9 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
-import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/data-table";
@@ -54,36 +53,13 @@ async function getProducts(): Promise<FormattedProduct[]> {
 export function ProductsClient() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-
   const { data: products = [] } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const response = await fetch(`/api/products/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete product");
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      toast.success("Product deleted successfully");
-    },
-  });
-
   const onDelete = async (id: string) => {
     try {
-      setLoading(true);
       const response = await fetch(`/api/products/${id}`, {
         method: "DELETE",
       });
@@ -92,13 +68,11 @@ export function ProductsClient() {
         throw new Error("Failed to delete product");
       }
 
-      router.refresh();
+      await queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Product deleted successfully");
     } catch (error) {
+      console.error("[DELETE_PRODUCT]", error);
       toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
-      setOpen(false);
     }
   };
 

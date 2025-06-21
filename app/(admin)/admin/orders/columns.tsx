@@ -1,12 +1,11 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, CheckCircle2, Loader } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -15,27 +14,38 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { OrderStatus } from "@prisma/client";
+import { cn } from "@/lib/utils";
 
 const orderStatusMap = {
   PENDING: {
     label: "Menunggu Pembayaran",
     variant: "secondary" as const,
+    icon: Loader,
+    className: " text-muted-foreground",
   },
   PAID: {
     label: "Sudah Dibayar",
     variant: "default" as const,
+    icon: Loader,
+    className: " text-green-500",
   },
   SHIPPED: {
     label: "Dalam Pengiriman",
     variant: "default" as const,
+    icon: Loader,
+    className: " text-yellow-500",
   },
   COMPLETED: {
     label: "Selesai",
     variant: "default" as const,
+    icon: CheckCircle2,
+    className: "text-green-500",
   },
   CANCELLED: {
     label: "Dibatalkan",
     variant: "destructive" as const,
+    icon: CheckCircle2,
+    className: "text-destructive",
   },
 };
 
@@ -122,6 +132,8 @@ export const columns: ColumnDef<OrderColumn>[] = [
       const meta = table.options.meta as {
         updateStatus: (id: string, status: OrderStatus) => void;
       };
+      const statusConfig = orderStatusMap[status];
+      const Icon = statusConfig.icon;
 
       return (
         <Select
@@ -132,23 +144,24 @@ export const columns: ColumnDef<OrderColumn>[] = [
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue>
-              <Badge variant={orderStatusMap[status].variant}>
-                {orderStatusMap[status].label}
-              </Badge>
+              <div className="flex items-center gap-2">
+                <Icon className={cn("h-4 w-4", statusConfig.className)} />
+                <span>{statusConfig.label}</span>
+              </div>
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
-            {Object.entries(orderStatusMap).map(([value, { label }]) => (
-              <SelectItem key={value} value={value}>
-                <Badge
-                  variant={
-                    orderStatusMap[value as keyof typeof orderStatusMap].variant
-                  }
-                >
-                  {label}
-                </Badge>
-              </SelectItem>
-            ))}
+            {Object.entries(orderStatusMap).map(([value, config]) => {
+              const StatusIcon = config.icon;
+              return (
+                <SelectItem key={value} value={value}>
+                  <div className="flex items-center gap-2">
+                    <StatusIcon className={cn("h-4 w-4", config.className)} />
+                    <span>{config.label}</span>
+                  </div>
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
       );
@@ -174,4 +187,3 @@ export const columns: ColumnDef<OrderColumn>[] = [
     },
   },
 ];
- 

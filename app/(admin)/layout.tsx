@@ -1,9 +1,20 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import SidebarHeader from "@/components/sidebar-header";
+import { redirect } from "next/navigation";
 
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { checkRole } from "@/lib/roles";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const isAdmin = await checkRole("admin");
+  if (!isAdmin) {
+    redirect("/");
+  }
+
   return (
     <SidebarProvider>
       <AppSidebar />
