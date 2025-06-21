@@ -123,9 +123,17 @@ export function ProductForm({
     setVariants(variants.filter((v) => v.id !== variantId));
   };
 
-  const updateVariantStock = (variantId: string, stock: number) => {
+  const updateVariant = (
+    variantId: string,
+    field: "name" | "stock",
+    value: string | number
+  ) => {
     setVariants(
-      variants.map((v) => (v.id === variantId ? { ...v, stock } : v))
+      variants.map((v) =>
+        v.id === variantId
+          ? { ...v, [field]: field === "stock" ? Number(value) : value }
+          : v
+      )
     );
   };
 
@@ -350,57 +358,29 @@ export function ProductForm({
 
           <Separator />
 
-          <div className="space-y-4">
-            <div>
-              <FormLabel>Variants</FormLabel>
-              <p className="text-sm text-muted-foreground mb-4">
-                Add size, color, or any other variant options for this product
-              </p>
-              <div className="flex flex-col sm:flex-row gap-2">
-                <Input
-                  placeholder="Variant name"
-                  value={newVariant}
-                  onChange={(e) => setNewVariant(e.target.value)}
-                  disabled={loading}
-                  className="flex-1"
-                />
-                <Input
-                  type="number"
-                  placeholder="Stock"
-                  value={newVariantStock}
-                  onChange={(e) =>
-                    setNewVariantStock(parseInt(e.target.value) || 0)
-                  }
-                  disabled={loading}
-                  className="w-24"
-                />
-                <Button
-                  type="button"
-                  onClick={addVariant}
-                  disabled={loading || !newVariant.trim()}
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-
-            <div className="space-y-2">
+          <div>
+            <h2 className="text-lg font-medium mb-4">Variants</h2>
+            <div className="space-y-4">
               {variants.map((variant) => (
                 <div
                   key={variant.id}
-                  className="flex items-center gap-2 bg-secondary/20 p-2 rounded-md"
+                  className="flex items-center space-x-4 bg-secondary/20 p-3 rounded-lg"
                 >
-                  <span className="flex-1">{variant.name}</span>
+                  <Input
+                    placeholder="Variant name"
+                    value={variant.name}
+                    onChange={(e) =>
+                      updateVariant(variant.id, "name", e.target.value)
+                    }
+                    className="flex-1"
+                  />
                   <Input
                     type="number"
+                    placeholder="Stock"
                     value={variant.stock}
                     onChange={(e) =>
-                      updateVariantStock(
-                        variant.id,
-                        parseInt(e.target.value) || 0
-                      )
+                      updateVariant(variant.id, "stock", e.target.value)
                     }
-                    disabled={loading}
                     className="w-24"
                   />
                   <Button
@@ -408,17 +388,35 @@ export function ProductForm({
                     variant="destructive"
                     size="icon"
                     onClick={() => removeVariant(variant.id)}
-                    disabled={loading}
                   >
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
               ))}
-              {variants.length === 0 && (
-                <p className="text-sm text-muted-foreground text-center py-4">
-                  No variants added yet. Add at least one variant.
-                </p>
-              )}
+              <div className="flex items-center space-x-4">
+                <Input
+                  placeholder="New variant name"
+                  value={newVariant}
+                  onChange={(e) => setNewVariant(e.target.value)}
+                  className="flex-1"
+                />
+                <Input
+                  type="number"
+                  placeholder="Stock"
+                  value={newVariantStock}
+                  onChange={(e) => setNewVariantStock(parseInt(e.target.value))}
+                  className="w-24"
+                />
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={addVariant}
+                  className="shrink-0"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Variant
+                </Button>
+              </div>
             </div>
           </div>
         </div>

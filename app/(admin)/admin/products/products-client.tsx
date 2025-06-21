@@ -26,13 +26,20 @@ interface FormattedProduct {
   createdAt: string;
 }
 
+interface ProductsApiResponse {
+  products: ProductResponse[];
+  hasMore: boolean;
+  total: number;
+}
+
 async function getProducts(): Promise<FormattedProduct[]> {
   const response = await fetch("/api/products");
+
   if (!response.ok) {
     throw new Error("Failed to fetch products");
   }
-  const data = await response.json();
-  return data.map((product: ProductResponse) => ({
+  const data: ProductsApiResponse = await response.json();
+  return data.products.map((product: ProductResponse) => ({
     id: String(product.id),
     name: String(product.name),
     description: String(product.description || ""),

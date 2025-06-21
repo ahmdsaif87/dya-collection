@@ -10,11 +10,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "www.freepik.com",
+        hostname: "img.clerk.com",
       },
       {
         protocol: "https",
-        hostname: "img.clerk.com",
+        hostname: "lh3.googleusercontent.com",
       },
     ],
   },

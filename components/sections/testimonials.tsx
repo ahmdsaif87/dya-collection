@@ -4,97 +4,153 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star } from "lucide-react";
+import { Marquee } from "@/components/magicui/marquee";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+
+
 
 const testimonials = [
   {
-    name: "Sarah Wijaya",
-    role: "Ibu Rumah Tangga",
+    name: "Ini Sonia",
     content:
-      "Produk berkualitas tinggi dan pelayanan yang sangat memuaskan. Pengiriman cepat dan aman.",
+      "Sukaaaa, pelayanannya bagus, tasnya juga bagusss, bakalan next order siii❤️⭐️⭐️⭐️⭐️⭐️",
     rating: 5,
-    image:
-      "https://res.cloudinary.com/dxurnpbrc/image/upload/v1749975126/jsgyg2webfdidlwrhdsw.webp",
+    date: "4 bulan lalu",
+    link: "https://maps.app.goo.gl/VJP9Jrc7ykGbXhtL9",
   },
   {
-    name: "Andi Pratama",
-    role: "Ayah Muda",
+    name: "Winda Rizkiana",
     content:
-      "Sangat puas dengan kualitas produk dan harga yang terjangkau. Anak saya sangat suka.",
+      "Koleksi tas terlengkapp sih ini, cari model apa aja ada semua lengkap banget pokoknya, bahan nya juga premium banget, udah sering beli disini dan awet semua tas nya sampe sekarang, pokoknya sukses selalu buat koleksi tas dya semoga bisa buka cabang deket rumahku ya🥰 …",
     rating: 5,
+    date: "2 tahun lalu",
     image:
-      "https://res.cloudinary.com/dxurnpbrc/image/upload/v1749975126/jsgyg2webfdidlwrhdsw.webp",
+      "https://lh3.googleusercontent.com/a-/ALV-UjXMULqYxIPR1SetlpPQCFXwaqFutVV4SrQm6AksxmhybxYotCs=w72-h72-p-rp-mo-br100",
+    link: "https://maps.app.goo.gl/ZEMoHeGZADkUUaK49",
   },
   {
-    name: "Linda Kusuma",
-    role: "Pengusaha",
+    name: "Lely Maodhy",
     content:
-      "Koleksi produk yang lengkap dan update. Recommended untuk para orang tua.",
+      "Recomend bangt blnja sini udh selernya ramah, murah tapi bnrangnya gk murahan kwalitas good bangt, gk malu2 in deh",
     rating: 5,
+    date: "8 bulan lalu",
     image:
-      "https://res.cloudinary.com/dxurnpbrc/image/upload/v1749975126/jsgyg2webfdidlwrhdsw.webp",
+      "https://lh3.googleusercontent.com/a-/ALV-UjUfS8bl0XTzmEcA6_0fv_GZeVRcJTh0NoMeLwmbxaGceR8NBnl4=w72-h72-p-rp-mo-br100",
+    link: "https://maps.app.goo.gl/5j5DBs8uAeV4xQnV6",
+  },
+  {
+    name: "Dinda Olivia Putri",
+    content:
+      "Produknya bagus sesuai real pict, pelayanannya juga ramah,modelnya juga ga pasaran buruan yang mau beli sebelum kehabisan❤️😍",
+    rating: 5,
+    date: "10 bulan lalu",
+    link: "https://maps.app.goo.gl/FsdmSFUgoqGqVuAKA",
+  },
+  {
+    name: "Nita Utami",
+    content:
+      "Semua barang sudah pasti original ya say ... pelayanan jugaa mantap tentunya. Teteh owner jugaa enakan. Barang selalu update model terbaru. Cuzzs lah gausah ragu lngsng order d teteh uwi 😍🥰🥰🥰😘",
+    rating: 5,
+    date: "2 tahun lalu",
+    image:
+      "https://lh3.googleusercontent.com/a-/ALV-UjVJ506ZiF8QaPSP8Tw1zGw7034IBAo2KVTa0rEeHcZ_fRTu_Bw=w72-h72-p-rp-mo-br100",
+    link: "https://maps.app.goo.gl/zLwCnPQaxSMSU65EA",
+  },
+  {
+    name: "Aulia Prima RP",
+    content:
+      "ownernya ramah pwoll, harganya juga terjangkauu dan kualitasnya jga bagus modelnya pun juga cantik2 bgt",
+    rating: 5,
+    date: "5 bulan lalu",
+    link: "https://maps.app.goo.gl/c76BL5oa6HdDbkQx9",
   },
 ];
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
+const firstRow = testimonials.slice(0, testimonials.length / 2);
+const secondRow = testimonials.slice(testimonials.length / 2);
 
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
-};
+function ReviewCard({ review }: { review: (typeof testimonials)[0] }) {
+  return (
+    <Link href={review.link} target="_blank" rel="noopener noreferrer">
+      <div
+        className={cn(
+          "relative h-full w-[300px] cursor-pointer overflow-hidden mx-2 transition-all duration-300",
+          "hover:shadow-lg hover:-translate-y-1",
+          "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
+          "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]"
+        )}
+      >
+        <div className="p-6 relative">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="relative w-10 h-10 rounded-full overflow-hidden">
+              {review.image ? (
+                <Image
+                  src={review.image}
+                  alt={review.name}
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
+                  {review.name.charAt(0).toUpperCase()}
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2 absolute top-10 right-5">
+              <Link
+                href={review.link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg"
+                  alt="Google"
+                  width={20}
+                  height={20}
+                />
+              </Link>
+            </div>
+
+            <div>
+              <h4 className="font-semibold">{review.name}</h4>
+              <p className="text-xs text-muted-foreground">{review.date}</p>
+            </div>
+          </div>
+          <div className="flex gap-1 mb-3">
+            {Array.from({ length: review.rating }).map((_, i) => (
+              <Star
+                key={i}
+                size={16}
+                className="fill-yellow-400 text-yellow-400"
+              />
+            ))}
+          </div>
+          <p className="text-sm text-muted-foreground line-clamp-3">
+            {review.content}
+          </p>
+        </div>
+      </div>
+    </Link>
+  );
+}
 
 export function Testimonials() {
   return (
-    <motion.div
-      variants={container}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-100px" }}
-      className="grid grid-cols-1 md:grid-cols-3 gap-6"
-    >
-      {testimonials.map((testimonial, index) => (
-        <motion.div key={index} variants={item}>
-          <Card className="h-full">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="relative w-12 h-12 rounded-full overflow-hidden">
-                  <Image
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div>
-                  <h4 className="font-semibold">{testimonial.name}</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {testimonial.role}
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-1 mb-3">
-                {Array.from({ length: testimonial.rating }).map((_, i) => (
-                  <Star
-                    key={i}
-                    size={16}
-                    className="fill-yellow-400 text-yellow-400"
-                  />
-                ))}
-              </div>
-              <p className="text-sm text-muted-foreground">
-                {testimonial.content}
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
-      ))}
-    </motion.div>
+    <div className="relative flex w-full flex-col items-center justify-center overflow-hidden py-10">
+      <Marquee pauseOnHover className="[--duration:40s] mb-6">
+        {firstRow.map((review, index) => (
+          <ReviewCard key={index} review={review} />
+        ))}
+      </Marquee>
+      <Marquee reverse pauseOnHover className="[--duration:40s]">
+        {secondRow.map((review, index) => (
+          <ReviewCard key={index} review={review} />
+        ))}
+      </Marquee>
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background"></div>
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background"></div>
+    </div>
   );
 }

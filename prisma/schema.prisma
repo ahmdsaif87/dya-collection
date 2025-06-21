@@ -15,8 +15,8 @@ datasource db {
 }
 
 model User {
-  id        String     @id // Clerk user ID
-  email     String     @unique
+  id        String     @id @unique // Clerk user ID
+  email     String
   orders    Order[]
   cartItems CartItem[]
   addresses Address[]

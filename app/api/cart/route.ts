@@ -20,8 +20,18 @@ async function validateAndGetUser() {
   const { userId } = await auth();
   const user = await currentUser();
 
-  if (!userId || !user?.emailAddresses?.[0]?.emailAddress) {
-    throw new Error("Unauthorized");
+  if (!userId) {
+    return { error: "Unauthorized", status: 401 };
+  }
+
+  // Get primary email or first email from the list
+  const email =
+    user?.emailAddresses?.find(
+      (email) => email.id === user.primaryEmailAddressId
+    )?.emailAddress || user?.emailAddresses?.[0]?.emailAddress;
+
+  if (!email) {
+    return { error: "Email address is required", status: 400 };
   }
 
   // Ensure user exists in our database
@@ -30,11 +40,11 @@ async function validateAndGetUser() {
     update: {},
     create: {
       id: userId,
-      email: user.emailAddresses[0].emailAddress,
+      email: email,
     },
   });
 
-  return dbUser.id;
+  return { userId: dbUser.id };
 }
 
 // Helper function to handle API errors
@@ -52,10 +62,14 @@ function handleApiError(error: unknown) {
 // Get cart items
 export async function GET() {
   try {
-    const userId = await validateAndGetUser();
+    const result = await validateAndGetUser();
+
+    if ("error" in result) {
+      return new NextResponse(result.error, { status: result.status });
+    }
 
     const cartItems = await prisma.cartItem.findMany({
-      where: { userId },
+      where: { userId: result.userId },
       include: {
         product: true,
         productVariant: true,
@@ -71,7 +85,12 @@ export async function GET() {
 // Add item to cart
 export async function POST(req: Request) {
   try {
-    const userId = await validateAndGetUser();
+    const result = await validateAndGetUser();
+
+    if ("error" in result) {
+      return new NextResponse(result.error, { status: result.status });
+    }
+
     const body = await req.json();
     const validatedData = cartItemSchema.parse(body);
 
@@ -89,7 +108,7 @@ export async function POST(req: Request) {
     // Check for existing cart item
     const existingItem = await prisma.cartItem.findFirst({
       where: {
-        userId,
+        userId: result.userId,
         productId: validatedData.productId,
         productVariantId: validatedData.productVariantId,
       },
@@ -116,7 +135,7 @@ export async function POST(req: Request) {
 
     const cartItem = await prisma.cartItem.create({
       data: {
-        userId,
+        userId: result.userId,
         productId: validatedData.productId,
         productVariantId: validatedData.productVariantId,
         quantity: validatedData.quantity,
@@ -136,7 +155,12 @@ export async function POST(req: Request) {
 // Update cart item quantity
 export async function PUT(req: Request) {
   try {
-    const userId = await validateAndGetUser();
+    const result = await validateAndGetUser();
+
+    if ("error" in result) {
+      return new NextResponse(result.error, { status: result.status });
+    }
+
     const body = await req.json();
     const validatedData = updateCartItemSchema.parse(body);
 
@@ -144,7 +168,7 @@ export async function PUT(req: Request) {
     const existingItem = await prisma.cartItem.findFirst({
       where: {
         id: validatedData.id,
-        userId,
+        userId: result.userId,
       },
       include: {
         productVariant: true,
@@ -162,7 +186,7 @@ export async function PUT(req: Request) {
 
     const updatedItem = await prisma.cartItem.update({
       where: {
-        id: existingItem.id, // Use the real ID from the database
+        id: existingItem.id,
       },
       data: { quantity: validatedData.quantity },
       include: {
@@ -180,7 +204,12 @@ export async function PUT(req: Request) {
 // Delete cart item
 export async function DELETE(req: Request) {
   try {
-    const userId = await validateAndGetUser();
+    const result = await validateAndGetUser();
+
+    if ("error" in result) {
+      return new NextResponse(result.error, { status: result.status });
+    }
+
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
 
@@ -197,7 +226,7 @@ export async function DELETE(req: Request) {
     const item = await prisma.cartItem.findFirst({
       where: {
         id,
-        userId,
+        userId: result.userId,
       },
     });
 
@@ -206,9 +235,7 @@ export async function DELETE(req: Request) {
     }
 
     await prisma.cartItem.delete({
-      where: {
-        id: item.id, // Use the real ID from the database
-      },
+      where: { id },
     });
 
     return new NextResponse(null, { status: 200 });

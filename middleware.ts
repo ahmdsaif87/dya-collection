@@ -10,13 +10,3 @@ export const config = {
     "/(api|trpc)(.*)",
   ],
 };
-
-export const onUserCreated = async (user: any) => {
-  await (
-    await clerkClient()
-  ).users.updateUserMetadata(user.id, {
-    publicMetadata: {
-      role: "admin",
-    },
-  });
-};

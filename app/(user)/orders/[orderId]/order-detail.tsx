@@ -8,15 +8,7 @@ import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { OrderActions } from "./order-actions";
-import {
-  CheckCircle,
-  Clock,
-  MapPin,
-  Package,
-  PackageCheck,
-  Truck,
-  XCircle,
-} from "lucide-react";
+import { MapPin, Package } from "lucide-react";
 
 interface ExtendedOrderItem extends OrderItem {
   product: Product;
@@ -30,14 +22,6 @@ interface ExtendedOrder extends Order {
 interface OrderDetailProps {
   order: ExtendedOrder;
 }
-
-const statusIcons = {
-  PENDING: <Clock className="h-4 w-4 mr-2 text-yellow-500" />,
-  PAID: <CheckCircle className="h-4 w-4 mr-2 text-green-600" />,
-  SHIPPED: <Truck className="h-4 w-4 mr-2 text-blue-600" />,
-  COMPLETED: <PackageCheck className="h-4 w-4 mr-2 text-emerald-600" />,
-  CANCELLED: <XCircle className="h-4 w-4 mr-2 text-red-500" />,
-};
 
 const orderStatusMap = {
   PENDING: {
@@ -83,7 +67,6 @@ export function OrderDetail({ order }: OrderDetailProps) {
             variant={orderStatusMap[order.status].variant}
             className="h-8 px-4 text-sm w-fit flex items-center"
           >
-            {statusIcons[order.status]}
             {orderStatusMap[order.status].label}
           </Badge>
 

@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import {
   Facebook,
@@ -10,8 +11,27 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import { useQuery } from "@tanstack/react-query";
+import { Category } from "@prisma/client";
+
+const getCategories = async () => {
+  const res = await fetch("/api/categories");
+  return res.json();
+};
+
+function generateCategorySlug(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
 
 export default function Footer() {
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getCategories(),
+  });
+
   return (
     <footer>
       <div className="mx-5 p-10  border bg-foreground  rounded-2xl">
@@ -20,109 +40,76 @@ export default function Footer() {
             <div className="space-y-2 text-md">
               <div className="flex items-center space-x-2  text-background font-medium">
                 <Phone className="h-4 w-4" />
-                <span>+62 (555) 123-4567</span>
+                <span>+62 857-4714-5440</span>
               </div>
               <div className="flex items-center space-x-2  text-background font-medium">
                 <Mail className="h-4 w-4" />
-                <span>support@dya.com</span>
+                <span>dyacollection@gmail.com</span>
               </div>
               <div className="flex items-center space-x-2  text-background font-medium">
                 <MapPin className="h-4 w-4" />
-                <span>Jl. Raya Tegal</span>
+                <span>Jl. Raya Tegal, Jawa Tengah</span>
               </div>
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="font-medium  text-background/70">Quick Links</h3>
+            <h3 className="font-medium  text-background/70">Menu</h3>
             <div className="space-y-2">
+              <Link
+                href="/"
+                className="block text-sm text-background font-medium hover:text-background/70"
+              >
+                Home
+              </Link>
+              <Link
+                href="/search"
+                className="block text-sm text-background font-medium hover:text-background/70"
+              >
+                Produk
+              </Link>
               <Link
                 href="/about"
                 className="block text-sm text-background font-medium hover:text-background/70"
               >
-                About Us
+                Tentang Kami
               </Link>
-              <Link
-                href="/products"
-                className="block text-sm text-background font-medium hover:text-background/70"
-              >
-                All Products
-              </Link>
-              <Link
-                href="/deals"
-                className="block text-sm text-background font-medium hover:text-background/70"
-              >
-                Special Deals
-              </Link>
-              <Link
-                href="/blog"
-                className="block text-sm text-background font-medium hover:text-background/70"
-              >
-                Blog
-              </Link>
-              <Link
-                href="/careers"
-                className="block text-sm text-background font-medium hover:text-background/70"
-              >
-                Careers
-              </Link>
-            </div>
-          </div>
-
-          {/* Customer Service */}
-          <div className="space-y-4">
-            <h3 className="font-medium text-background/70">Customer Service</h3>
-            <div className="space-y-2">
               <Link
                 href="/contact"
                 className="block text-sm text-background font-medium hover:text-background/70"
               >
-                Contact Us
+                Kontak
               </Link>
-              <Link
-                href="/faq"
-                className="block text-sm text-background font-medium hover:text-background/70"
-              >
-                FAQ
-              </Link>
-              <Link
-                href="/shipping"
-                className="block text-sm text-background font-medium hover:text-background/70"
-              >
-                Shipping Info
-              </Link>
-              <Link
-                href="/returns"
-                className="block text-sm text-background font-medium hover:text-background/70"
-              >
-                Returns & Exchanges
-              </Link>
-              <Link
-                href="/track-order"
-                className="block text-sm text-background font-medium hover:text-background/70"
-              >
-                Track Your Order
-              </Link>
-              <Link
-                href="/size-guide"
-                className="block text-sm text-background font-medium hover:text-background/70"
-              >
-                Size Guide
-              </Link>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <h3 className="font-medium text-background/70 mb-2">Koleksi</h3>
+            <div className="space-y-2 flex flex-col">
+              {categories?.map((category: Category) => (
+                <Link
+                  href={`/search/${generateCategorySlug(category.name)}`}
+                  key={category.name}
+                  className="block text-sm text-background font-medium hover:text-background/70"
+                >
+                  {category.name}
+                </Link>
+              ))}
             </div>
           </div>
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-white font-bold text-lg">S</span>
+                <span className="text-white font-bold text-lg">D</span>
               </div>
-              <span className="font-bold text-xl text-background">ShopHub</span>
+              <span className="font-bold text-xl text-background">
+                Dya Collection
+              </span>
             </div>
             <p className="text-sm text-background font-medium">
-              Your trusted online marketplace for quality products at great
-              prices. Shop with confidence and enjoy fast, reliable delivery.
+              Toko fashion online terpercaya yang menyediakan berbagai macam
+              pakaian wanita dengan kualitas terbaik dan harga terjangkau.
             </p>
             <div className="flex space-x-4">
               <Button
@@ -157,26 +144,26 @@ export default function Footer() {
       <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 px-5 py-5">
         <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
           <p className="text-sm text-foreground font-medium">
-            © 2024 ShopHub. All rights reserved.
+            © 2024 Dya Collection. All rights reserved.
           </p>
         </div>
 
         <div className="flex items-center space-x-2">
           <span className="text-sm text-foreground font-medium">
-            We accept:
+            Metode Pembayaran:
           </span>
           <div className="flex space-x-2">
             <Badge>
-              <span className="text-xs font-bold">VISA</span>
+              <span className="text-xs font-bold">QRIS</span>
             </Badge>
             <Badge>
-              <span className="text-xs font-bold">MC</span>
+              <span className="text-xs font-bold">DANA</span>
             </Badge>
             <Badge>
-              <span className="text-xs font-bold">PP</span>
+              <span className="text-xs font-bold">OVO</span>
             </Badge>
             <Badge>
-              <span className="text-xs font-bold">GPay</span>
+              <span className="text-xs font-bold">BANK</span>
             </Badge>
           </div>
         </div>

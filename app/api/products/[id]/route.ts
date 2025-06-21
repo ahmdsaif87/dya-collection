@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
 
 // Helper function to generate slug from product name
 function generateSlug(name: string) {
@@ -12,12 +11,12 @@ function generateSlug(name: string) {
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ slug: string }> }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { slug } = await context.params;
+    const { id } = await context.params;
 
-    if (!slug) {
+    if (!id) {
       return NextResponse.json(
         { error: "Product ID or slug is required" },
         { status: 400 }
@@ -31,7 +30,7 @@ export async function GET(
     if (isAdminRequest) {
       const product = await prisma.product.findUnique({
         where: {
-          id: slug,
+          id,
         },
         include: {
           variant: true,
@@ -52,7 +51,7 @@ export async function GET(
     // For user-facing requests, try both ID and slug
     let product = await prisma.product.findUnique({
       where: {
-        id: slug,
+        id,
       },
       include: {
         variant: true,
@@ -67,9 +66,9 @@ export async function GET(
           name: {
             mode: "insensitive",
             in: [
-              slug.replace(/-/g, " "), // Convert slug to name
-              slug.replace(/-/g, ""), // Without spaces
-              slug, // As is
+              id.replace(/-/g, " "), // Convert slug to name
+              id.replace(/-/g, ""), // Without spaces
+              id, // As is
             ],
           },
         },
@@ -98,12 +97,68 @@ export async function GET(
   }
 }
 
-export async function PATCH(
+export async function DELETE(
   request: Request,
-  context: { params: Promise<{ slug: string }> }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { slug } = await context.params;
+    const { id } = await context.params;
+
+    if (!id) {
+      return new NextResponse("Product ID is required", { status: 400 });
+    }
+
+    // Get existing variants to delete cart items
+    const existingVariants = await prisma.productVariant.findMany({
+      where: {
+        productId: id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    // Delete cart items referencing these variants
+    if (existingVariants.length > 0) {
+      await prisma.cartItem.deleteMany({
+        where: {
+          productVariantId: {
+            in: existingVariants.map((v) => v.id),
+          },
+        },
+      });
+    }
+
+    // Now safe to delete variants
+    await prisma.productVariant.deleteMany({
+      where: {
+        productId: id,
+      },
+    });
+
+    // Then delete the product
+    const product = await prisma.product.delete({
+      where: {
+        id,
+      },
+    });
+
+    return NextResponse.json(product);
+  } catch (error) {
+    console.error("[PRODUCT_DELETE]", error);
+    if (error instanceof Error) {
+      return new NextResponse(error.message, { status: 500 });
+    }
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
+
+export async function PATCH(
+  request: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await context.params;
     const body = await request.json();
     const { name, description, price, imageUrl, categoryId, variant } = body;
 
@@ -128,7 +183,7 @@ export async function PATCH(
     // For admin routes, only look up by ID
     const existingProduct = await prisma.product.findUnique({
       where: {
-        id: slug,
+        id,
       },
     });
 
@@ -210,90 +265,8 @@ export async function PATCH(
     return NextResponse.json(product);
   } catch (error) {
     console.error("[PRODUCT_PATCH]", error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2002") {
-        return new NextResponse("A product with this name already exists", {
-          status: 409,
-        });
-      }
-      if (error.code === "P2003") {
-        return new NextResponse(
-          "Cannot delete variants that are in active carts",
-          {
-            status: 400,
-          }
-        );
-      }
-    }
-    return new NextResponse("Internal error", { status: 500 });
-  }
-}
-
-export async function DELETE(
-  request: Request,
-  context: { params: Promise<{ slug: string }> }
-) {
-  try {
-    const { slug } = await context.params;
-
-    // For admin routes, only look up by ID
-    const product = await prisma.product.findUnique({
-      where: {
-        id: slug,
-      },
-    });
-
-    if (!product) {
-      return new NextResponse("Product not found", { status: 404 });
-    }
-
-    // Get existing variants to delete cart items
-    const existingVariants = await prisma.productVariant.findMany({
-      where: {
-        productId: product.id,
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    // Delete cart items referencing these variants
-    if (existingVariants.length > 0) {
-      await prisma.cartItem.deleteMany({
-        where: {
-          productVariantId: {
-            in: existingVariants.map((v) => v.id),
-          },
-        },
-      });
-    }
-
-    // Now safe to delete variants
-    await prisma.productVariant.deleteMany({
-      where: {
-        productId: product.id,
-      },
-    });
-
-    // Then delete the product
-    const deletedProduct = await prisma.product.delete({
-      where: {
-        id: product.id,
-      },
-    });
-
-    return NextResponse.json(deletedProduct);
-  } catch (error) {
-    console.error("[PRODUCT_DELETE]", error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2003") {
-        return new NextResponse(
-          "Cannot delete product with items in active carts",
-          {
-            status: 400,
-          }
-        );
-      }
+    if (error instanceof Error) {
+      return new NextResponse(error.message, { status: 500 });
     }
     return new NextResponse("Internal error", { status: 500 });
   }

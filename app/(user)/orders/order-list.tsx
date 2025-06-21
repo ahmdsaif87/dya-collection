@@ -188,6 +188,13 @@ export function OrderList() {
                 </div>
               </div>
             ))}
+
+        {orders.length === 0 && (
+          <div className="text-center text-muted-foreground h-100 flex items-center justify-center flex-col">
+            Tidak ada pesanan yang ditemukan
+            <Link href={"/search"} className="underline">Belanja yukk 🥰</Link>
+          </div>
+        )}
       </div>
     </div>
   );

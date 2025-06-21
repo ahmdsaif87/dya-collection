@@ -8,7 +8,6 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -17,6 +16,8 @@ import { useCartStore, type Product, type ProductVariant } from "@/lib/store";
 import { formatPrice } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { ProductList } from "@/components/product-list";
+import { SignInButton, useAuth } from "@clerk/nextjs";
+import ShareButton from "@/components/share-button";
 
 function ProductSkeleton() {
   return (
@@ -60,32 +61,7 @@ function ProductSkeleton() {
           <Skeleton className="h-12 w-48 rounded-full mt-8" />
         </div>
       </div>
-
-      {/* Related Products Section Skeleton */}
-      <div className="w-full max-w-7xl mt-10">
-        <Skeleton className="h-8 w-64 mb-4" />
-        <div className="flex gap-4 overflow-x-auto pb-10">
-          {Array.from({ length: 4 }).map((_, index) => (
-            <RelatedProductSkeleton key={index} />
-          ))}
-        </div>
-      </div>
     </div>
-  );
-}
-
-function RelatedProductSkeleton() {
-  return (
-    <Card className="w-60 gap-2 relative inline-block">
-      <CardHeader>
-        <Skeleton className="w-[200px] h-[200px] rounded-lg" />
-      </CardHeader>
-      <CardContent className="flex flex-col gap-2">
-        <Skeleton className="h-6 w-3/4" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-1/2" />
-      </CardContent>
-    </Card>
   );
 }
 
@@ -100,6 +76,7 @@ async function getProduct(slug: string) {
 
 export default function Page() {
   const params = useParams();
+  const { isSignedIn } = useAuth();
   const slug = params?.slug as string;
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
     null
@@ -214,6 +191,7 @@ export default function Page() {
             <h1 className="text-4xl md:text-7xl font-medium">
               <span className="block">{product.name}</span>
             </h1>
+            <ShareButton key={product.id} />
           </div>
           <Badge className="font-mono text-xl font-bold mt-4 rounded-full border-primary border-2 w-fit">
             {formatPrice(product.price)}
@@ -257,7 +235,7 @@ export default function Page() {
           )}
 
           {/* Add to Cart Button */}
-          {!isOutOfStock && (
+          {!isOutOfStock && isSignedIn && (
             <Button
               className="p-5 rounded-full w-fit mt-8 border-2 border-primary"
               size="lg"
@@ -268,6 +246,13 @@ export default function Page() {
               <Plus className="size-4 mr-2" />
               Tambahkan ke keranjang
             </Button>
+          )}
+          {!isSignedIn && (
+            <SignInButton mode="modal">
+              <Button variant="default" className="mt-8">
+                Masuk untuk menambahkan produk ke keranjang
+              </Button>
+            </SignInButton>
           )}
           {isOutOfStock && (
             <div className="flex h-full pt-4 ">

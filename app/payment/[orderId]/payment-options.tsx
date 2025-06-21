@@ -96,9 +96,7 @@ Mohon kirimkan instruksi pembayarannya. Terima kasih!`;
           ) : (
             <>
               <span className="flex-1">Bayar Langsung</span>
-              <span className="font-medium">
-                Rp {order.total.toLocaleString("id-ID")}
-              </span>
+              
             </>
           )}
         </Button>

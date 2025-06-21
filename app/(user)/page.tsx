@@ -4,6 +4,7 @@ import { WhyUs } from "@/components/sections/why-us";
 import { CTA } from "@/components/sections/cta";
 import ProductCategory from "@/components/product-category";
 import AnimatedSection from "@/components/animated-section";
+import MapEmbed from "@/components/MapEmbed";
 
 // Dynamically import heavier components
 const ProductList = dynamic(
@@ -97,8 +98,23 @@ export default function HomePage() {
           <Testimonials />
         </AnimatedSection>
 
+        <AnimatedSection>
+          <div className="container mx-auto flex flex-col items-center gap-6 mb-16 text-center max-w-3xl ">
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent leading-[1.1]">
+              JIMS HONEY by Dya Official
+            </h2>
+            <p className="text-lg md:text-xl text-muted-foreground/80 leading-relaxed font-medium max-w-2xl">
+              Jl. Raya Cikarang, No. 123, Kota Cikarang, Jawa Barat
+            </p>
+            <MapEmbed />
+          </div>
+        </AnimatedSection>
+
         {/* CTA Section */}
-        <AnimatedSection delay={0.3} className="bg-muted/30 -mx-4 px-4 py-20 md:py-24">
+        <AnimatedSection
+          delay={0.3}
+          className="bg-muted/30 -mx-4 px-4 py-20 md:py-24"
+        >
           <div className="container mx-auto">
             <CTA />
           </div>

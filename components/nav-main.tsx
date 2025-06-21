@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/sidebar";
 import { Collapsible } from "./ui/collapsible";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export function NavMain({
   items,
@@ -21,6 +23,7 @@ export function NavMain({
     icon?: LucideIcon;
   }[];
 }) {
+  const pathname = usePathname();
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -29,10 +32,16 @@ export function NavMain({
           <Collapsible key={item.title} asChild>
             <SidebarMenuItem>
               <Link href={item.url}>
-              <SidebarMenuButton tooltip={item.title}>
-                {item.icon && <item.icon />}
-                <span>{item.title}</span>
-              </SidebarMenuButton>
+                <SidebarMenuButton
+                  tooltip={item.title}
+                  className={cn(
+                    pathname === item.url && "bg-primary text-primary-foreground hover:bg-primary",
+                    "hover:bg-primary/10 hover:text-primary"
+                  )}
+                >
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
+                </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
           </Collapsible>

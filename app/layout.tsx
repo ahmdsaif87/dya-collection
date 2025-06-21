@@ -35,7 +35,7 @@ export default function RootLayout({
         >
           <QueryProvider>
             {children}
-            <Toaster position="top-center" />
+            <Toaster position="bottom-center" richColors />
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryProvider>
         </body>

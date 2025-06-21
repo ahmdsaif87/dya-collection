@@ -21,7 +21,7 @@ export default async function OrderPage({ params }: PageProps) {
   const { orderId } = await params;
 
   if (!userId) {
-    redirect("/sign-in");
+    redirect("/");
   }
 
   const order = await prisma.order.findUnique({

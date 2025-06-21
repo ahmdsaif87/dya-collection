@@ -14,7 +14,7 @@ export default async function PaymentPage({ params }: PaymentPageProps) {
   const { userId } = await auth();
   const { orderId } = await params;
   if (!userId) {
-    redirect("/sign-in");
+    redirect("/");
   }
 
   const order = await prisma.order.findUnique({
@@ -51,7 +51,7 @@ export default async function PaymentPage({ params }: PaymentPageProps) {
            gap-2"
           >
             <ChevronLeft className="w-4 h-4" />
-            Kembali ke Pesanan
+            Pesanan Saya
           </Link>
         </div>
         <div>

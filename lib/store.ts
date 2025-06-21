@@ -92,6 +92,11 @@ export const useCartStore = create<CartStore>()(
           });
 
           if (!response.ok) {
+            if (response.status === 401) {
+              // Clear cart on unauthorized
+              get().clearCart();
+              throw new Error("Silakan masuk untuk menambahkan ke keranjang");
+            }
             throw new Error("Failed to add item to cart");
           }
 
@@ -142,6 +147,11 @@ export const useCartStore = create<CartStore>()(
             });
 
             if (!response.ok) {
+              if (response.status === 401) {
+                // Clear cart on unauthorized
+                get().clearCart();
+                throw new Error("Silakan masuk untuk mengubah keranjang");
+              }
               throw new Error("Failed to update quantity");
             }
           }
@@ -168,6 +178,11 @@ export const useCartStore = create<CartStore>()(
           });
 
           if (!response.ok && !id.startsWith("temp-")) {
+            if (response.status === 401) {
+              // Clear cart on unauthorized
+              get().clearCart();
+              throw new Error("Silakan masuk untuk menghapus item");
+            }
             throw new Error("Failed to remove item");
           }
         } catch (error) {

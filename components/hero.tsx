@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, ShoppingBag, Star } from "lucide-react";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -40,13 +41,14 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button size="lg">
-            <ShoppingBag className="mr-2 h-5 w-5" />
-            Belanja Sekarang
-            <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+          <Button size="lg" asChild>
+            <Link href="/search">
+              Belanja Sekarang
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Link>
           </Button>
-          <Button variant="outline" size="lg">
-            Lihat Koleksi
+          <Button variant="outline" size="lg" asChild>
+            <Link href="/search">Lihat Koleksi</Link>
           </Button>
         </div>
 
@@ -68,7 +70,12 @@ export default function Hero() {
           </div>
           <div className="flex items-center gap-2">
             <div className="p-2 bg-background border rounded-full shadow-sm">
-              <Star className="w-5 h-5 text-yellow-400" />
+              <Image
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg"
+                alt="Google"
+                width={20}
+                height={20}
+              />
             </div>
             <div>
               <p className="font-semibold">4.9/5</p>

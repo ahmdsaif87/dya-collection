@@ -7,7 +7,7 @@ export default async function CheckoutPage() {
   const { userId } = await auth();
 
   if (!userId) {
-    redirect("/sign-in");
+    redirect("/");
   }
 
   // Get user's addresses

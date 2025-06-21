@@ -5,7 +5,14 @@ import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, CheckCircle2, Loader } from "lucide-react";
+import {
+  ArrowUpDown,
+  CheckCircle2,
+  DollarSign,
+  Loader,
+  Truck,
+  X,
+} from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -26,13 +33,13 @@ const orderStatusMap = {
   PAID: {
     label: "Sudah Dibayar",
     variant: "default" as const,
-    icon: Loader,
+    icon: DollarSign,
     className: " text-green-500",
   },
   SHIPPED: {
     label: "Dalam Pengiriman",
     variant: "default" as const,
-    icon: Loader,
+    icon: Truck,
     className: " text-yellow-500",
   },
   COMPLETED: {
@@ -44,7 +51,7 @@ const orderStatusMap = {
   CANCELLED: {
     label: "Dibatalkan",
     variant: "destructive" as const,
-    icon: CheckCircle2,
+    icon: X,
     className: "text-destructive",
   },
 };
