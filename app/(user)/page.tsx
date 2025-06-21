@@ -13,10 +13,7 @@ const ProductList = dynamic(
     loading: () => (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {Array.from({ length: 8 }).map((_, i) => (
-          <div
-            key={i}
-            className="w-full h-60 rounded-xl bg-gray-100 animate-pulse"
-          />
+          <div key={i} className="w-full h-60 rounded-xl muted animate-pulse" />
         ))}
       </div>
     ),
@@ -29,9 +26,7 @@ const Testimonials = dynamic(
       (mod) => mod.Testimonials
     ),
   {
-    loading: () => (
-      <div className="h-60 rounded-xl bg-gray-100 animate-pulse" />
-    ),
+    loading: () => <div className="h-60 rounded-xl muted animate-pulse" />,
   }
 );
 

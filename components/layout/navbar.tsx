@@ -8,7 +8,7 @@ export default async function Navbar() {
   const isAdmin = await checkRole("admin");
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background px-5 border-b">
+    <header className="sticky top-0 z-50 w-full bg-background px-5 ">
       <div className=" flex h-16 items-center">
         {/* Brand Logo */}
         <Link
@@ -16,7 +16,7 @@ export default async function Navbar() {
           className="mr-6 flex items-center space-x-2"
           aria-label="Dya Collection Home"
         >
-          <span className="font-bold text-xl uppercase hidden md:inline-block">
+          <span className=" font-bold text-xl uppercase hidden md:inline-block">
             Dya Collection
           </span>
           <span className="font-bold text-xl uppercase md:hidden">DYC</span>

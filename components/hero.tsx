@@ -9,12 +9,6 @@ import Link from "next/link";
 export default function Hero() {
   return (
     <section className="relative py-16 px-5 flex flex-col md:flex-row items-center justify-between w-full min-h-screen overflow-hidden bg-background text-foreground">
-      {/* Decorative blurred blobs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl opacity-50 animate-blob" />
-        <div className="absolute top-40 right-10 w-72 h-72 bg-muted/20 rounded-full blur-3xl opacity-40 animate-blob animation-delay-2000" />
-        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-accent/10 rounded-full blur-3xl opacity-30 animate-blob animation-delay-4000" />
-      </div>
 
       {/* Text Section */}
       <motion.div
@@ -92,7 +86,6 @@ export default function Hero() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="absolute inset-0 bg-primary/10 rounded-xl blur-2xl -rotate-6 scale-105" />
         <Image
           src="https://res.cloudinary.com/dxurnpbrc/image/upload/v1750148957/baby-cap-black_t5zzrr.png"
           alt="Tas Wanita Elegan"

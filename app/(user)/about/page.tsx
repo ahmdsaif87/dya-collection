@@ -29,20 +29,20 @@ export default function AboutPage() {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-3xl font-bold mb-6">Our Story</h2>
-                <p className="text-gray-600 mb-4">
+                <p className="text-foreground mb-4">
                   Founded in 2020, ShopHub began as a small startup with a big
                   vision: to create an online marketplace that puts customers
                   first. What started as a team of five passionate individuals
                   has grown into a thriving platform serving millions of
                   customers worldwide.
                 </p>
-                <p className="text-gray-600 mb-4">
+                <p className="text-foreground mb-4">
                   We believe that shopping online should be simple, secure, and
                   enjoyable. That&apos;s why we&apos;ve built our platform with
                   cutting-edge technology and a customer-centric approach that
                   ensures every interaction is smooth and satisfying.
                 </p>
-                <p className="text-gray-600">
+                <p className="text-foreground">
                   Today, we&apos;re proud to partner with thousands of sellers
                   and brands to bring you the best products at competitive
                   prices, backed by exceptional customer service.
@@ -54,25 +54,25 @@ export default function AboutPage() {
                     <div className="text-3xl font-bold text-primary mb-2">
                       5M+
                     </div>
-                    <div className="text-sm text-gray-600">Happy Customers</div>
+                    <div className="text-sm text-foreground">Happy Customers</div>
                   </div>
                   <div>
                     <div className="text-3xl font-bold text-primary mb-2">
                       50K+
                     </div>
-                    <div className="text-sm text-gray-600">Products</div>
+                    <div className="text-sm text-foreground">Products</div>
                   </div>
                   <div>
                     <div className="text-3xl font-bold text-primary mb-2">
                       1K+
                     </div>
-                    <div className="text-sm text-gray-600">Trusted Sellers</div>
+                    <div className="text-sm text-foreground">Trusted Sellers</div>
                   </div>
                   <div>
                     <div className="text-3xl font-bold text-primary mb-2">
                       99.9%
                     </div>
-                    <div className="text-sm text-gray-600">Uptime</div>
+                    <div className="text-sm text-foreground">Uptime</div>
                   </div>
                 </div>
               </div>
@@ -85,7 +85,7 @@ export default function AboutPage() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">Our Values</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-foreground max-w-2xl mx-auto">
                 These core values guide everything we do and shape the
                 experience we create for our customers
               </p>
@@ -96,7 +96,7 @@ export default function AboutPage() {
                   <CheckCircle className="h-8 w-8 text-primary-foreground" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Quality First</h3>
-                <p className="text-gray-600">
+                <p className="text-foreground">
                   We carefully curate our product selection to ensure every item
                   meets our high standards for quality and value.
                 </p>
@@ -106,7 +106,7 @@ export default function AboutPage() {
                   <Heart className="h-8 w-8 text-primary-foreground" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Customer Love</h3>
-                <p className="text-gray-600">
+                <p className="text-foreground">
                   Our customers are at the heart of everything we do. We&apos;re
                   committed to providing exceptional service and support.
                 </p>
@@ -116,7 +116,7 @@ export default function AboutPage() {
                   <Shield className="h-8 w-8 text-primary-foreground" />
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Trust & Security</h3>
-                <p className="text-gray-600">
+                <p className="text-foreground">
                   We use advanced security measures to protect your data and
                   ensure safe, secure transactions every time.
                 </p>
@@ -130,7 +130,7 @@ export default function AboutPage() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">Why Choose ShopHub?</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-foreground max-w-2xl mx-auto">
                 We&apos;re more than just an online store - we&apos;re your
                 trusted shopping partner
               </p>
@@ -141,7 +141,7 @@ export default function AboutPage() {
                   <Truck className="h-8 w-8 text-primary-foreground" />
                 </div>
                 <h3 className="font-semibold mb-2">Fast Shipping</h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-foreground">
                   Free shipping on orders over $50 with delivery in 2-3 business
                   days
                 </p>
@@ -151,7 +151,7 @@ export default function AboutPage() {
                   <Shield className="h-8 w-8 text-primary-foreground" />
                 </div>
                 <h3 className="font-semibold mb-2">Secure Payment</h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-foreground">
                   Your payment information is protected with bank-level security
                 </p>
               </div>
@@ -160,7 +160,7 @@ export default function AboutPage() {
                   <Award className="h-8 w-8 text-primary-foreground" />
                 </div>
                 <h3 className="font-semibold mb-2">Quality Guarantee</h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-foreground">
                   30-day money-back guarantee on all purchases
                 </p>
               </div>
@@ -169,7 +169,7 @@ export default function AboutPage() {
                   <Users className="h-8 w-8 text-primary-foreground" />
                 </div>
                 <h3 className="font-semibold mb-2">24/7 Support</h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-foreground">
                   Round-the-clock customer service to help you anytime
                 </p>
               </div>
@@ -182,7 +182,7 @@ export default function AboutPage() {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">Tim Kami</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-foreground max-w-2xl mx-auto">
                 The passionate people behind ShopHub who work tirelessly to
                 bring you the best shopping experience
               </p>
@@ -194,7 +194,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Sarah Johnson</h3>
                 <p className="text-primary mb-2">CEO & Founder</p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-foreground">
                   Visionary leader with 15+ years in e-commerce, passionate
                   about creating exceptional customer experiences.
                 </p>
@@ -205,7 +205,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Michael Chen</h3>
                 <p className="text-primary mb-2">CTO</p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-foreground">
                   Tech innovator ensuring our platform stays cutting-edge and
                   secure for millions of users worldwide.
                 </p>
@@ -216,7 +216,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Emily Rodriguez</h3>
                 <p className="text-primary mb-2">Head of Customer Success</p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-foreground">
                   Dedicated to ensuring every customer has an amazing experience
                   from browse to delivery and beyond.
                 </p>

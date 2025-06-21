@@ -4,7 +4,6 @@ import Image from "next/image";
 import { Star } from "lucide-react";
 import { Marquee } from "@/components/magicui/marquee";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 
 const testimonials = [
   {
@@ -68,7 +67,7 @@ const secondRow = testimonials.slice(testimonials.length / 2);
 
 function ReviewCard({ review }: { review: (typeof testimonials)[0] }) {
   return (
-    <Link href={review.link} target="_blank" rel="noopener noreferrer">
+    <a href={review.link} target="_blank" rel="noopener noreferrer">
       <div
         className={cn(
           "relative h-full w-[300px] cursor-pointer overflow-hidden mx-2 transition-all duration-300",
@@ -87,21 +86,19 @@ function ReviewCard({ review }: { review: (typeof testimonials)[0] }) {
                   className="object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
+                <div className="w-full h-full bg-muted rounded-full flex items-center justify-center">
                   {review.name.charAt(0).toUpperCase()}
                 </div>
               )}
             </div>
 
             <div className="flex items-center gap-2 absolute top-5 right-5">
-              <a href={review.link} target="_blank" rel="noopener noreferrer">
-                <Image
-                  src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg"
-                  alt="Google"
-                  width={20}
-                  height={20}
-                />
-              </a>
+              <Image
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg"
+                alt="Google"
+                width={20}
+                height={20}
+              />
             </div>
 
             <div>
@@ -123,7 +120,7 @@ function ReviewCard({ review }: { review: (typeof testimonials)[0] }) {
           </p>
         </div>
       </div>
-    </Link>
+    </a>
   );
 }
 
