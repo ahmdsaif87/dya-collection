@@ -9,7 +9,7 @@ import { Plus, X } from "lucide-react";
 import {
   CldUploadWidget,
   CldImage,
-  CldUploadWidgetResults,
+  CloudinaryUploadWidgetResults,
 } from "next-cloudinary";
 import {
   Form,
@@ -393,10 +393,15 @@ export function ProductForm({
                           <CldUploadWidget
                             signatureEndpoint="/api/sign-cloudinary-params"
                             uploadPreset="dyaimage"
-                            onSuccess={(results: CldUploadWidgetResults) => {
+                            onSuccess={(
+                              results: CloudinaryUploadWidgetResults
+                            ) => {
                               if (results.event !== "success") return;
-                              field.onChange(results.info?.secure_url || "");
-                              results.widget.close();
+                              field.onChange(
+                                (results.info as CloudinaryUploadWidgetInfo)
+                                  .secure_url
+                              );
+                              setGalleryDialogOpen(false);
                             }}
                             onClose={() => {
                               document.body.style.overflow = "auto";
