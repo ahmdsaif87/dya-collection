@@ -236,7 +236,7 @@ export async function PATCH(
       where: {
         productId: existingProduct.id,
       },
-    });
+      });
 
     // Then update the product with new variants
     const product = await prisma.product.update({

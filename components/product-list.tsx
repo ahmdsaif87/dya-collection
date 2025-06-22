@@ -10,6 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
 import AnimatedSection from "./animated-section";
+import { CldImage } from "next-cloudinary";
 
 // Helper function to generate slug from product name
 function generateSlug(name: string) {
@@ -70,10 +71,11 @@ function ProductCard({ product }: { product: Product }) {
           }`}
         >
           <CardHeader className="flex items-center justify-center p-4">
-            <Image
+            <CldImage
               src={product.imageUrl}
               width={200}
               height={200}
+              removeBackground={true}
               alt={product.name}
               className="object-contain hover:scale-115 transition-all duration-300"
             />

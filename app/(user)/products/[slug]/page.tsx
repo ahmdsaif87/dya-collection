@@ -18,6 +18,7 @@ import { motion } from "framer-motion";
 import { ProductList } from "@/components/product-list";
 import { SignInButton, useAuth } from "@clerk/nextjs";
 import ShareButton from "@/components/share-button";
+import { CldImage } from "next-cloudinary";
 
 function ProductSkeleton() {
   return (
@@ -167,11 +168,12 @@ export default function Page() {
         <div className="w-full md:w-1/2">
           <Suspense fallback={<Skeleton className="w-full h-full" />}>
             <div className="aspect-square overflow-hidden relative">
-              <Image
+              <CldImage
                 src={product.imageUrl}
                 alt={product.name}
                 width={500}
                 height={500}
+                removeBackground={true}
                 className="h-full w-full object-cover object-center hover:scale-105 transition-all duration-300"
               />
               {isOutOfStock && (
