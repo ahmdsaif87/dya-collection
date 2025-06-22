@@ -8,7 +8,6 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { SearchCommand } from "@/components/search-comand";
 import { cn } from "@/lib/utils";
-import { CartSheet } from "@/components/cart-sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -97,7 +96,6 @@ export default function ClientNavbar() {
 
         <SignedIn>
           <UserButton
-            afterSignOutUrl="/"
             appearance={{
               elements: {
                 avatarBox: "h-8 w-8",
@@ -106,7 +104,7 @@ export default function ClientNavbar() {
           />
         </SignedIn>
 
-        <CartSheet />
+        
       </div>
     </div>
   );

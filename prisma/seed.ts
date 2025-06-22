@@ -3,18 +3,21 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const images = [
-  "https://res.cloudinary.com/dxurnpbrc/image/upload/v1750148957/baby-cap-black_t5zzrr.png",
-  "https://res.cloudinary.com/dxurnpbrc/image/upload/v1750148957/hoodie-1_fakmha.png",
-  "https://res.cloudinary.com/dxurnpbrc/image/upload/v1750148956/t-shirt-2_1_uiyrid.png",
-  "https://res.cloudinary.com/dxurnpbrc/image/upload/v1750148956/hat-1_nr35tp.png",
+  "https://res.cloudinary.com/dyacollection/image/upload/v1750585927/dog-sweater-1_wotfkk.png",
+  "https://res.cloudinary.com/dyacollection/image/upload/v1750585927/baby-onesie-beige-1_tojjri.png",
+  "https://res.cloudinary.com/dyacollection/image/upload/v1750585928/hoodie-1_npaenx.png",
+  "https://res.cloudinary.com/dyacollection/image/upload/v1750585927/t-shirt-1_bhbzsp.png",
+  "https://res.cloudinary.com/dyacollection/image/upload/v1750585927/t-shirt-spiral-1_kz6pte.png",
+  "https://res.cloudinary.com/dyacollection/image/upload/v1750585927/shoes-1_zwm8do.png",
+  "https://res.cloudinary.com/dyacollection/image/upload/v1750585927/t-shirt-color-black_hvcfme.png",
 ];
 
 const categories = [
+  { name: "Tas Wanita" },
   { name: "Pakaian Anak" },
-  { name: "Aksesoris Bayi" },
-  { name: "Perlengkapan Mandi" },
-  { name: "Mainan Edukasi" },
-  { name: "Peralatan Makan" },
+  { name: "Pakaian Dewasa" },
+  { name: "Sepatu & Sandal" },
+  { name: "Aksesoris" },
 ];
 
 const getRandomImage = () => {
@@ -22,7 +25,7 @@ const getRandomImage = () => {
 };
 
 const getRandomPrice = () => {
-  return Math.floor(Math.random() * (300000 - 50000) + 50000);
+  return Math.floor(Math.random() * (300000 - 50000) + 50000); // IDR 50k - 300k
 };
 
 const getRandomStock = () => {
@@ -55,11 +58,10 @@ async function main() {
       const product = await prisma.product.create({
         data: {
           name: productName,
-          description: `Deskripsi lengkap untuk ${productName}. Produk berkualitas tinggi untuk buah hati Anda.`,
+          description: `Deskripsi lengkap untuk ${productName}. Produk berkualitas tinggi pilihan Dya Collection.`,
           price: getRandomPrice(),
           imageUrl: getRandomImage(),
           categoryId: createdCategory.id,
-          // Create 2-4 variants for each product
           variant: {
             create: [
               {
@@ -91,7 +93,7 @@ async function main() {
     }
   }
 
-  console.log("✅ Seed data created successfully");
+  console.log("✅ Seed data created successfully for Dya Collection");
 }
 
 main()

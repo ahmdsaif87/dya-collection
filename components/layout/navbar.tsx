@@ -3,6 +3,7 @@ import Link from "next/link";
 import ClientNavbar, { ClientNavbarMobile, MobileNav } from "./client-navbar";
 import { Button } from "../ui/button";
 import { UserButton } from "@clerk/nextjs";
+import { CartSheet } from "../cart-sheet";
 
 export default async function Navbar() {
   const isAdmin = await checkRole("admin");
@@ -42,6 +43,7 @@ export default async function Navbar() {
             <ClientNavbar />
           )}
           <MobileNav />
+          <CartSheet />
         </div>
       </div>
     </header>

@@ -17,6 +17,14 @@ import {
 import { Button } from "./ui/button";
 import { Search } from "lucide-react";
 
+// Helper function to generate slug from product name
+function generateSlug(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
 interface Variant {
   id: string;
   productId: string;
@@ -42,7 +50,6 @@ interface Product {
   createdAt: string;
   updatedAt: string;
   variant: Variant[];
-  slug: string;
 }
 
 export function SearchCommand() {
@@ -140,7 +147,8 @@ export function SearchCommand() {
                     key={product.id}
                     value={product.name}
                     onSelect={() => {
-                      router.push(`/products/${product.slug}`);
+                      const slug = generateSlug(product.name);
+                      router.push(`/products/${slug}`);
                       setOpen(false);
                     }}
                   >
@@ -153,7 +161,7 @@ export function SearchCommand() {
                         </span>
                       </div>
                     </div>
-                  </CommandItem>
+                    </CommandItem>
                 ))}
               </CommandGroup>
             )}
