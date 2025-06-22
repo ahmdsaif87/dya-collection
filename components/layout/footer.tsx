@@ -9,8 +9,8 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { Category } from "@prisma/client";
 

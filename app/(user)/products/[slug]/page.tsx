@@ -172,7 +172,7 @@ export default function Page() {
                 alt={product.name}
                 width={500}
                 height={500}
-                className="h-full w-full object-cover object-center"
+                className="h-full w-full object-cover object-center hover:scale-105 transition-all duration-300"
               />
               {isOutOfStock && (
                 <div className="absolute inset-0 flex items-center justify-center">

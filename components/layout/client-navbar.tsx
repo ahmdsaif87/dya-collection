@@ -23,7 +23,7 @@ interface NavItem {
 const navigationItems: NavItem[] = [
   { name: "Home", href: "/" },
   { name: "Produk", href: "/search" },
-  { name: "Tentang Kami", href: "/about" },
+  { name: "Tentang", href: "/about" },
   { name: "Kontak", href: "/contact" },
 ];
 
@@ -75,7 +75,6 @@ export function MobileNav() {
 export default function ClientNavbar() {
   return (
     <div className="flex items-center space-x-4">
-
       {/* Actions */}
       <div className="flex items-center space-x-4">
         <SignedIn>

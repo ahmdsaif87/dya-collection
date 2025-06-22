@@ -70,18 +70,13 @@ function ProductCard({ product }: { product: Product }) {
           }`}
         >
           <CardHeader className="flex items-center justify-center p-4">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <Image
-                src={product.imageUrl}
-                width={200}
-                height={200}
-                alt={product.name}
-                className="object-contain"
-              />
-            </motion.div>
+            <Image
+              src={product.imageUrl}
+              width={200}
+              height={200}
+              alt={product.name}
+              className="object-contain hover:scale-115 transition-all duration-300"
+            />
           </CardHeader>
           <CardContent className="absolute bottom-0 left-0 right-0 p-3 flex items-center">
             <div className="flex border rounded-full items-center gap-2 p-2 bg-glass bg-white/10 backdrop-blur-md">

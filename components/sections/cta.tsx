@@ -20,17 +20,16 @@ export function CTA() {
         Koleksi lengkap produk berkualitas dengan harga terjangkau untuk buah
         hati tercinta
       </p>
-      <motion.div
-        whileHover={{ scale: 1.05 }}
-        transition={{ type: "spring", stiffness: 300 }}
-      >
-        <Link href="/search">
-          <Button size="lg" className="gap-2">
-            Belanja Sekarang
-            <ArrowRight size={16} />
-          </Button>
-        </Link>
-      </motion.div>
+
+      <Link href="/search">
+        <Button
+          size="lg"
+          className="gap-2 hover:scale-105 transition-all duration-300"
+        >
+          Belanja Sekarang
+          <ArrowRight size={16} />
+        </Button>
+      </Link>
     </motion.div>
   );
 }
