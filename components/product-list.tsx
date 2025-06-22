@@ -6,7 +6,6 @@ import { useInView } from "framer-motion";
 import { useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
 import AnimatedSection from "./animated-section";

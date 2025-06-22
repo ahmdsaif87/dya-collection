@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Suspense, useState } from "react";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";

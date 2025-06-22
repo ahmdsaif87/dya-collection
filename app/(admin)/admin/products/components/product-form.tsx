@@ -64,14 +64,13 @@ interface ProductFormProps {
   categories?: Category[];
 }
 
-interface CloudinaryUploadWidgetInfo {
+interface CloudinaryInfo {
+  public_id: string;
   secure_url: string;
+  width: number;
+  height: number;
 }
 
-interface CloudinaryUploadWidgetResult {
-  event: string;
-  info: CloudinaryUploadWidgetInfo;
-}
 
 const formSchema = z.object({
   name: z
@@ -398,10 +397,9 @@ export function ProductForm({
                             ) => {
                               if (results.event !== "success") return;
                               field.onChange(
-                                (results.info as CloudinaryUploadWidgetInfo)
-                                  .secure_url
+                                (results.info as CloudinaryInfo).secure_url
                               );
-                              results.widget.close();
+                              window.close()
                             }}
                             onClose={() => {
                               document.body.style.overflow = "auto";
