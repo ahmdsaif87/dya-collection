@@ -401,7 +401,7 @@ export function ProductForm({
                                 (results.info as CloudinaryUploadWidgetInfo)
                                   .secure_url
                               );
-                              setGalleryDialogOpen(false);
+                              results.widget.close();
                             }}
                             onClose={() => {
                               document.body.style.overflow = "auto";
