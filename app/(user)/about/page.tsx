@@ -8,236 +8,43 @@ export default function AboutPage() {
     <AnimatedSection delay={0.3}>
       <div className="min-h-screen">
         {/* Hero Section */}
-        <section className=" py-20">
+        <section className=" py-10">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Tentang Kami
+            <h1 className="text-4xl md:text-6xl font-medium mb-2">
+              About Dya
             </h1>
-            <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-              Your trusted online marketplace connecting millions of customers
-              with quality products since 2020
-            </p>
-            <Button size="lg" variant="secondary" asChild>
-              <Link href="/contact">Get in Touch</Link>
-            </Button>
           </div>
         </section>
 
         {/* Our Story */}
-        <section className="py-16">
+        <section className="py-2">
           <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="flex text-justify max-w-3xl mx-auto mb-8">
               <div>
-                <h2 className="text-3xl font-bold mb-6">Our Story</h2>
                 <p className="text-foreground mb-4">
-                  Founded in 2020, ShopHub began as a small startup with a big
-                  vision: to create an online marketplace that puts customers
-                  first. What started as a team of five passionate individuals
-                  has grown into a thriving platform serving millions of
-                  customers worldwide.
+                  Didirikan pada tahun 2020, Dya Collection berawal dari toko kecil dengan visi besar: menghadirkan produk fashion yang terjangkau dan berkualitas untuk semua kalangan. Dari awalnya hanya dijalankan oleh tim kecil yang penuh semangat, kini Dya Collection telah berkembang menjadi brand yang dipercaya oleh ribuan pelanggan di seluruh Indonesia.
                 </p>
                 <p className="text-foreground mb-4">
-                  We believe that shopping online should be simple, secure, and
-                  enjoyable. That&apos;s why we&apos;ve built our platform with
-                  cutting-edge technology and a customer-centric approach that
-                  ensures every interaction is smooth and satisfying.
+                  Kami percaya bahwa belanja online haruslah mudah, aman, dan menyenangkan. Karena itu, kami terus berinovasi dalam menghadirkan platform yang ramah pengguna, didukung oleh teknologi yang andal dan pelayanan pelanggan yang responsif.
                 </p>
                 <p className="text-foreground">
-                  Today, we&apos;re proud to partner with thousands of sellers
-                  and brands to bring you the best products at competitive
-                  prices, backed by exceptional customer service.
+                  Saat ini, Dya Collection bangga menawarkan beragam pilihan tas, jam tangan, dan daster berkualitas, dengan harga kompetitif dan layanan yang mengutamakan kepuasan pelanggan.
                 </p>
-              </div>
-              <div className="bg-gray-100 rounded-lg p-8">
-                <div className="grid grid-cols-2 gap-6 text-center">
-                  <div>
-                    <div className="text-3xl font-bold text-primary mb-2">
-                      5M+
-                    </div>
-                    <div className="text-sm text-foreground">Happy Customers</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-bold text-primary mb-2">
-                      50K+
-                    </div>
-                    <div className="text-sm text-foreground">Products</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-bold text-primary mb-2">
-                      1K+
-                    </div>
-                    <div className="text-sm text-foreground">Trusted Sellers</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-bold text-primary mb-2">
-                      99.9%
-                    </div>
-                    <div className="text-sm text-foreground">Uptime</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        {/* Our Values */}
-        <section className="py-16 bg-card">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Our Values</h2>
-              <p className="text-foreground max-w-2xl mx-auto">
-                These core values guide everything we do and shape the
-                experience we create for our customers
-              </p>
-            </div>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="h-8 w-8 text-primary-foreground" />
-                </div>
-                <h3 className="text-xl font-semibold mb-3">Quality First</h3>
-                <p className="text-foreground">
-                  We carefully curate our product selection to ensure every item
-                  meets our high standards for quality and value.
-                </p>
-              </div>
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Heart className="h-8 w-8 text-primary-foreground" />
-                </div>
-                <h3 className="text-xl font-semibold mb-3">Customer Love</h3>
-                <p className="text-foreground">
-                  Our customers are at the heart of everything we do. We&apos;re
-                  committed to providing exceptional service and support.
-                </p>
-              </div>
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Shield className="h-8 w-8 text-primary-foreground" />
-                </div>
-                <h3 className="text-xl font-semibold mb-3">Trust & Security</h3>
-                <p className="text-foreground">
-                  We use advanced security measures to protect your data and
-                  ensure safe, secure transactions every time.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Why Choose Us */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Why Choose ShopHub?</h2>
-              <p className="text-foreground max-w-2xl mx-auto">
-                We&apos;re more than just an online store - we&apos;re your
-                trusted shopping partner
-              </p>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Truck className="h-8 w-8 text-primary-foreground" />
-                </div>
-                <h3 className="font-semibold mb-2">Fast Shipping</h3>
-                <p className="text-sm text-foreground">
-                  Free shipping on orders over $50 with delivery in 2-3 business
-                  days
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Shield className="h-8 w-8 text-primary-foreground" />
-                </div>
-                <h3 className="font-semibold mb-2">Secure Payment</h3>
-                <p className="text-sm text-foreground">
-                  Your payment information is protected with bank-level security
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Award className="h-8 w-8 text-primary-foreground" />
-                </div>
-                <h3 className="font-semibold mb-2">Quality Guarantee</h3>
-                <p className="text-sm text-foreground">
-                  30-day money-back guarantee on all purchases
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="h-8 w-8 text-primary-foreground" />
-                </div>
-                <h3 className="font-semibold mb-2">24/7 Support</h3>
-                <p className="text-sm text-foreground">
-                  Round-the-clock customer service to help you anytime
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Team Section */}
-        <section className="py-16 bg-card">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Tim Kami</h2>
-              <p className="text-foreground max-w-2xl mx-auto">
-                The passionate people behind ShopHub who work tirelessly to
-                bring you the best shopping experience
-              </p>
-            </div>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-32 h-32 bg-primary  border rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <Users className="h-16 w-16 text-primary-foreground" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Sarah Johnson</h3>
-                <p className="text-primary mb-2">CEO & Founder</p>
-                <p className="text-sm text-foreground">
-                  Visionary leader with 15+ years in e-commerce, passionate
-                  about creating exceptional customer experiences.
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-32 h-32 bg-primary text-primary-foreground border rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <Users className="h-16 w-16 text-primary-foreground" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Michael Chen</h3>
-                <p className="text-primary mb-2">CTO</p>
-                <p className="text-sm text-foreground">
-                  Tech innovator ensuring our platform stays cutting-edge and
-                  secure for millions of users worldwide.
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-32 h-32 bg-primary text-primary-foreground border rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <Users className="h-16 w-16 text-primary-foreground" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Emily Rodriguez</h3>
-                <p className="text-primary mb-2">Head of Customer Success</p>
-                <p className="text-sm text-foreground">
-                  Dedicated to ensuring every customer has an amazing experience
-                  from browse to delivery and beyond.
-                </p>
               </div>
             </div>
           </div>
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 mx-5 rounded-t-4xl bg-primary text-primary-foreground">
+        <section className="mx-5 rounded-t-4xl">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4">
-              Ready to Start Shopping?
+            <h2 className="text-3xl font-medium mb-4">
+              Apakah Anda Siap untuk Berbelanja?
             </h2>
-            <p className="text-xl mb-8 max-w-2xl mx-auto">
-              Join millions of satisfied customers and discover amazing products
-              at unbeatable prices
-            </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary" asChild>
-                <Link href="/products">Browse Products</Link>
+                <Link href="/search">Browse Products</Link>
               </Button>
               <Button
                 size="lg"
