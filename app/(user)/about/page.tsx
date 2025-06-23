@@ -1,4 +1,3 @@
-import { CheckCircle, Users, Truck, Shield, Award, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import AnimatedSection from "@/components/animated-section";
