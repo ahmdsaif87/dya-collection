@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { CldImage } from "next-cloudinary";
 
 interface CloudinaryResource {
   secure_url: string;
@@ -77,7 +77,7 @@ export function CloudinaryGalleryDialog({
       onSelect(image.secure_url);
       onOpenChange(false);
     },
-    [onSelect, onOpenChange]
+    [onSelect, onOpenChange],
   );
 
   return (
@@ -103,14 +103,15 @@ export function CloudinaryGalleryDialog({
                   "group relative aspect-square cursor-pointer rounded-lg overflow-hidden border-2 transition-all duration-200",
                   selectedImage === image.secure_url
                     ? "border-primary ring-2 ring-primary ring-offset-2"
-                    : "border-border hover:border-primary/50"
+                    : "border-border hover:border-primary/50",
                 )}
                 onClick={() => handleSelect(image)}
               >
-                <Image
+                <CldImage
                   src={image.secure_url}
                   alt={image.public_id.split("/").pop() || "Gallery image"}
                   fill
+                  removeBackground={true}
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                   sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                 />

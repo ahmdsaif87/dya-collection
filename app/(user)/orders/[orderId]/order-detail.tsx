@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Order, OrderItem, Product, Address } from "@prisma/client";
 import { formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +8,7 @@ import { id } from "date-fns/locale";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { OrderActions } from "./order-actions";
 import { MapPin, Package } from "lucide-react";
+import { CldImage } from "next-cloudinary";
 
 interface ExtendedOrderItem extends OrderItem {
   product: Product;
@@ -94,9 +94,10 @@ export function OrderDetail({ order }: OrderDetailProps) {
             {order.items.map((item) => (
               <div key={item.id} className="flex gap-4">
                 <div className="relative aspect-square h-20 w-20 overflow-hidden rounded-lg border">
-                  <Image
+                  <CldImage
                     src={item.product.imageUrl}
                     alt={item.product.name}
+                    removeBackground={true}
                     fill
                     className="object-cover"
                   />

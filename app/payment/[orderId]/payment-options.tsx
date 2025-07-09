@@ -1,45 +1,45 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+// import { useState } from "react";
+// import { useRouter } from "next/navigation";
 import { Order } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Loader2, MessageSquare } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 interface PaymentOptionsProps {
   order: Order;
 }
 
 export function PaymentOptions({ order }: PaymentOptionsProps) {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  // const router = useRouter();
+  // const [isLoading, setIsLoading] = useState(false);
 
-  const handleDirectPayment = async () => {
-    setIsLoading(true);
+  // const handleDirectPayment = async () => {
+  //   setIsLoading(true);
 
-    try {
-      const response = await fetch(`/api/orders/${order.id}/pay`, {
-        method: "POST",
-      });
+  //   try {
+  //     const response = await fetch(`/api/orders/${order.id}/pay`, {
+  //       method: "POST",
+  //     });
 
-      if (!response.ok) {
-        throw new Error("Pembayaran gagal");
-      }
+  //     if (!response.ok) {
+  //       throw new Error("Pembayaran gagal");
+  //     }
 
-      toast.success("Pembayaran berhasil");
-      router.push(`/orders/${order.id}`);
-      router.refresh();
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Terjadi kesalahan");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     toast.success("Pembayaran berhasil");
+  //     router.push(`/orders/${order.id}`);
+  //     router.refresh();
+  //   } catch (error) {
+  //     toast.error(error instanceof Error ? error.message : "Terjadi kesalahan");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleWhatsAppPayment = () => {
     // Format pesan WhatsApp
     const message = `Halo, saya ingin melakukan pembayaran untuk pesanan:
-    
+
 Order ID: #${order.id.slice(-8)}
 Total: Rp ${order.total.toLocaleString("id-ID")}
 
@@ -50,7 +50,7 @@ Mohon kirimkan instruksi pembayarannya. Terima kasih!`;
 
     // Buat URL WhatsApp dengan pesan yang sudah di-encode
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message
+      message,
     )}`;
 
     // Buka WhatsApp di tab baru
@@ -83,7 +83,7 @@ Mohon kirimkan instruksi pembayarannya. Terima kasih!`;
           </div>
         </Button>
 
-        <Button
+        {/* <Button
           className="h-auto py-4"
           onClick={handleDirectPayment}
           disabled={isLoading}
@@ -96,10 +96,10 @@ Mohon kirimkan instruksi pembayarannya. Terima kasih!`;
           ) : (
             <>
               <span className="flex-1">Bayar Langsung</span>
-              
+
             </>
           )}
-        </Button>
+        </Button> */}
       </div>
 
       <p className="text-sm text-muted-foreground text-center pt-4">
