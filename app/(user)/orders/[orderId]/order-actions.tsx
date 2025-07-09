@@ -43,7 +43,7 @@ export function OrderActions({ order }: OrderActionsProps) {
       // Jika status sebelumnya adalah PAID, kirim notifikasi ke admin via WhatsApp
       if (order.status === "PAID") {
         const message = `Halo Admin,
-        
+
 Pesanan dengan ID #${order.id.slice(-8)} telah dibatalkan oleh pembeli.
 
 Total: Rp ${order.total.toLocaleString("id-ID")}
@@ -51,9 +51,10 @@ Total: Rp ${order.total.toLocaleString("id-ID")}
 Mohon segera proses pengembalian dana. Terima kasih!`;
 
         // Nomor WhatsApp admin (ganti dengan nomor yang sebenarnya)
-        const phoneNumber = "6285157739978";
+        // ‪+6281328071595‬
+        const phoneNumber = "6281328071595";
         const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-          message
+          message,
         )}`;
         window.open(whatsappUrl, "_blank");
       }
