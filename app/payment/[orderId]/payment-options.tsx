@@ -46,7 +46,7 @@ Total: Rp ${order.total.toLocaleString("id-ID")}
 Mohon kirimkan instruksi pembayarannya. Terima kasih!`;
 
     // Nomor WhatsApp admin (ganti dengan nomor yang sebenarnya)
-    const phoneNumber = "6281328071595‬";
+    const phoneNumber = "6281328071595";
 
     // Buat URL WhatsApp dengan pesan yang sudah di-encode
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
