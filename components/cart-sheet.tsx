@@ -15,8 +15,9 @@ import { formatPrice } from "@/lib/utils";
 import { useCartStore } from "@/lib/store";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
-import Image from "next/image";
 import { useCart } from "@/hooks/use-cart";
+import { CldImage } from "next-cloudinary";
+import { useAuth } from "@clerk/nextjs";
 
 export function CartSheet() {
   const { items } = useCart();
@@ -25,6 +26,7 @@ export function CartSheet() {
   const getTotal = useCartStore((state) => state.getTotal);
   const [isOpen, setIsOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<string | null>(null);
+  const { userId } = useAuth();
 
   const handleUpdateQuantity = async (id: string, quantity: number) => {
     setPendingAction(`update-${id}`);
@@ -47,7 +49,7 @@ export function CartSheet() {
           className="relative bg-card rounded-full"
         >
           <ShoppingCart className="w-4 h-4" />
-          {items.length > 0 && (
+          {userId && items.length > 0 && (
             <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full w-4 h-4 flex items-center justify-center">
               {items.length}
             </span>
@@ -72,82 +74,90 @@ export function CartSheet() {
             </div>
           ) : (
             <div className="space-y-6 py-6">
-              {items.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex gap-4 relative mx-4 border-b pb-4 "
-                >
-                  <div className=" aspect-square h-20 border rounded-md relative ">
-                    <Image
-                      src={item.product.imageUrl}
-                      alt={item.product.name}
-                      fill
-                      className="object-cover rounded-md"
-                    />
+              {items.map((item) => {
+                if (!item.product) {
+                  return null; // Skip rendering if product data is missing
+                }
+                return (
+                  <div
+                    key={item.id}
+                    className="flex gap-4 relative mx-4 border-b pb-4 "
+                  >
+                    <div className=" aspect-square h-20 border rounded-md relative ">
+                      <CldImage
+                        src={item.product.imageUrl}
+                        alt={item.product.name}
+                        fill
+                        removeBackground={true}
+                        className="object-cover rounded-md"
+                      />
 
-                    <button
-                      className="absolute z-10 -top-2 -left-2 text-muted-foreground hover:text-foreground rounded-full p-1.5 border bg-muted shadow"
-                      onClick={() => handleRemoveItem(item.id)}
-                      disabled={pendingAction === `remove-${item.id}`}
-                    >
-                      {pendingAction === `remove-${item.id}` ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <X className="h-4 w-4" />
-                      )}
-                    </button>
-                  </div>
+                      <button
+                        className="absolute z-10 -top-2 -left-2 text-muted-foreground hover:text-foreground rounded-full p-1.5 border bg-muted shadow"
+                        onClick={() => handleRemoveItem(item.id)}
+                        disabled={pendingAction === `remove-${item.id}`}
+                      >
+                        {pendingAction === `remove-${item.id}` ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <X className="h-4 w-4" />
+                        )}
+                      </button>
+                    </div>
 
-                  <div className="flex-1 space-y-1 ">
-                    <div className="flex justify-between">
-                      <div>
-                        <h3 className="font-medium leading-none">
-                          {item.product.name}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          {item.productVariant.name}
+                    <div className="flex-1 space-y-1 ">
+                      <div className="flex justify-between">
+                        <div>
+                          <h3 className="font-medium leading-none">
+                            {item.product.name}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {item.productVariant.name}
+                          </p>
+                        </div>
+                        <p className="font-medium">
+                          {formatPrice(item.product.price)}
                         </p>
                       </div>
-                      <p className="font-medium">
-                        {formatPrice(item.product.price)}
-                      </p>
-                    </div>
-                    <div className="absolute bottom-5 -right-1 items-center gap-2">
-                      <div className="flex items-center rounded-full border">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 rounded-l-full"
-                          onClick={() =>
-                            handleUpdateQuantity(item.id, item.quantity - 1)
-                          }
-                          disabled={
-                            pendingAction === `update-${item.id}` ||
-                            item.quantity <= 1
-                          }
-                        >
-                          -
-                        </Button>
-                        <span className="w-8 text-center">{item.quantity}</span>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 rounded-r-full"
-                          onClick={() =>
-                            handleUpdateQuantity(item.id, item.quantity + 1)
-                          }
-                          disabled={
-                            pendingAction === `update-${item.id}` ||
-                            item.quantity >= item.productVariant.stock
-                          }
-                        >
-                          +
-                        </Button>
+                      <div className="absolute bottom-5 -right-1 items-center gap-2">
+                        <div className="flex items-center rounded-full border">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 rounded-l-full"
+                            onClick={() =>
+                              handleUpdateQuantity(item.id, item.quantity - 1)
+                            }
+                            disabled={
+                              pendingAction === `update-${item.id}` ||
+                              item.quantity <= 1
+                            }
+                          >
+                            -
+                          </Button>
+                          <span className="w-8 text-center">
+                            {item.quantity}
+                          </span>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 rounded-r-full"
+                            onClick={() =>
+                              handleUpdateQuantity(item.id, item.quantity + 1)
+                            }
+                            disabled={
+                              pendingAction === `update-${item.id}` ||
+                              item.quantity >= item.productVariant.stock
+                            }
+                          >
+                            +
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </ScrollArea>

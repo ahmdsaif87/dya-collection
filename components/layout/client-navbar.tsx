@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { Menu } from "lucide-react";
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -42,7 +48,7 @@ function NavigationLink({
       className={cn(
         "transition-colors hover:text-primary ",
         isActive ? "font-bold text-primary" : "text-muted-foreground",
-        isMobile && "block w-full p-2 text-base"
+        isMobile && "block w-full p-2 text-base",
       )}
       aria-current={isActive ? "page" : undefined}
     >
@@ -92,6 +98,11 @@ export default function ClientNavbar() {
               Login
             </Button>
           </SignInButton>
+          <SignUpButton mode="modal">
+            <Button variant="default" className="rounded-full">
+              Daftar
+            </Button>
+          </SignUpButton>
         </SignedOut>
 
         <SignedIn>
@@ -103,8 +114,6 @@ export default function ClientNavbar() {
             }}
           />
         </SignedIn>
-
-        
       </div>
     </div>
   );

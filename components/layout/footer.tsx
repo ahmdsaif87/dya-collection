@@ -10,7 +10,6 @@ import {
   MapPin,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { Category } from "@prisma/client";
 
@@ -108,8 +107,9 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-sm text-background font-medium">
-              Toko fashion online terpercaya yang menyediakan berbagai macam
-              pakaian wanita dengan kualitas terbaik dan harga terjangkau.
+              Toko fashion online terpercaya yang menyediakan berbagai macam tas
+              wanita dengan desain stylish, kualitas terbaik, dan harga
+              terjangkau.
             </p>
             <div className="flex space-x-4">
               <Button
@@ -141,32 +141,10 @@ export default function Footer() {
         </div>
       </div>
       {/* Bottom Section */}
-      <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 px-5 py-5">
-        <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
-          <p className="text-sm text-foreground font-medium">
-            © 2024 Dya Collection. All rights reserved.
-          </p>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <span className="text-sm text-foreground font-medium">
-            Metode Pembayaran:
-          </span>
-          <div className="flex space-x-2">
-            <Badge>
-              <span className="text-xs font-bold">QRIS</span>
-            </Badge>
-            <Badge>
-              <span className="text-xs font-bold">DANA</span>
-            </Badge>
-            <Badge>
-              <span className="text-xs font-bold">OVO</span>
-            </Badge>
-            <Badge>
-              <span className="text-xs font-bold">BANK</span>
-            </Badge>
-          </div>
-        </div>
+      <div className="flex text-center items-center justify-center px-5 py-5">
+        <p className="text-sm text-foreground font-medium text-center flex">
+          © 2025 Dya Collection. All rights reserved.
+        </p>
       </div>
     </footer>
   );

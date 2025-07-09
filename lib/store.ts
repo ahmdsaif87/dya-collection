@@ -59,13 +59,13 @@ export const useCartStore = create<CartStore>()(
         const existingItem = get().items.find(
           (i) =>
             i.productId === item.productId &&
-            i.productVariantId === item.productVariantId
+            i.productVariantId === item.productVariantId,
         );
 
         if (existingItem) {
           return get().updateQuantity(
             existingItem.id,
-            existingItem.quantity + item.quantity
+            existingItem.quantity + item.quantity,
           );
         }
 
@@ -112,7 +112,7 @@ export const useCartStore = create<CartStore>()(
             items: state.items.filter((i) => i.id !== tempId),
           }));
           toast.error(
-            error instanceof Error ? error.message : "Failed to add item"
+            error instanceof Error ? error.message : "Failed to add item",
           );
         }
       },
@@ -133,7 +133,7 @@ export const useCartStore = create<CartStore>()(
         // Update optimistically
         set((state) => ({
           items: state.items.map((item) =>
-            item.id === id ? { ...item, quantity } : item
+            item.id === id ? { ...item, quantity } : item,
           ),
         }));
 
@@ -159,7 +159,9 @@ export const useCartStore = create<CartStore>()(
           // Revert on error
           set({ items: originalItems });
           toast.error(
-            error instanceof Error ? error.message : "Failed to update quantity"
+            error instanceof Error
+              ? error.message
+              : "Failed to update quantity",
           );
         }
       },
@@ -189,7 +191,7 @@ export const useCartStore = create<CartStore>()(
           // Revert on error
           set({ items: originalItems });
           toast.error(
-            error instanceof Error ? error.message : "Failed to remove item"
+            error instanceof Error ? error.message : "Failed to remove item",
           );
         }
       },
@@ -200,13 +202,13 @@ export const useCartStore = create<CartStore>()(
 
       getTotal: () => {
         return get().items.reduce(
-          (total, item) => total + item.product.price * item.quantity,
-          0
+          (total, item) => total + (item.product?.price ?? 0) * item.quantity,
+          0,
         );
       },
     }),
     {
       name: "cart-storage",
-    }
-  )
+    },
+  ),
 );

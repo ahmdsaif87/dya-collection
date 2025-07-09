@@ -14,11 +14,11 @@ export function CTA() {
       className="text-center max-w-2xl mx-auto"
     >
       <h2 className="text-3xl font-semibold mb-4">
-        Temukan Produk Terbaik untuk Si Kecil
+        Tas Wanita Stylish untuk Setiap Gaya
       </h2>
       <p className="text-muted-foreground mb-8">
-        Koleksi lengkap produk berkualitas dengan harga terjangkau untuk buah
-        hati tercinta
+        Temukan koleksi tas wanita terbaru dengan desain elegan, kualitas
+        terbaik, dan harga terjangkau.
       </p>
 
       <Link href="/search">
@@ -26,7 +26,7 @@ export function CTA() {
           size="lg"
           className="gap-2 hover:scale-105 transition-all duration-300"
         >
-          Belanja Sekarang
+          Lihat Koleksi
           <ArrowRight size={16} />
         </Button>
       </Link>

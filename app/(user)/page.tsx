@@ -17,17 +17,17 @@ const ProductList = dynamic(
         ))}
       </div>
     ),
-  }
+  },
 );
 
 const Testimonials = dynamic(
   () =>
     import("@/components/sections/testimonials").then(
-      (mod) => mod.Testimonials
+      (mod) => mod.Testimonials,
     ),
   {
     loading: () => <div className="h-60 rounded-xl muted animate-pulse" />,
-  }
+  },
 );
 
 export default function HomePage() {
@@ -99,7 +99,8 @@ export default function HomePage() {
               JIMS HONEY by Dya Official
             </h2>
             <p className="text-lg md:text-xl text-muted-foreground/80 leading-relaxed font-medium max-w-2xl">
-              Jl. Raya Cikarang, No. 123, Kota Cikarang, Jawa Barat
+              Perum Jl. Puri Cendana No.14 Blok E, RT.03/RW.07, Area Sawah,
+              Grobog Kulon, Kec. Pangkah, Kabupaten Tegal, Jawa Tengah 52471
             </p>
             <MapEmbed />
           </div>
