@@ -71,7 +71,6 @@ interface CloudinaryInfo {
   height: number;
 }
 
-
 const formSchema = z.object({
   name: z
     .string()
@@ -393,16 +392,24 @@ export function ProductForm({
                             signatureEndpoint="/api/sign-cloudinary-params"
                             uploadPreset="dyaimage"
                             onSuccess={(
-                              results: CloudinaryUploadWidgetResults
+                              results: CloudinaryUploadWidgetResults,
+                              { widget }
                             ) => {
                               if (results.event !== "success") return;
                               field.onChange(
                                 (results.info as CloudinaryInfo).secure_url
                               );
-                              window.close()
+                              widget.close();
                             }}
                             onClose={() => {
                               document.body.style.overflow = "auto";
+                            }}
+                            options={{
+                              maxFiles: 1,
+                              maxFileSize: 1024 * 1024 * 2, // 2MB,
+                              resourceType: "image",
+                              sources: ["local", "camera"],
+                              multiple: false,
                             }}
                           >
                             {({ open }) => (
